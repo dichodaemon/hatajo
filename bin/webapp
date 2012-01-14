@@ -1,0 +1,38 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#ejicere!3-detonavit36-figuravit2
+import sys
+import os
+
+BASE_DIR = os.path.abspath( os.path.join( os.path.dirname( __file__ ), ".." ) )
+path     = os.path.abspath( os.path.join( BASE_DIR, "python" ) )
+if os.path.exists( path ):
+  sys.path.append( path )
+
+from hatajo.webapp import WebApp
+from hatajo.form_authentication import *
+
+import xmlrpclib
+import cherrypy
+
+import logging
+import logging.config
+
+logger = logging.getLogger( "WebApp" )
+
+#-------------------------------------------------------------------------------
+
+def start():
+  #~ logging.config.fileConfig( sys.argv[2] )
+
+  backend      = xmlrpclib.ServerProxy( "http://localhost:30300/", allow_none = True )
+  cherrypy.tools.form_authentication.backend = backend
+  application  = WebApp( backend )
+  
+  application  = WebApp( backend )
+  cherrypy.quickstart( application, "/", sys.argv[1] )
+
+#-------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+  start()

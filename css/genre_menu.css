@@ -1,0 +1,30 @@
+#left {
+  padding-left: 0px;
+  padding-top: 20px;
+}
+
+ul.genre-menu {
+  list-style:  none;
+  padding-left: 60px;
+}
+
+.genre-menu li {
+  border-bottom: 1px dotted #888A85;
+  line-height: 20pt;
+}
+
+.genre-menu a {
+  color: #BABDB6;
+  text-decoration: none;
+}
+
+.genre-menu a:hover {
+  color: #2E3436;
+  text-decoration: underline;
+}
+
+.genre-menu li:after {
+  content: ">";
+  float: right;
+  color: #BABDB6;
+}

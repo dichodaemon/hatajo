@@ -1,0 +1,13 @@
+#header {
+  padding: 10px 30px;
+}
+
+#header .logo {
+  display: inline;
+  margin-right: 40px;
+}
+
+.header-help {
+  float: right;
+  vertical-align: 9px;
+}

@@ -1,0 +1,32 @@
+## -*- coding: utf-8 -*-
+<!--%namespace name="ui" file="ui.mako"/-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+
+<title>Hatajo - ${pageTitle}</title>
+
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+<meta name="author" content="Dizan Vasquez - hatajo.com"/>
+<meta name="description" content="Site Description Here"/>
+<meta name="keywords" content="keywords, here"/>
+<meta name="robots" content="index, follow, noarchive"/>
+<meta name="googlebot" content="noarchive"/>
+
+${self.insert_css()}
+${self.insert_js()}
+
+</head>
+
+<body>
+${next.body()}
+</body>
+</html>
+
+<%def name="insert_css()">
+</%def>
+
+<%def name="insert_js()">
+</%def>
+

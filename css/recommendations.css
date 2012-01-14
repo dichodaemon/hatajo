@@ -1,0 +1,31 @@
+#recommendations {
+  display: inline;
+  vertical-align: 9px;
+}
+
+.recommendation h2 {
+  color: #A40000;
+  border-bottom: solid 4px;
+}
+.recommendation table {
+  width: 100%;
+  text-align: left;
+}
+
+.recommendation table td {
+  text-align: center;
+}
+
+.recommendation table ul {
+  list-style: none;
+  padding: 0px;
+}
+
+.recommendation table li.title {
+  color: #3465A4;
+}
+
+.recommendation table li.price {
+  color: #CC0000;
+}
+
