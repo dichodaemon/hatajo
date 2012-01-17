@@ -1,5 +1,4 @@
 ## -*- coding: utf-8 -*-
-<!--%namespace name="ui" file="ui.mako"/-->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -14,19 +13,26 @@
 <meta name="robots" content="index, follow, noarchive"/>
 <meta name="googlebot" content="noarchive"/>
 
-${self.insert_css()}
-${self.insert_js()}
+<% body = capture( next.body )%>
+
+% for e in _css:
+<link rel="stylesheet" type="text/css" media="screen" href="/css/${e}.css"/>
+% endfor
+<script type="text/javascript" src="/js/jquery-1.7.1.min.js"/></script>
+% for e in _js:
+<script type="text/javascript" src="/js/${e}.js"></script>
+% endfor
+<script type="text/javascript">
+$( document ).ready( function() {
+% for l in _code:
+${l}
+% endfor
+} );
+</script>
 
 </head>
 
 <body>
-${next.body()}
+${body}
 </body>
 </html>
-
-<%def name="insert_css()">
-</%def>
-
-<%def name="insert_js()">
-</%def>
-

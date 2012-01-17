@@ -1,0 +1,28 @@
+.ratings {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.ratings .undone, .rating .fade {
+  background: url( "/img/star-empty.png" ) no-repeat;
+  width: 9px;
+  display: block;
+  height: 9px;
+  float: left;
+  margin-right: 2px;
+  text-indent: -99999px;
+}
+
+.ratings .done{
+  background: url( "/img/star-full.png" ) no-repeat;
+  width: 9px;
+  display: block;
+  height: 9px;
+  float: left;
+  margin-right: 2px;
+  text-indent: -99999px;
+}
+
+.ratings_edit span.undone:hover{
+  background: url( "/img/star-full.png" ) no-repeat;
+}

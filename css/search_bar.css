@@ -5,11 +5,14 @@
   background: -moz-linear-gradient(left,  #971C30,  #D80B12); /* for firefox 3.6+ */ 
 }
 
-#searchbar {
-  padding: 10px 30px;
+#search_bar {
+  padding: 10px 20px 10px 30px;
+  margin: 0px;
+  height: 27px;
 }
 
-div .searchbox {
+div.searchbox {
+  float: left;
   width: 310px;
   padding-left: 5px;
   border: 2px solid #EEEEEC;
@@ -25,10 +28,12 @@ div .searchbox {
 }
 
 .searchbox input.text {
-  line-height: 24px;
+  line-height: 12px;
   border: none;
   border-right: solid 2px #BABDB6;
   width: 270px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .searchbox input:focus {
@@ -43,3 +48,13 @@ div .searchbox {
   background-image: url( "/img/search.png" );
 }
 
+#search_bar div.buttons {
+  float: right;
+  margin: 0px;
+  padding: 0px;
+}
+
+#search_bar div.buttons form{
+  margin: 0px;
+  padding: 0px;
+}

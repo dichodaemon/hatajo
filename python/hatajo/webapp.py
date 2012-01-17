@@ -29,4 +29,23 @@ class WebApp( object ):
     }
     return result
 
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "search_results.html" )
+  def search_results( self ):
+    result = {
+      "pageTitle": u"Su búsqueda"
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "film_info.html" )
+  def film_info( self ):
+    result = {
+      "pageTitle": u"Detalles de la película"
+    }
+    return result
 

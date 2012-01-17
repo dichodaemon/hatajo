@@ -1,0 +1,172 @@
+div.film_images {
+  width: 150px;
+  margin-left: 60px;
+  margin-bottom: 20px;
+}
+
+.film_images img.micro {
+  width: 30px;
+}
+
+.film_images img.main {
+  margin-bottom: 5px;
+  clear: both;
+}
+
+
+.film_description ul {
+  list-style: none;
+  text-align: left;
+}
+
+.film_description ul li {
+  border-bottom: none;
+  margin: 3px 0px 0px 0px;
+  padding: 0px;
+}
+
+.film_description ul a {
+  text-decoration: none;
+  color: #204A87;
+}
+
+.film_description ul a:hover {
+  text-decoration: underline;
+  color: #204A87;
+}
+
+.film_description ul .title {
+  font-size: 14pt;
+}
+
+.film_description ul .media {
+  color: #555753;
+}
+
+.film_description ul .price {
+  font-size: 8pt;
+}
+
+.film_description ul .price .normal {
+  font-size: 12pt;
+  color: #555753;
+  text-decoration: line-through;
+}
+
+.film_description ul .price .discounted {
+  font-size: 12pt;
+  color: #A40000;
+}
+
+.film_description ul .delivery {
+  font-size: 8pt;
+  color: #A40000;
+}
+
+.film_description ul .special {
+  font-size: 8pt;
+  color: #555753;
+}
+
+
+.add_to_cart div.top {
+  background: #C9E2F6;
+  text-align: center;
+  margin-right: 20px;
+  padding: 20px;
+}
+
+.add_to_cart div.bottom{
+  background: #EFF6FF;
+  text-align: center;
+  margin-right: 20px;
+  padding: 20px;
+}
+
+.add_to_cart input.quantity {
+  width: 20px;
+}
+
+.add_to_cart input.submit {
+}
+
+.large_text {
+  border-top: 1px dotted #2E3436;
+  padding: 10px 0px;
+  margin: 20px;
+  clear: both;
+}
+
+.large_text h2 {
+  font-size: 16px;
+}
+
+.large_text dl {
+  float: left;
+}
+
+.large_text dt {
+  clear: left;
+  float: left;
+}
+
+.large_text dd {
+  margin-left: 5px;
+  float: left;
+  color: #555753;
+}
+
+.large_text p {
+  color: #555753;
+}
+
+.rating_list {
+  list-style: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.rating_list li a {
+  color: #3465A4;
+  text-decoration: none;
+}
+
+.rating_list li a:hover {
+  text-decoration: underline;
+}
+
+dl.comments dt {
+  margin-bottom: 15px;
+}
+
+dl.comments dd {
+  margin: 0px;
+  margin-bottom: 15px;
+}
+
+dl.comments span.user {
+}
+
+dl.comments span.date {
+  color: #555753;
+}
+
+div.bar_outer {
+  display: inline-block;
+  background: #EEEEEC;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100px;
+  height: 15px;
+}
+
+div.bar_inner {
+  background: #FCAF3E;
+  width: 50px;
+  height: 15px;
+}
+
+
+
+
+

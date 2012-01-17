@@ -1,0 +1,20 @@
+## -*- coding: utf-8 -*-
+<%page args="id, edit=False"/>
+<%namespace name="core" file="core.mako"/>
+<%core:add_css name="rating"/>
+<%core:add_js name="ratings"/>
+<%core:add_code>
+% if edit:
+  $( "#${id}" ).ratings( true );
+% else:
+  $( "#${id}" ).ratings();
+% endif
+</%core:add_code>
+
+<div id="${id}" class="rating">
+  <span class="undone" rel="1">star one</span>
+  <span class="undone" rel="2">star two</span>
+  <span class="undone" rel="3">star three</span>
+  <span class="undone" rel="4">star four</span>
+  <span class="undone" rel="5">star five</span>
+</div>

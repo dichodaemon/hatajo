@@ -3,7 +3,9 @@
   text-align: center;
   padding: 20px;
   margin: 0px;
+  margin-top: 20px;
   color: #888A85;
+  clear: both;
 }
 
 #footer li {

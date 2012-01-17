@@ -1,6 +1,5 @@
-#recommendations {
-  display: inline;
-  vertical-align: 9px;
+div.recommendation {
+  clear: both;
 }
 
 .recommendation h2 {
@@ -23,6 +22,15 @@
 
 .recommendation table li.title {
   color: #3465A4;
+}
+
+.recommendation li.title a {
+  color: #3465A4;
+  text-decoration: none;
+}
+
+.recommendation li.title a:hover {
+  text-decoration: underline;
 }
 
 .recommendation table li.price {

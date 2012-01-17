@@ -1,0 +1,100 @@
+#search_results {
+  text-align: left;
+  margin-left: 40px;
+  margin-right: 40px;
+  color: #2E3436;
+}
+
+#search_results h2 {
+  color: #A40000;
+}
+
+#search_results .header {
+  background: #FFC0C0;
+  color: #A40000;
+  text-align: right;
+  padding: 3px 20px;
+}
+
+#search_results ul {
+  margin-right: 40px;
+}
+
+#search_results ul li {
+  padding: 10px 0px 10px 0px;
+  border-bottom: dotted 1px #2E3436;
+  list-style: none;
+  width: 100%;
+  float: left;
+  position: relative;
+}
+
+#search_results ul em {
+  color: #555753;
+  font-size: 10pt;
+  font-style: normal;
+  float: left;
+  margin-right: 20px;
+}
+
+#search_results img {
+  float: left;
+  vertical-align: top;
+}
+
+#search_results ul.description {
+  float: left;
+  height: 250px;
+  position: absolute;
+  top: 15%;
+  left: 200px;
+}
+
+#search_results ul.description li {
+  border-bottom: none;
+  margin: 3px 0px 0px 0px;
+  padding: 0px;
+}
+
+#search_results ul.description a {
+  text-decoration: none;
+  color: #204A87;
+}
+
+#search_results ul.description a:hover {
+  text-decoration: underline;
+  color: #204A87;
+}
+
+#search_results ul.description .title {
+  font-size: 14pt;
+}
+
+#search_results ul.description .media {
+  color: #555753;
+}
+
+#search_results ul.description .price {
+  font-size: 8pt;
+}
+
+#search_results ul.description .price .normal {
+  font-size: 12pt;
+  color: #555753;
+  text-decoration: line-through;
+}
+
+#search_results ul.description .price .discounted {
+  font-size: 12pt;
+  color: #A40000;
+}
+
+#search_results ul.description .delivery {
+  font-size: 8pt;
+  color: #A40000;
+}
+
+#search_results ul.description .special {
+  font-size: 8pt;
+  color: #555753;
+}

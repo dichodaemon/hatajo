@@ -1,0 +1,145 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base_public.html"/>
+<%namespace name="core" file="core.mako"/>
+<%core:add_css name="three_columns"/>
+<%core:add_css name="film_images"/>
+<%core:add_css name="ratings"/>
+<%core:add_js name="ratings"/>
+<%core:add_code>
+  $( "#c0" ).ratings( 3, false );
+  $( "#c1" ).ratings( 3, false );
+  $( "#c2" ).ratings( 3, false );
+  $( "#c3" ).ratings( 3, false );
+</%core:add_code>
+
+<div id="column_container">
+  <div id="center" class="column">
+    <div class="film_description">
+      <ul>
+        <li class="title"><a href="/film_info">La burla del diablo</a> (Beat the Devil)</li>
+        <li>Director: John Huston</li>
+        <li>Gina Lollobrigida, Jennifer Jones</li>
+        <li class="media">DVD</li>
+        <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
+        <li class="delivery"><a href="/film_info">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
+        <li class="special">Envío gratis en la compra de 3 películas</li>
+      </ul>
+    </div>
+  </div>
+  <div id="left" class="column">
+    <div class="film_images">
+      <img src="/img/test/cover1.jpg" class="main"/>
+      <a href="/film_info"><img src="/img/test/cover1.jpg" class="micro"/></a>
+      <a href="/film_info"><img src="/img/test/cover1.jpg" class="micro"/></a>
+      <a href="/film_info"><img src="/img/test/cover1.jpg" class="micro"/></a>
+    </div>
+  </div>
+  <div id="right" class="column">
+    <form class="add_to_cart">
+      <div class="top">
+        <label for="quantity">Cantidad:</label>
+        <input id="quantity" name="quantity" class="quantity" type="text" value="1"/>
+      </div>
+      <div class="bottom">
+        <input type="submit" value="Agregar al Carrito" class="submit, red_button"/>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="indent1">
+  <%include file="recommendation.html"/>
+</div>
+<div class="large_text">
+  <h2>Detalles del producto:</h2>
+  <dl>
+    <dt>Actor(es):</dt>
+    <dd>Stéphane Audran, Jean-Pierre Cassel</dd>
+    <dt>Director(es):</dt>
+    <dd>John Huston</dd>
+    <dt>Formato:</dt>
+    <dd>NTSC, Import</dd>
+    <dt>Idioma:</dt>
+    <dd>Inglés</dd>
+    <dt>Subtítulos:</dt>
+    <dd>Español</dd>
+    <dt>Región:</dt>
+    <dd>Region 1 (Estados Unidos y Canadá)</dd>
+    <dt>No. de discos:</dt>
+    <dd>1</dd>
+    <dt>Clasificación:</dt>
+    <dd>C</dd>
+    <dt>Estudio:</dt>
+    <dd>Paramount</dd>
+    <dt>Medio:</dt>
+    <dd>DVD</dd>
+    <dt>Duración:</dt>
+    <dd>118 minutos</dd>
+    <dt>Comentarios:</dt>
+    <dd><span id="c0"></span> en 128 Comentarios</dd>
+    <dt>RTC:</dt>
+    <dd>DVDA-7241-C</dd>
+    <dt>Código de barras:</dt>
+    <dd>75002228132165</dd>
+    <dt>Ranking en la tienda:</dt>
+    <dd>30</dd>
+  </dl>
+</div>
+
+<div class="large_text">
+  <h2>Características especiales:</h2>
+  
+  <p>
+    Trailer y biografías de Claude Chabrol, Jean Pierre, Stephane, Audran y 
+    Michel Bouqet.
+  </p>
+  <p>
+    Comentario de los guonistas Howard Rodman y Tierry Fox y el cine Feebey.
+  </p>
+  <p>
+    Galería de fotos.
+  </p>
+</div>
+
+<div class="large_text">
+  <h2>Reseña de la distribuidora:</h2>
+  
+  <p>
+    Helene (Stéphane Aundran) es una buena madre con un pasado como stripper y 
+    camarera. Se divorcia de su marido después de que éste los ataca a ella y a
+    su hijo. Sus ex-suegros la culpan de causar la addicción de su marido y 
+    quieren quitarle la custodia del hijo. Frustrados por los tribunales, 
+    contratan a Paul Pierre para destruir su reputación.
+  </p>
+</div>
+
+<div class="large_text">
+  <h2>Comentarios de los usuarios:</h2>
+  <ul class="rating_list">
+    <li><a href="#">5 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145) <span id="c1"></span> en 500 comentarios</li>
+    <li><a href="#">4 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
+    <li><a href="#">3 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
+    <li><a href="#">2 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
+    <li><a href="#">1 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
+  </ul>
+</div>
+
+<div class="large_text">
+  <dl class="comments">
+    <dt><span class="user">Ivan Mercader</span> <span id="c2"></span> rating 3 de 5 estrellas <span class="date">25 Noviembre 2011</span></dt>
+    <dd>
+      Desafortunadamente, esta película de Batman fue una de las peores que haya
+      visto nunca. La primera película con Michael Keaton era la mejor y ha ido
+      empeorando en los últimos años. En primer lugar, el casting fue totalmente
+      irreal. El interés del amor de Batman y la fiscal de distrito es 
+      prácticamente nulo.
+    </dd>
+    <dt><span class="user">Ivan Mercader</span> <span id="c3"></span> 3 de 5 estrellas <span class="date">25 Noviembre 2011</span></dt>
+    <dd>
+      Desafortunadamente, esta película de Batman fue una de las peores que haya
+      visto nunca. La primera película con Michael Keaton era la mejor y ha ido
+      empeorando en los últimos años. En primer lugar, el casting fue totalmente
+      irreal. El interés del amor de Batman y la fiscal de distrito es 
+      prácticamente nulo.
+    </dd>
+  </dl>
+</div>
