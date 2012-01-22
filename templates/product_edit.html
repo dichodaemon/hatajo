@@ -1,0 +1,123 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base_administration.html"/>
+<%namespace name="core" file="core.mako"/>
+<%namespace name="forms" file="forms.mako"/>
+<%core:add_css name="two_columns"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="forms"/>
+<%core:add_js name="jquery-ui-1.8.17.custom.min"/>
+<%core:add_js name="forms"/>
+
+<div id="column_container">
+  <div id="center" class="column">
+    <form class="main_form" action="product_edit" method="get">
+      <h1>Datos del producto</h1>
+      <input type="hidden" id="id" value"${id}"/>
+      <table cellpadding="0" cellspacing="0">
+        <%forms:multi_catalog
+          field="actors"
+          catalog="actors"
+          label="Actor(es)"
+          hint="escriba un actor" >
+          Agregue los actores que participan en la película.
+        </%forms:multi_catalog>
+        <%forms:multi_catalog
+          field="directors"
+          catalog="directors"
+          label="Director(es)"
+          hint="escriba un director" >
+          Agregue los directores que realizaron la película.
+        </%forms:multi_catalog>
+        <%forms:catalog
+          field="format"
+          catalog="formats"
+          hint="escriba un formato"
+          label="Formato">
+          Seleccione el formato del producto.
+        </%forms:catalog>
+        <%forms:catalog
+          field="language"
+          catalog="languages"
+          hint="escriba un idioma"
+          label="Idioma">
+          Seleccione el idioma del producto.
+        </%forms:catalog>
+        <%forms:catalog
+          field="subtitles"
+          catalog="subtitles"
+          hint="escriba un idioma de subtítulos"
+          label="Subtítulos">
+          Seleccione el idioma de los subtítulos.
+        </%forms:catalog>
+        <%forms:catalog
+          field="region"
+          catalog="regions"
+          hint="escriba una región"
+          label="Región">
+          Seleccione la región del producto.
+        </%forms:catalog>
+        <%forms:field
+          field="item_count"
+          label="No. de discos">
+          <input id="item_count" type="text"/>
+          <div class="help">
+            Escriba cuántos discos tiene el producto.
+          </div>
+        </%forms:field>
+        <%forms:catalog
+          field="age_rating"
+          catalog="age_ratings"
+          hint="escriba una clasificación"
+          label="Clasificación">
+          Seleccione la clasificación del producto.
+        </%forms:catalog>
+        <%forms:catalog
+          field="studio"
+          catalog="studios"
+          hint="escriba un estudio"
+          label="Estudio">
+          Seleccione el estudio del producto.
+        </%forms:catalog>
+        <%forms:catalog
+          field="media"
+          catalog="medias"
+          hint="escriba un tipo de medio"
+          label="Medio">
+          Seleccione el medio del producto.
+        </%forms:catalog>
+        <%forms:field
+          field="duration"
+          label="Duración">
+          <input id="duration" type="text"/>
+          <div class="help">
+            Escriba la duración de la película.
+          </div>
+        </%forms:field>
+        <%forms:field
+          field="rtc"
+          label="RTC">
+          <input id="rtc" type="text"/>
+          <div class="help">
+            Escriba el código RTC del producto.
+          </div>
+        </%forms:field>
+        <%forms:field
+          field="bar_code"
+          label="Código de barras">
+          <input id="bar_code" type="text"/>
+          <div class="help">
+            Escriba el código de barras del producto.
+          </div>
+        </%forms:field>
+        <tr class="buttons">
+          <td colspan="2">
+            <input type="submit" value="Enviar" class="button"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <div id="left" class="column">
+    <%include file="genre_menu.html"/>
+  </div>
+</div>

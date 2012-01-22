@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#ejicere!3-detonavit36-figuravit2
+
 import sys
 import os
 
@@ -9,29 +9,33 @@ path     = os.path.abspath( os.path.join( BASE_DIR, "python" ) )
 if os.path.exists( path ):
   sys.path.append( path )
 
-from hatajo.webapp import WebApp
-from hatajo.form_authentication import *
+import hatajo
 
-import xmlrpclib
-import cherrypy
+from twisted.internet      import reactor
+import twisted.web         as tw
+import twisted.web.server
 
 import ConfigParser
 import codecs
+
 
 #-------------------------------------------------------------------------------
 
 def start():
   config = ConfigParser.SafeConfigParser()
   config.readfp( codecs.open( sys.argv[1], "r", "utf-8" ) )
-  backend      = xmlrpclib.ServerProxy( 
-    config.get( "global", "backend_url" ).strip( '"' ),
-    allow_none = True 
+
+  hatajo.db.init( config.get( "db", "url" ).strip( '"' ) )
+  backend = hatajo.backend.Backend()
+  
+  reactor.listenTCP( 
+    config.getint( "global", "port" ), 
+    tw.server.Site( hatajo.xmlrpc.Server( backend ) ) 
   )
-  cherrypy.tools.form_authentication.backend = backend
-  application  = WebApp( backend )
-  cherrypy.quickstart( application, "/", sys.argv[1] )
+  reactor.run()  
 
 #-------------------------------------------------------------------------------
 
 if __name__ == "__main__":
   start()
+

@@ -1,0 +1,73 @@
+form.main_form {
+  text-align: left;
+  margin-left: 40px;
+}
+
+form.main_form input.button {
+  float: right;
+  margin: 10px 0px 0px 5px;
+}
+
+.main_form table {
+  border-collapse: collapse;
+}
+
+.main_form tr.field {
+  border: none;
+  border-bottom: 1px solid #BABDB6;
+  border: 1px solid #BABDB6;
+}
+
+.main_form tr.field:nth-child( odd ) {
+  background-color: #EEEEEC;
+}
+
+.main_form tr.field:nth-child( pair ) {
+  background-color: #FFFFFF;
+}
+
+.main_form td {
+  vertical-align: top;
+  padding: 5px 20px 10px 5px;
+}
+
+.main_form td.label {
+  font-weight: bold;
+  background-color: #D3D7CF;
+  color: #2E3436;
+  width: 100px;
+}
+
+.main_form td.field {
+  width: 300px;
+}
+
+.main_form td div.help {
+  text-align: left;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.main_form td.field input {
+  width: 100%;
+}
+
+.main_form td.field select {
+  width: 100%;
+}
+
+
+.main_form td.field button {
+  width: 100%;
+}
+
+.main_form input {
+  color: #233436;
+  font-style: none;
+}
+
+.main_form input.hint {
+  color: #D3D7CF;
+  font-style: italic;
+}
+

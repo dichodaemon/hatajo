@@ -25,8 +25,8 @@ def transform( template = None ):
     params = oldHandler( *args, **kargs ) 
     
     if template and type( params ) != list:
-      params["_js"] = set()
-      params["_css"] = set()
+      params["_js"] = []
+      params["_css"] = []
       params["_code"] = []
       t = lookup.get_template( template )
       t.output_encoding = 'utf-8'
