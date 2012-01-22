@@ -12,30 +12,48 @@
   </tr>
 </%def>
 
-<%def name="multi_catalog( field, label, catalog, hint )">
+<%def name="multi_catalog( field, label, catalog, hint, tabindex=None )">
   <%core:add_code>
-    $.forms.multi_catalog( "${field}", "${catalog}", "${hint}" )
+    $.forms.multi_catalog( "${field}", "${catalog}", "${hint}" );
+    ${caller.body()}
   </%core:add_code>
   <%self:field field="${field}" label="${label}">
-    <input name="add_${field}" id="add_${field}" type="text" value="" class="hint"/>
-    <select id="${field}" multiple="1">
+    %if tabindex != None:
+    <input tabindex="${tabindex}" id="add_${field}" type="text" value="" class="hint"/>
+    %else:
+    <input id="add_${field}" type="text" value="" class="hint"/>
+    %endif
+    <select id="${field}" name="${field}" multiple="1">
     </select>
     <button id="remove_${field}" class="button"/>Borrar</button>
-    <div class="help">
-      ${caller.body()}
-    </div>
   </%self:field>
 </%def>
 
-<%def name="catalog( field, label, catalog, hint )">
+<%def name="catalog( field, label, catalog, hint, tabindex=None )">
   <%core:add_code>
-    $.forms.catalog( "${field}", "${catalog}", "${hint}" )
+    $.forms.catalog( "${field}", "${catalog}", "${hint}" );
+    ${caller.body()}
   </%core:add_code>
   <%self:field field="${field}" label="${label}">
-    <input id="${field}_id" type="hidden" value=""/>
-    <input id="${field}" type="text"/>
-    <div class="help">
-      ${caller.body()}
-    </div>
+    <input id="${field}_id" name="${field}_id" type="hidden" value=""/>
+    %if tabindex != None:
+    <input id="${field}" name="${field}" tabindex="${tabindex}" type="text"/>
+    %else:
+    <input id="${field}" name="${field}" type="text"/>
+    %endif
+  </%self:field>
+</%def>
+
+<%def name="text_field( field, label, hint, tabindex=None )">
+  <%core:add_code>
+    $( "#${field}" ).hint( "${hint}" );
+    ${caller.body()}
+  </%core:add_code>
+  <%self:field field="${field}" label="${label}">
+    %if tabindex != None:
+    <input id="${field}" name="${field}" tabindex="${tabindex}" type="text"/>
+    %else:
+    <input id="${field}" name="${field}" type="text"/>
+    %endif
   </%self:field>
 </%def>

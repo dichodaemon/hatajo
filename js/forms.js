@@ -1,10 +1,43 @@
 ( function( $ ) {
+  $.fn.hint = function( hint ) {
+    return this.each( function() {
+      var $this = $( this );
+      $this.attr( "value", hint ).addClass( "hint" );
+      $this.change( function( event ) {
+        if ( $.trim( $this.attr( "value" ) ) != "" ) {
+          $this.removeClass( "hint" );
+        } else {
+          $this.attr( "value", hint ).addClass( "hint" );
+        }
+      } );
+      $this.focus( function() {
+        if ( $this.hasClass( "hint" ) ) {
+          $this.removeClass( "hint" );
+          $this.attr( "value", "" );
+        }
+      } );
+
+      $this.blur( function() {
+        if ( $.trim( $this.attr( "value" ) ) == "" ) {
+          $this.attr( "value", hint ).addClass( "hint" );
+        }
+      } );
+
+      $this.keypress( function() {
+        if ( $this.hasClass( "hint" ) ) {
+          $this.removeClass( "hint" );
+          $this.attr( "value", "" );
+        }
+      } );
+    } );
+  };
+
   $.forms = {};
 
   $.forms.multi_catalog = function ( field, catalog, hint ) {
     var $add = $( "#add_" + field );
     var $list = $( "#" + field );
-    $add.attr( "value", hint ).addClass( "hint" );
+    $add.hint( hint );
     $add.autocomplete( {
       source   : "find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
@@ -18,31 +51,27 @@
       }
     } );
 
+    var $last = null;
+
     $add.change( function( event ) {
       if ( $.trim( $add.attr( "value" ) ) != "" ) {
-        $( "<option/>" ).attr( "value", "" ).text( this.value ).appendTo( "#" + field );
+        $last = $( "<option/>" );
+        $last.attr( "value", "*" ).text( this.value ).appendTo( "#" + field );
+        $add.attr( "value", "" );
+      } else {
+        $last = null;
+      }
+    } );
+
+    $add.keypress( function( event ) {
+      $last = null;
+    } );
+
+    $add.blur( function( event ) {
+      if ( $last != null ) {
+        $last.remove();
       }
       $add.attr( "value", hint ).addClass( "hint" );
-    } );
-
-    $add.focus( function() {
-      if ( $add.hasClass( "hint" ) ) {
-        $add.removeClass( "hint" );
-        $add.attr( "value", "" );
-      }
-    } );
-
-    $add.blur( function() {
-      if ( $.trim( $add.attr( "value" ) ) == "" ) {
-        $add.attr( "value", hint ).addClass( "hint" );
-      }
-    } );
-
-    $add.keypress( function() {
-      if ( $add.hasClass( "hint" ) ) {
-        $add.removeClass( "hint" );
-        $add.attr( "value", "" );
-      }
     } );
 
     $( "#remove_" + field ).click( function( event ) {
@@ -54,7 +83,7 @@
   $.forms.catalog = function ( field, catalog, hint ) {
     var $description = $( "#" + field );
     var $id  = $( "#" + field + "_id" );
-    $description.attr( "value", hint ).addClass( "hint" );
+    $description.hint( hint );
     $description.autocomplete( {
       source   : "find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
@@ -65,28 +94,8 @@
     } );
 
     $description.change( function( event ) {
-      if ( $.trim( $description.attr( "value" ) ) == "" ) {
-        $description.attr( "value", "" );
-      }
-    } );
-
-    $description.focus( function() {
-      if ( $description.hasClass( "hint" ) ) {
-        $description.removeClass( "hint" );
-        $description.attr( "value", "" );
-      }
-    } );
-
-    $description.blur( function() {
-      if ( $.trim( $description.attr( "value" ) ) == "" ) {
-        $description.attr( "value", hint ).addClass( "hint" );
-      }
-    } );
-
-    $description.keypress( function() {
-      if ( $description.hasClass( "hint" ) ) {
-        $description.removeClass( "hint" );
-        $description.attr( "value", "" );
+      if ( $.trim( $description.attr( "value" ) ) != "" ) {
+        $id.attr( "value", "*" );
       }
     } );
   }

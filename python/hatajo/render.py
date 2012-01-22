@@ -14,7 +14,8 @@ from   mako.lookup   import TemplateLookup
 
 lookup = TemplateLookup( 
   directories = [os.path.join( BASE_DIR, 'templates' )],
-  format_exceptions = True 
+  format_exceptions = True,
+  output_encoding = "utf-8"
 )
 
 #-------------------------------------------------------------------------------

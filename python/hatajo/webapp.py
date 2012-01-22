@@ -8,6 +8,7 @@ import logging
 import re
 import time
 import datetime
+from collections import defaultdict
 
 BASE_DIR = os.path.abspath( os.path.join( os.path.dirname( __file__ ), "..", "..", ".." ) )
 
@@ -97,16 +98,18 @@ class WebApp( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "product_edit.html" )
-  def product_edit( self, id = None, actors = [] ):
-    if id == None:
-      id = "new"
-    elif id == "new":
-      id = 1
-      print actors
+  def product_edit( self, actors = None, **kargs ):
+    d = defaultdict( lambda: None )
+    d.update( kargs )
+    if d["id"] == None:
+      d["id"] = "new"
+    elif d["id"] == "new":
+      d["id"] = 1
+    print actors
     result = {
       "pageTitle": u"Información de producto",
-      "id": id,
-      "actors": actors
+      "id": d["id"],
+      "actors": actors 
     }
     return result
 

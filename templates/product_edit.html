@@ -10,108 +10,89 @@
 
 <div id="column_container">
   <div id="center" class="column">
-    <form class="main_form" action="product_edit" method="get">
+    <form class="main_form" action="product_edit" method="post">
       <h1>Datos del producto</h1>
-      <input type="hidden" id="id" value"${id}"/>
+      <input type="hidden" id="id" name="id" value="${id}"/>
       <table cellpadding="0" cellspacing="0">
         <%forms:multi_catalog
           field="actors"
           catalog="actors"
           label="Actor(es)"
-          hint="escriba un actor" >
-          Agregue los actores que participan en la película.
+          tabindex="1"
+          hint="agregue un actor">
+          $( "#add_actors" ).focus();
         </%forms:multi_catalog>
         <%forms:multi_catalog
           field="directors"
           catalog="directors"
           label="Director(es)"
-          hint="escriba un director" >
-          Agregue los directores que realizaron la película.
-        </%forms:multi_catalog>
+          tabindex="2"
+          hint="agregue un director"/>
         <%forms:catalog
           field="format"
           catalog="formats"
           hint="escriba un formato"
-          label="Formato">
-          Seleccione el formato del producto.
-        </%forms:catalog>
+          tabindex="3"
+          label="Formato"/>
         <%forms:catalog
           field="language"
           catalog="languages"
           hint="escriba un idioma"
-          label="Idioma">
-          Seleccione el idioma del producto.
-        </%forms:catalog>
+          tabindex="4"
+          label="Idioma"/>
         <%forms:catalog
           field="subtitles"
           catalog="subtitles"
           hint="escriba un idioma de subtítulos"
-          label="Subtítulos">
-          Seleccione el idioma de los subtítulos.
-        </%forms:catalog>
+          tabindex="4"
+          label="Subtítulos"/>
         <%forms:catalog
           field="region"
           catalog="regions"
           hint="escriba una región"
-          label="Región">
-          Seleccione la región del producto.
-        </%forms:catalog>
-        <%forms:field
+          tabindex="5"
+          label="Región"/>
+        <%forms:text_field
           field="item_count"
-          label="No. de discos">
-          <input id="item_count" type="text"/>
-          <div class="help">
-            Escriba cuántos discos tiene el producto.
-          </div>
-        </%forms:field>
+          label="No. de discos"
+          tabindex="6"
+          hint="escriba el número de discos"/>
         <%forms:catalog
           field="age_rating"
           catalog="age_ratings"
           hint="escriba una clasificación"
-          label="Clasificación">
-          Seleccione la clasificación del producto.
-        </%forms:catalog>
+          tabindex="7"
+          label="Clasificación"/>
         <%forms:catalog
           field="studio"
           catalog="studios"
           hint="escriba un estudio"
-          label="Estudio">
-          Seleccione el estudio del producto.
-        </%forms:catalog>
+          tabindex="8"
+          label="Estudio"/>
         <%forms:catalog
           field="media"
           catalog="medias"
           hint="escriba un tipo de medio"
-          label="Medio">
-          Seleccione el medio del producto.
-        </%forms:catalog>
-        <%forms:field
+          tabindex="9"
+          label="Medio"/>
+        <%forms:text_field
           field="duration"
-          label="Duración">
-          <input id="duration" type="text"/>
-          <div class="help">
-            Escriba la duración de la película.
-          </div>
-        </%forms:field>
-        <%forms:field
+          label="Duración"
+          tabindex="10"
+          hint="escriba la duración de la película"/>
+        <%forms:text_field
           field="rtc"
-          label="RTC">
-          <input id="rtc" type="text"/>
-          <div class="help">
-            Escriba el código RTC del producto.
-          </div>
-        </%forms:field>
-        <%forms:field
+          label="RTC"
+          tabindex="11"
+          hint="escriba el código RTC del producto"/>
+        <%forms:text_field
           field="bar_code"
-          label="Código de barras">
-          <input id="bar_code" type="text"/>
-          <div class="help">
-            Escriba el código de barras del producto.
-          </div>
-        </%forms:field>
+          label="Código de barras"
+          tabindex="12"
+          hint="escriba el código de barras del producto"/>
         <tr class="buttons">
           <td colspan="2">
-            <input type="submit" value="Enviar" class="button"/>
+            <input type="submit" tabindex="13" value="Enviar" class="button"/>
           </td>
         </tr>
       </table>
