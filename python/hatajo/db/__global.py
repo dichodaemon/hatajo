@@ -11,24 +11,24 @@ from sqlalchemy.orm             import mapper, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+import __builtin__
 
 #-------------------------------------------------------------------------------
 
-Base     = declarative_base()
+Base = declarative_base()
 metadata = Base.metadata
-
-engine  = None
-Session = None
 
 #-------------------------------------------------------------------------------
 
 def init( uri, **kargs ):
-  global engine, Session
-  engine   = create_engine( 
-    uri,
-    **kargs
-  )
-  Session = scoped_session( sessionmaker( bind = engine ) )
+  bid = __builtin__.__dict__
+  if not bid.has_key( "engine" ):
+    bid["engine"] = create_engine( 
+      uri,
+      **kargs
+    )
+  if not bid.has_key( "Session" ):
+    bid["Session"] = scoped_session( sessionmaker( bind = engine ) )
 
 def create( uri, **kargs ):
   global engine

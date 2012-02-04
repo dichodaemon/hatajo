@@ -10,7 +10,7 @@ if os.path.exists( path ):
   sys.path.append( path )
 
 from hatajo.webapp import WebApp
-from hatajo.form_authentication import *
+from hatajo.webapp import form_authentication
 
 import xmlrpclib
 import cherrypy
