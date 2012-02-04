@@ -2,13 +2,13 @@
 
 from __global import *
 
-class Catalogs( Base ):
-  __tablename__ = 'catalogs'
+class CatalogEntry( Base ):
+  __tablename__ = 'catalog_entries'
   id           = Column( Integer, primary_key = True )
   catalog_name = Column( String )
   value        = Column( String )
 
-  byId   = classmethod( byId )
+  by_id   = classmethod( by_id )
 
   def __init__( self, catalog_name, value ):
     self.catalog_name = catalog_name

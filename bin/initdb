@@ -24,12 +24,12 @@ config = ConfigParser.SafeConfigParser()
 config.readfp( codecs.open( sys.argv[1], "r", "utf-8" ) )
 hatajo.db.create( config.get( "db", "url" ).strip( '"' ) )
 
-hatajo.db.session().add( hatajo.db.Catalogs( "actors", "Brad Pitt" ) )
-hatajo.db.session().add( hatajo.db.Catalogs( "actors", "Malcolm Macdowell" ) )
-hatajo.db.session().add( hatajo.db.Catalogs( "directors", "Akira Kurosawa" ) )
-hatajo.db.session().add( hatajo.db.Catalogs( "directors", u"Pedro almodóvar" ) )
-hatajo.db.session().add( hatajo.db.Catalogs( "formats", "DVD" ) )
-hatajo.db.session().add( hatajo.db.Catalogs( "formats", "Blue-Ray" ) )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "actors", "Brad Pitt" ) )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "actors", "Malcolm Macdowell" ) )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "directors", "Akira Kurosawa" ) )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "directors", u"Pedro almodóvar" ) )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "formats", "DVD" ) )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "formats", "Blue-Ray" ) )
 
 hatajo.db.session().commit()
 

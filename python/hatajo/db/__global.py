@@ -2,6 +2,7 @@
 
 from sqlalchemy                 import Table, Column, Integer, Date, DateTime
 from sqlalchemy                 import String, MetaData, ForeignKey
+from sqlalchemy                 import LargeBinary
 from sqlalchemy                 import Boolean
 from sqlalchemy                 import or_, and_, not_
 from sqlalchemy.orm             import relation
@@ -34,17 +35,14 @@ def create( uri, **kargs ):
   init( uri, **kargs )
   metadata.create_all( engine )
 
-
-
 def session():
   return Session()
-
 
 def all( cls ):
   return session().query( cls ).all()
 
-def byName( cls, name ):
+def by_name( cls, name ):
   return session().query( cls ).filter( cls.name == name ).first()
 
-def byId( cls, id ):
+def by_id( cls, id ):
   return session().query( cls ).filter( cls.id == id ).first()

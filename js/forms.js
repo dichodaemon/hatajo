@@ -2,7 +2,12 @@
   $.fn.hint = function( hint ) {
     return this.each( function() {
       var $this = $( this );
-      $this.attr( "value", hint ).addClass( "hint" );
+      if ( $this.attr( "value" ) == hint 
+        || $.trim( $this.attr( "value" ) ) == "" 
+      ) {
+        $this.attr( "value", hint ).addClass( "hint" );
+      }
+
       $this.change( function( event ) {
         if ( $.trim( $this.attr( "value" ) ) != "" ) {
           $this.removeClass( "hint" );
@@ -10,6 +15,7 @@
           $this.attr( "value", hint ).addClass( "hint" );
         }
       } );
+
       $this.focus( function() {
         if ( $this.hasClass( "hint" ) ) {
           $this.removeClass( "hint" );
@@ -33,59 +39,57 @@
   };
 
   $.forms = {};
+  $.forms.addItem = function ( field, value, key ) {
+    var $list_item  = $( "<li></li>" ).hide();
+    $( "#" + field + "__values" ).append( $list_item );
+    $list_item.append( $( "<input type='text' readonly= '1' name='" + field + "__values' value='" + value + "'/>" ) );
+    $list_item.append( $( "<input type='hidden' name='" + field + "__ids' value='" + key + "'/>" ) );
+    var $button= $( "<button type='button'><img src='/img/list-remove.png'/></button>" );
+    $list_item.append( $button );
+    $button.click( function( event ) {$list_item.remove();} );
+    $list_item.slideDown();
+  }
 
-  $.forms.multi_catalog = function ( field, catalog, hint ) {
+  $.forms.multi_catalog = function ( field, hint ) {
     var $add = $( "#add_" + field );
-    var $list = $( "#" + field );
+    var $list = $( "#" + field + "__values" );
     $add.hint( hint );
+
+
     $add.autocomplete( {
-      source   : "find_in_catalog/?catalog_name=" + catalog,
+      source   : "find_in_catalog/?catalog_name=" + field,
       minLength: 2,
       select   : function( event, ui ) {
-        if ( $( "#" + field + " option[value=" + ui.item.id + "]" ).length > 0 ) {
+        if ( $( "#" + field + "__values option[value=" + ui.item.id + "]" ).length > 0 ) {
           alert( "Ese elemento ya está en la lista" );
         } else {
-          $( "<option/>" ).attr( "value", ui.item.id ).text( ui.item.value ).appendTo( "#" + field );
+          $.forms.addItem( field, ui.item.value, ui.item.id );
         }
         ui.item.value = "";
       }
     } );
 
-    var $last = null;
-
-    $add.change( function( event ) {
-      if ( $.trim( $add.attr( "value" ) ) != "" ) {
-        $last = $( "<option/>" );
-        $last.attr( "value", "*" ).text( this.value ).appendTo( "#" + field );
-        $add.attr( "value", "" );
-      } else {
-        $last = null;
-      }
-    } );
-
-    $add.keypress( function( event ) {
-      $last = null;
-    } );
-
     $add.blur( function( event ) {
-      if ( $last != null ) {
-        $last.remove();
-      }
       $add.attr( "value", hint ).addClass( "hint" );
     } );
 
-    $( "#remove_" + field ).click( function( event ) {
-      event.preventDefault();
-      $( "option:selected", $list ).remove();
+    $add.keypress( function( event ) {
+      if ( event.keyCode == 13 ) {
+        event.preventDefault();
+        if ( $.trim( $add.attr( "value" ) ) != "" ) {
+          $.forms.addItem( field, $add.attr( "value" ), "new" );
+          $add.attr( "value", "" );
+        }
+      }
     } );
   };
 
-  $.forms.catalog = function ( field, catalog, hint ) {
-    var $description = $( "#" + field );
-    var $id  = $( "#" + field + "_id" );
+  $.forms.catalog = function ( field, hint ) {
+    var $description = $( "#" + field + "__value" );
+    var $id  = $( "#" + field + "__id" );
     $description.hint( hint );
     $description.autocomplete( {
-      source   : "find_in_catalog/?catalog_name=" + catalog,
+      source   : "find_in_catalog/?catalog_name=" + field,
       minLength: 2,
       select   : function( event, ui ) {
         $id.attr( "value", ui.item.id );
@@ -94,8 +98,10 @@
     } );
 
     $description.change( function( event ) {
-      if ( $.trim( $description.attr( "value" ) ) != "" ) {
-        $id.attr( "value", "*" );
+      if ( $description.hasClass( "hint" ) ) {
+        $id.attr( "value", "" );
+      } else if (   $.trim( $description.attr( "value" ) ) != "" ) {
+        $id.attr( "value", "new" );
       }
     } );
   }

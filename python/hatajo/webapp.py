@@ -98,19 +98,12 @@ class WebApp( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "product_edit.html" )
-  def product_edit( self, actors = None, **kargs ):
-    d = defaultdict( lambda: None )
-    d.update( kargs )
-    if d["id"] == None:
-      d["id"] = "new"
-    elif d["id"] == "new":
-      d["id"] = 1
-    print actors
+  def product_edit( self, **kargs ):
+    kargs = self.backend.product_update( kargs )
     result = {
-      "pageTitle": u"Información de producto",
-      "id": d["id"],
-      "actors": actors 
+      "pageTitle": u"Información de producto"
     }
+    result.update( kargs )
     return result
 
   #-----------------------------------------------------------------------------
@@ -119,3 +112,37 @@ class WebApp( object ):
   def find_in_catalog( self, catalog_name, term ):
     return json.dumps( self.backend.find_in_catalog( catalog_name, term ) )
 
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def upload_image( self, qqfile ):
+    content_type = "unknown"
+    if qqfile[-4:] == ".png":
+      content_type = "image/png"
+    length = int( cherrypy.request.headers["Content-Length"] )
+    content = cherrypy.request.body.read( length )
+    result = self.backend.save_binary( qqfile, content_type, content.encode( "base64" ) )
+    return json.dumps( result )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def ck_upload_image( self, CKEditor, CKEditorFuncNum, langCode, upload ):
+    content = upload.file.read()
+    content = content.encode( "base64" )
+    filename = str( upload.filename )
+    content_type = str( upload.content_type )
+    result = self.backend.save_binary( filename, content_type, content )
+    return """
+    <html><body><script type="text/javascript">
+    window.parent.CKEDITOR.tools.callFunction(%s, '%s','%s');
+    </script></body></html>""" % ( CKEditorFuncNum, "/load_image?id=%i" % result, "" )
+    
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def load_image( self, id ):
+    result = self.backend.load_binary( id )
+    cherrypy.response.headers["Content-Type"] = result["content_type"]
+    return result["content"].decode( "base64" )

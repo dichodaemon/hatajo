@@ -1,3 +1,5 @@
-from __global import *
-from catalogs import *
+from __global       import *
+from catalog_entry  import *
+from product        import *
+from binary_content import *
 

@@ -35,11 +35,11 @@ form.main_form input.button {
   font-weight: bold;
   background-color: #D3D7CF;
   color: #2E3436;
-  width: 100px;
+  width: 150px;
 }
 
 .main_form td.field {
-  width: 300px;
+  width: 350px;
 }
 
 .main_form td div.help {
@@ -71,3 +71,93 @@ form.main_form input.button {
   font-style: italic;
 }
 
+.main_form ul {
+  list-style: none;
+  padding: 0px 0px 0px 10px;
+  margin: 0px 0px 0px 0px;
+}
+
+.main_form ul.items li {
+  line-height: 30px;
+}
+
+.main_form ul.items li:nth-child( odd ) {
+  background: #FCF197;
+}
+
+.main_form ul.items li:nth-child( pair ) {
+  background: #EEEEEC;
+}
+
+.main_form ul.items button {
+  width: 30px;
+  padding: 0px;
+  text-align: center;
+  float: right;
+}
+
+.main_form ul.items img {
+  padding: 0px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main_form ul.items input {
+  width: 290px;
+  background: none;
+  border: none;
+}
+
+.main_form button.images {
+  height: 25px;
+  margin-bottom: 10px;
+}
+.main_form table.images {
+  margin: 5px 0px 5px 10px;
+}
+
+.main_form table.images tr:nth-child( odd ) {
+  background: #FCF197;
+}
+
+.main_form table.images tr:nth-child( pair ) {
+  background: #EEEEEC;
+}
+
+.main_form table.images input {
+  width: 20px;
+  float: left;
+  display: inline;
+}
+
+.main_form table.images span {
+  float: left;
+  display: inline;
+}
+
+.main_form table.images td {
+  vertical-align: middle;
+}
+
+.main_form table.images td.thumbnail {
+  width: 200px;
+}
+
+.main_form table.images td.checkbox {
+  width: 100px;
+}
+
+.main_form table.images img.thumbnail {
+  max-height: 35px;
+  max-width: 150px;
+  vertical-align: middle;
+}
+
+#imgPreviewWithStyles {
+  background: #FFF;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  padding: 5px;
+  z-index: 999;
+  border: solid 2px #BABDB6;
+}

@@ -5,10 +5,11 @@ import os
 from mako import exceptions
 
 BASE_DIR = os.path.abspath( os.path.join( os.path.dirname( __file__ ), "..", ".." ) )
-  
+ 
 import cherrypy
 from   cherrypy import Tool, tools
 import gettext
+import tidy
 from   mako.template import Template
 from   mako.lookup   import TemplateLookup
 
@@ -29,9 +30,21 @@ def transform( template = None ):
       params["_js"] = []
       params["_css"] = []
       params["_code"] = []
+      params["_head"] = []
       t = lookup.get_template( template )
       t.output_encoding = 'utf-8'
-      return t.render_unicode( **params )
+      result = t.render_unicode( **params )
+      if template[-5:] == ".html":
+        return str( tidy.parseString( 
+          result, 
+          output_xhtml = True, 
+          indent = True, 
+          tidy_mark = 0, 
+          output_encoding = "utf8",
+          wrap = 120
+        ) )
+      else:
+        return result
 
 
   cherrypy.request.handler = wrapper

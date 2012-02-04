@@ -4,23 +4,25 @@
 <html>
 <head>
 
-<title>Hatajo - ${pageTitle}</title>
+<title>Mis-Pelis - ${pageTitle}</title>
 
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
-<meta name="author" content="Dizan Vasquez - hatajo.com"/>
+<meta name="author" content="Dizan Vasquez - mis-pelis.com"/>
 <meta name="description" content="Site Description Here"/>
 <meta name="keywords" content="keywords, here"/>
 <meta name="robots" content="index, follow, noarchive"/>
 <meta name="googlebot" content="noarchive"/>
 
 <% body = capture( next.body )%>
-
 % for e in _css:
 <link rel="stylesheet" type="text/css" media="screen" href="/css/${e}.css"/>
 % endfor
-<script type="text/javascript" src="/js/jquery-1.7.1.min.js"/></script>
+<script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
 % for e in _js:
 <script type="text/javascript" src="/js/${e}.js"></script>
+% endfor
+% for e in _head:
+${e}
 % endfor
 <script type="text/javascript">
 $( document ).ready( function() {
