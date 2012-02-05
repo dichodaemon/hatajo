@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import db
 from db import session, CatalogEntry
 import hashlib
+import pprint
+
+import helpers
 
 class Backend( object ):
   def __init__( self ):
@@ -15,32 +20,50 @@ class Backend( object ):
       { "id": v.id, "value": v.value } for v in result
     ]
 
-  def product_update( self, arguments ):
-    import pprint
-    if not "id" in arguments:
-      arguments["id"] = "new"
-      return arguments
-    elif arguments["id"] == "new":
-      pprint.pprint( arguments, width = 80 )
-    for id, value in arguments.items():
-      if (  len( id ) > 6
-        and ( id[-5:] == "__ids" or id[-8:] == "__values" ) 
-        and type( value ) != list
-      ):
-        arguments[id] = [value]
-    for id, value in arguments.items():
-      if len( id ) > 6 and id[-5:] == "__ids":
-        catalog = id[:-5]
-        ids    = value
-        values = arguments[catalog + "__values"]
-        for i in xrange( len( ids ) ):
-          if ids[i] == "new":
-            print "Adding value '%s' to catalog '%s'" % ( values[i], catalog )
-            entry = CatalogEntry( catalog, values[i] ) 
-            session().add( entry )
-            session().commit()
-            ids[i] = entry.id
+  @helpers.main_form
+  def product_update( self, arguments, warnings, errors ):
+    print "-" * 80
+    pprint.pprint( arguments, width = 80 )
+
+    if arguments["id"] == "new": 
+      product = db.Product( arguments["name"] )
+    else:
+      product = db.Product.by_id( arguments["id"] )
+
+    if len( arguments ) > 1:
+      if arguments["name"].strip() == "":
+        errors["name"].append( u"Es necesario asignar un nombre al producto" )
+      if len( arguments["images"]["ids"] ) == 0:
+        errors["images"].append( u"Es necesario dar de alta una imagen" )
+      if len( filter( lambda x: x, arguments["images"]["values"] ) ) == 0:
+        errors["images"].append( u"Es necesario dar de alta una imagen principal" )
+      if len( errors ) == 0:
+        helpers.product.to_record( arguments, product )
+        db.session().add( product )
+        db.session().commit()
+        arguments = helpers.product.to_dictionary( product )
+    else:
+      arguments = helpers.product.to_dictionary( product )
+    print
+    pprint.pprint( arguments, width = 80 )
     return arguments
+
+  def product_info( self, id ):
+    print "-" * 80
+    product = db.Product.by_id( id )
+    result = helpers.product.to_dictionary( product )
+    pprint.pprint( result, width = 80 )
+    return result
+
+  def products( self ):
+    print "-" * 80
+    result = db.session().query( db.Product ).all()
+    result = [ 
+        helpers.product.to_dictionary( p )
+      for p in result
+    ]
+    pprint.pprint( result, width = 80 )
+    return result
 
   def save_binary( self, filename, content_type, content ):
     content = content.decode( "base64" )
@@ -57,6 +80,7 @@ class Backend( object ):
 
   def load_binary( self, id ):
     result = db.BinaryContent.by_id( id )
+    print id, result
     return {
       "name": result.name,
       "hash": result.hash,

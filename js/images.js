@@ -1,12 +1,15 @@
 ( function( $ ) {
   $.images = {};
   $.images.addItem = function ( field, value, key ) {
+    var prefix = field + "__i__";
     var $list_item  = $( "<tr></tr>" ).hide();
     $( "#" + field + "__values" ).append( $list_item );
     var $td = $( "<td class='thumbnail'></td>" );
     $list_item.append( $td );
-    var $imagea =  $( "<a href='/load_image?id=" + key + "' id=" + field + "__imga_" + key + "'></a>" );
-    $imagea.append( $( "<img id='" + field + "__img_" + key + "' class='thumbnail'/>" ) );
+    var $imagea = $( "<a href='/load_image?id=" + key + "'></a>" );
+    var $image  = $( "<img class='thumbnail'/>" );
+    $image.attr( "src", "/load_image?id=" + key ); 
+    $imagea.append( $image )
     $imagea.imgPreview( {
       containerID: "imgPreviewWithStyles",
       onShow: function( link ) {
@@ -21,10 +24,17 @@
       }
     } );
     $td.append( $imagea );
-    $td = $( "<td class='checkbox'></td>" );
+    var $td = $( "<td class='checkbox'></td>" );
     $list_item.append( $td );
-    $td.append( $( "<input type='checkbox' name='" + field + "__values' value='" + key + "'/><span>principal</span>" ) );
-    $td.append( $( "<input type='hidden' name='" + field + "__ids' value='" + key + "'/>" ) );
+    var $checkbox = $( "<input type='checkbox' name='" + prefix + "values' value='" + key + "'/>" );
+    if ( value === "False" ) {
+      $checkbox.attr( "checked", null );
+    } else {
+      $checkbox.attr( "checked", "1" );
+    }
+    $td.append( $checkbox );
+    $td.append( "<span>principal</span>" );
+    $td.append( $( "<input type='hidden' name='" + prefix + "ids' value='" + key + "'/>" ) );
     $td = $( "<td class='button'></td>" );
     $list_item.append( $td );
     var $button= $( "<button type='button'><img src='/img/list-remove.png'/></button>" );
@@ -41,11 +51,10 @@
       button: $add,
       action: "upload_image", 
       sizeLimit: 1000000,
-      allowedExtensions: ["png"],
+      allowedExtensions: ["png", "jpg"],
       params: {}, 
       onComplete: function( id, fileName, id ) {
         $.images.addItem( field, false, id );
-        $( "#" + field + "__img_" + id ).attr( "src", "/load_image?id=" + id );
       },
       messages: {
           typeError: "{file} es de un tipo inválido. Sólo {extensions} son permitidos.",

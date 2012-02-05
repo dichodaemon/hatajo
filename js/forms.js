@@ -1,4 +1,14 @@
 ( function( $ ) {
+  $.fn.hintForm = function() {
+    return this.each( function() {
+      $( this ).submit( function() {
+        $( this ).find( "input.hint" ).each( function() {
+          $( this ).attr( "value", "" );
+        } );
+        return true;
+      } );
+    } );
+  };
   $.fn.hint = function( hint ) {
     return this.each( function() {
       var $this = $( this );
@@ -39,31 +49,32 @@
   };
 
   $.forms = {};
-  $.forms.addItem = function ( field, value, key ) {
+  $.forms.addItem = function ( field, catalog, value, key ) {
+    var prefix = field + "__m__" + catalog + "__";
     var $list_item  = $( "<li></li>" ).hide();
     $( "#" + field + "__values" ).append( $list_item );
-    $list_item.append( $( "<input type='text' readonly= '1' name='" + field + "__values' value='" + value + "'/>" ) );
-    $list_item.append( $( "<input type='hidden' name='" + field + "__ids' value='" + key + "'/>" ) );
+    $list_item.append( $( "<input type='text' readonly= '1' name='" + prefix + "values' value='" + value + "'/>" ) );
+    $list_item.append( $( "<input type='hidden' name='" + prefix + "ids' value='" + key + "'/>" ) );
     var $button= $( "<button type='button'><img src='/img/list-remove.png'/></button>" );
     $list_item.append( $button );
     $button.click( function( event ) {$list_item.remove();} );
     $list_item.slideDown();
   }
 
-  $.forms.multi_catalog = function ( field, hint ) {
+  $.forms.multi_catalog = function ( field, catalog, hint ) {
     var $add = $( "#add_" + field );
     var $list = $( "#" + field + "__values" );
     $add.hint( hint );
 
 
     $add.autocomplete( {
-      source   : "find_in_catalog/?catalog_name=" + field,
+      source   : "find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
       select   : function( event, ui ) {
         if ( $( "#" + field + "__values option[value=" + ui.item.id + "]" ).length > 0 ) {
           alert( "Ese elemento ya está en la lista" );
         } else {
-          $.forms.addItem( field, ui.item.value, ui.item.id );
+          $.forms.addItem( field, catalog, ui.item.value, ui.item.id );
         }
         ui.item.value = "";
       }
@@ -77,19 +88,20 @@
       if ( event.keyCode == 13 ) {
         event.preventDefault();
         if ( $.trim( $add.attr( "value" ) ) != "" ) {
-          $.forms.addItem( field, $add.attr( "value" ), "new" );
+          $.forms.addItem( field, catalog, $add.attr( "value" ), "new" );
           $add.attr( "value", "" );
         }
       }
     } );
   };
 
-  $.forms.catalog = function ( field, hint ) {
-    var $description = $( "#" + field + "__value" );
-    var $id  = $( "#" + field + "__id" );
+  $.forms.catalog = function ( field, catalog, hint ) {
+    var prefix = field + "__s__" + catalog + "__";
+    var $description = $( "#" + prefix + "value" );
+    var $id  = $( "#" + prefix + "id" );
     $description.hint( hint );
     $description.autocomplete( {
-      source   : "find_in_catalog/?catalog_name=" + field,
+      source   : "find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
       select   : function( event, ui ) {
         $id.attr( "value", ui.item.id );

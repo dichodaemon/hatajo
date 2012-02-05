@@ -5,6 +5,7 @@ from sqlalchemy                 import String, MetaData, ForeignKey
 from sqlalchemy                 import LargeBinary
 from sqlalchemy                 import Boolean
 from sqlalchemy                 import or_, and_, not_
+from sqlalchemy                 import func
 from sqlalchemy.orm             import relation
 from sqlalchemy.orm             import mapper, backref
 

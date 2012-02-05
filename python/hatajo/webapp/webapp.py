@@ -8,7 +8,9 @@ import logging
 import re
 import time
 import datetime
+import pprint
 from collections import defaultdict
+from helpers import cleanup_arguments
 
 BASE_DIR = os.path.abspath( os.path.join( os.path.dirname( __file__ ), "..", "..", ".." ) )
 
@@ -36,7 +38,8 @@ class WebApp( object ):
   @cherrypy.tools.render( template = "search_results.html" )
   def search_results( self ):
     result = {
-      "pageTitle": u"Su búsqueda"
+      "pageTitle": u"Su búsqueda",
+      "data": self.backend.products()
     }
     return result
 
@@ -44,9 +47,10 @@ class WebApp( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "film_info.html" )
-  def film_info( self ):
+  def film_info( self, id ):
     result = {
-      "pageTitle": u"Detalles de la película"
+      "pageTitle": u"Detalles de la película",
+      "data": self.backend.product_info( id )
     }
     return result
 
@@ -65,7 +69,6 @@ class WebApp( object ):
   @cherrypy.expose
   #@cherrypy.tools.render( template = "product_list.html" )
   def product_support( self, **args ):
-    print args
     return json.dumps( {
       "sEcho": args["sEcho"],
       "iTotalRecords": 10,
@@ -99,9 +102,13 @@ class WebApp( object ):
   @cherrypy.expose
   @cherrypy.tools.render( template = "product_edit.html" )
   def product_edit( self, **kargs ):
-    kargs = self.backend.product_update( kargs )
+    kargs = cleanup_arguments( kargs )
+    kargs, warnings, errors = self.backend.product_update( kargs )
     result = {
-      "pageTitle": u"Información de producto"
+      "pageTitle": u"Información de producto",
+      "errors": errors,
+      "warnings": warnings,
+      "data": kargs
     }
     result.update( kargs )
     return result
@@ -110,7 +117,9 @@ class WebApp( object ):
 
   @cherrypy.expose
   def find_in_catalog( self, catalog_name, term ):
-    return json.dumps( self.backend.find_in_catalog( catalog_name, term ) )
+    result = json.dumps( self.backend.find_in_catalog( catalog_name, term ) )
+    print result
+    return result
 
   #-----------------------------------------------------------------------------
 
@@ -119,6 +128,8 @@ class WebApp( object ):
     content_type = "unknown"
     if qqfile[-4:] == ".png":
       content_type = "image/png"
+    elif qqfile[-4:] == ".jpg":
+      content_type = "image/jpg"
     length = int( cherrypy.request.headers["Content-Length"] )
     content = cherrypy.request.body.read( length )
     result = self.backend.save_binary( qqfile, content_type, content.encode( "base64" ) )
@@ -143,6 +154,17 @@ class WebApp( object ):
 
   @cherrypy.expose
   def load_image( self, id ):
-    result = self.backend.load_binary( id )
+    import httplib, time, random
+    done = False
+    while not done:
+      try:
+        done = True
+        result = self.backend.load_binary( id )
+      except httplib.CannotSendRequest:
+        time.sleep( random.random() )
+        done = False
+      except httplib.ResponseNotReady:
+        time.sleep( random.random() )
+        done = False
     cherrypy.response.headers["Content-Type"] = result["content_type"]
     return result["content"].decode( "base64" )

@@ -10,6 +10,7 @@ div.film_images {
 
 .film_images img.main {
   margin-bottom: 5px;
+  max-width: 140px;
   clear: both;
 }
 
@@ -95,10 +96,12 @@ div.film_images {
   padding: 10px 0px;
   margin: 20px;
   clear: both;
+  color: #555753;
 }
 
 .large_text h2 {
   font-size: 16px;
+  color: #2E3436;
 }
 
 .large_text dl {
@@ -113,11 +116,9 @@ div.film_images {
 .large_text dd {
   margin-left: 5px;
   float: left;
-  color: #555753;
 }
 
 .large_text p {
-  color: #555753;
 }
 
 .rating_list {

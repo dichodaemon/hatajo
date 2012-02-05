@@ -1,30 +1,52 @@
 ## -*- coding: utf-8 -*-
 <%namespace name="core" file="core.mako"/>
+<%!
+def q( text ):
+  return text.replace( "\"", "\\\"" )
+%>
+<%def name="form( action, method )">
+  <%core:add_js name="forms"/>
+  <%core:add_code>
+    $( "form.main_form" ).hintForm();
+  </%core:add_code>
+  <form class="main_form" action="${action}" method="${method}">
+  ${caller.body()}
+  </form>
+</%def>
 
 <%def name="field( field, label )">
+  %if field in errors or field in warnings:
+  <tr id="${field}_row" class="field error">
+  %else:
   <tr id="${field}_row" class="field">
+  %endif
     <td class="label">
       <label for="${field}">${label}</label>
     </td>
     <td class="field">
       ${caller.body()}
+      %if field in errors:
+      <ul class="error">
+      %for e in errors[field]:
+        <li>${e}</li>
+      %endfor
+      </ul>
+      %endif
     </td>
   </tr>
 </%def>
 
-<%def name="multi_catalog( field, label, hint, tabindex=None )">
+<%def name="multi_catalog( field, catalog, label, hint, tabindex=None )">
   <%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
   <%core:add_css name="forms"/>
   <%core:add_js name="jquery-ui-1.8.17.custom.min"/>
   <%core:add_js name="forms"/>
   <%core:add_code>
-    $.forms.multi_catalog( "${field}", "${hint}" );<%fields = context.get( field + "__values", [] )%>
-    %if type( fields ) == list:
-    %for i in xrange( len( fields ) ):
-    $.forms.addItem( "${field}", "${context[field + '__values'][i]}", "${context[field + '__ids'][i]}" );
+    $.forms.multi_catalog( "${field}", "${catalog}", "${hint}" );
+    %if field in data:
+    %for i in xrange( len( data[field]['ids'] ) ):
+    $.forms.addItem( "${field}", "${catalog}", "${data[field]['values'][i] | q}", "${data[field]['ids'][i]}" );
     %endfor  
-    %else:
-    $.forms.addItem( "${field}", "${context[field + '__values']}", "${context[field + '__ids']}" );
     %endif
     ${caller.body()}
   </%core:add_code>
@@ -39,33 +61,34 @@
   </%self:field>
 </%def>
 
-<%def name="catalog( field, label, hint, tabindex=None )">
+<%def name="catalog( field, catalog, label, hint, tabindex=None )">
+  <% prefix = field + "__s__" + catalog + "__" %> 
   <%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
   <%core:add_css name="forms"/>
   <%core:add_js name="jquery-ui-1.8.17.custom.min"/>
   <%core:add_js name="forms"/>
   <%core:add_code>
-    %if context.get( field + "__id", False ):
-    $( "#${field}__value" ).attr( "value", "${context[field + '__value']}" );
-    $( "#${field}__id" ).attr( "value", "${context[field + '__id']}" );
+    %if field in data:
+    $( "#${prefix}value" ).attr( "value", "${data[field]['value'] | q}" );
+    $( "#${prefix}id" ).attr( "value", "${data[field]['id']}" );
     %endif
-    $.forms.catalog( "${field}", "${hint}" );
+    $.forms.catalog( "${field}", "${catalog}", "${hint}" );
     ${caller.body()}
   </%core:add_code>
   <%self:field field="${field}" label="${label}">
-    <input id="${field}__id" name="${field}__id" type="hidden" value=""/>
+    <input id="${prefix}id" name="${prefix}id" type="hidden" value=""/>
     %if tabindex != None:
-    <input id="${field}__value" name="${field}__value" tabindex="${tabindex}" type="text"/>
+    <input id="${prefix}value" name="${prefix}value" tabindex="${tabindex}" type="text"/>
     %else:
-    <input id="${field}__value" name="${field}__value" type="text"/>
+    <input id="${prefix}value" name="${prefix}value" type="text"/>
     %endif
   </%self:field>
 </%def>
 
 <%def name="text_field( field, label, hint, tabindex=None )">
   <%core:add_code>
-    %if context.get( field, False ):
-    $( "#${field}" ).attr( "value", "${context[field]}" );
+    %if field in data:
+    $( "#${field}" ).attr( "value", "${context[field] | q}" );
     %endif
     $( "#${field}" ).hint( "${hint}" );
     ${caller.body()}
@@ -86,14 +109,13 @@
   </%core:add_head>
   <%core:add_code>
     $( "#${field}" ).ckeditor();
+    ${caller.body()}
   </%core:add_code>
   <%self:field field="${field}" label="${label}">
     %if tabindex != None:
-    <textarea id="${field}" name="${field}" tabindex="${tabindex}">
-    </textarea>
+    <textarea id="${field}" name="${field}" tabindex="${tabindex}">${context.get( field, "" ) | h}</textarea>
     %else:
-    <textarea id="${field}" name="${field}">
-    </textarea>
+    <textarea id="${field}" name="${field}">${context.get( field, "" ) | h}</textarea>
     %endif
   </%self:field>
 </%def>
@@ -106,6 +128,16 @@
   <%core:add_js name="imgpreview.full.jquery"/>
   <%core:add_code>
     $.images.productImages( "${field}", "${hint}" );
+    %if field in data:
+    %for i in xrange( len( data[field]['ids'] ) ):
+    %if "values" in data[field]:
+    $.images.addItem( "${field}", "${data[field]['values'][i] | q}", "${data[field]['ids'][i]}" );
+    %else:
+    $.images.addItem( "${field}", "False", "${data[field]['ids'][i]}" );
+    %endif
+    %endfor  
+    %endif
+    ${caller.body()}
   </%core:add_code>
   <%self:field
     field="${field}"

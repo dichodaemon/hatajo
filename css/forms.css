@@ -13,8 +13,6 @@ form.main_form input.button {
 }
 
 .main_form tr.field {
-  border: none;
-  border-bottom: 1px solid #BABDB6;
   border: 1px solid #BABDB6;
 }
 
@@ -40,6 +38,20 @@ form.main_form input.button {
 
 .main_form td.field {
   width: 350px;
+}
+
+.main_form tr.error td.label {
+  background-color: #EF2929;
+  color: #EEEEEC;
+}
+
+.main_form tr.error td.field {
+  background-color: #FFF;
+}
+
+.main_form ul.error {
+  color: #A40000;
+  list-style: disc inside none;
 }
 
 .main_form td div.help {
