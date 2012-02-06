@@ -13,6 +13,7 @@ TODO
 * Add image preview in product_info.
 * Add image and field display utilities.
 * Check for existence of at least one main image.
+* Add retry logic around backend access in webapp.
 
 DONE
 ----

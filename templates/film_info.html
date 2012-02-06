@@ -1,6 +1,7 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="base_public.html"/>
 <%namespace name="core" file="core.mako"/>
+<%namespace name="recommendation" file="recommendation.mako"/>
 <%core:add_css name="three_columns"/>
 <%core:add_css name="film_images"/>
 <%core:add_css name="ratings"/>
@@ -47,7 +48,9 @@
   </div>
 </div>
 <div class="indent1">
-  <%include file="recommendation.html"/>
+  <%recommendation:recommendation
+    title="Quien compró esta película tambien compró..."
+    method="random"/>
 </div>
 <div class="large_text">
   <h2>Detalles del producto:</h2>

@@ -33,10 +33,13 @@ class Backend( object ):
     if len( arguments ) > 1:
       if arguments["name"].strip() == "":
         errors["name"].append( u"Es necesario asignar un nombre al producto" )
-      if len( arguments["images"]["ids"] ) == 0:
+      if "images" in arguments:
+        if len( arguments["images"]["ids"] ) == 0:
+          errors["images"].append( u"Es necesario dar de alta una imagen" )
+        if len( filter( lambda x: x, arguments["images"]["values"] ) ) == 0:
+          errors["images"].append( u"Es necesario dar de alta una imagen principal" )
+      else:
         errors["images"].append( u"Es necesario dar de alta una imagen" )
-      if len( filter( lambda x: x, arguments["images"]["values"] ) ) == 0:
-        errors["images"].append( u"Es necesario dar de alta una imagen principal" )
       if len( errors ) == 0:
         helpers.product.to_record( arguments, product )
         db.session().add( product )

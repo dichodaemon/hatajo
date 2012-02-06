@@ -8,6 +8,7 @@ def q( text ):
   <%core:add_js name="forms"/>
   <%core:add_code>
     $( "form.main_form" ).hintForm();
+    //$( "form.main_form:focusable" ).first().focus();
   </%core:add_code>
   <form class="main_form" action="${action}" method="${method}">
   ${caller.body()}
@@ -90,7 +91,7 @@ def q( text ):
     %if field in data:
     $( "#${field}" ).attr( "value", "${context[field] | q}" );
     %endif
-    $( "#${field}" ).hint( "${hint}" );
+    $( "#${field}" ).hint( "${hint}" ).enter2tab();
     ${caller.body()}
   </%core:add_code>
   <%self:field field="${field}" label="${label}">
@@ -137,12 +138,17 @@ def q( text ):
     %endif
     %endfor  
     %endif
+    $( "#add_${field}" ).enter2tab();
     ${caller.body()}
   </%core:add_code>
   <%self:field
     field="${field}"
     label="${label}">
+    %if tabindex != None:
     <button id="add_${field}" class="images" tabindex="${tabindex}">        
+    %else:
+    <button id="add_${field}" class="images">        
+    %endif
       Subir imágenes
     </button>
     <table id="${field}__values" class="images">

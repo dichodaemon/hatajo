@@ -11,6 +11,9 @@ import datetime
 import pprint
 from collections import defaultdict
 from helpers import cleanup_arguments
+import random
+import httplib
+import time
 
 BASE_DIR = os.path.abspath( os.path.join( os.path.dirname( __file__ ), "..", "..", ".." ) )
 
@@ -116,6 +119,32 @@ class WebApp( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
+  @cherrypy.tools.render( template = "recommendation.html" )
+  def recommendation( self, title, method = "" ):
+    done = False
+    while not done:
+      try:
+        done = True
+        elements = self.backend.products()
+        random.shuffle( elements )
+      except httplib.CannotSendRequest:
+        time.sleep( random.random() )
+        done = False
+      except httplib.ResponseNotReady:
+        time.sleep( random.random() )
+        done = False
+    return {
+      "data": {
+        "title": title,
+        "elements": elements
+      }
+    }
+
+
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
   def find_in_catalog( self, catalog_name, term ):
     result = json.dumps( self.backend.find_in_catalog( catalog_name, term ) )
     print result
@@ -154,7 +183,6 @@ class WebApp( object ):
 
   @cherrypy.expose
   def load_image( self, id ):
-    import httplib, time, random
     done = False
     while not done:
       try:

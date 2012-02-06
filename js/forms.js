@@ -1,5 +1,45 @@
 ( function( $ ) {
+  $.extend($.expr[':'], {
+    data: function(elem, i, match) {
+      return !!$.data(elem, match[3]);
+    },
+
+    focusable: function(element) {
+      var nodeName = element.nodeName.toLowerCase();
+      var tabIndex = $.attr(element, 'tabindex');
+      return (/input|select|textarea|button|object/.test(nodeName)
+        ? !element.disabled
+        : 'a' == nodeName || 'area' == nodeName
+          ? element.href || !isNaN(tabIndex)
+          : !isNaN(tabIndex))
+        // the element and all of its ancestors must be visible
+        // the browser may report that the area is hidden
+        && !$(element)['area' == nodeName ? 'parents' : 'closest'](':hidden').length;
+    },
+
+    tabbable: function(element) {
+      var tabIndex = $.attr(element, 'tabindex');
+      return (isNaN(tabIndex) || tabIndex >= 0) && $(element).is(':focusable');
+    }
+  });
+  var tabables = null;
+
+  $.fn.enter2tab = function() {
+    return this.each( function() {
+      $( this ).keydown( function( event ) {
+        if ( event.keyCode == 13 ) {
+          var current = tabables.index( this );
+          var next = tabables.eq( current + 1 ).length ? tabables.eq( current + 1 ) : tabables.eq( 0 );
+          next.focus();
+          return false;
+        }
+      } );
+    } );
+  };
+
+
   $.fn.hintForm = function() {
+    tabables = $( ":focusable" );
     return this.each( function() {
       $( this ).submit( function() {
         $( this ).find( "input.hint" ).each( function() {
@@ -9,6 +49,7 @@
       } );
     } );
   };
+
   $.fn.hint = function( hint ) {
     return this.each( function() {
       var $this = $( this );
@@ -66,7 +107,6 @@
     var $list = $( "#" + field + "__values" );
     $add.hint( hint );
 
-
     $add.autocomplete( {
       source   : "find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
@@ -84,13 +124,19 @@
       $add.attr( "value", hint ).addClass( "hint" );
     } );
 
+    var current = tabables.index( $add );
+    var next = !!tabables.eq( current + 1 ).length ? tabables.eq( current + 1 ) : tabables.eq( 0 );
+
     $add.keypress( function( event ) {
       if ( event.keyCode == 13 ) {
         event.preventDefault();
         if ( $.trim( $add.attr( "value" ) ) != "" ) {
           $.forms.addItem( field, catalog, $add.attr( "value" ), "new" );
           $add.attr( "value", "" );
+        } else {
+          next.focus();
         }
+        return false;
       }
     } );
   };
@@ -100,6 +146,7 @@
     var $description = $( "#" + prefix + "value" );
     var $id  = $( "#" + prefix + "id" );
     $description.hint( hint );
+    $description.enter2tab();
     $description.autocomplete( {
       source   : "find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
@@ -116,5 +163,6 @@
         $id.attr( "value", "new" );
       }
     } );
+
   }
 } )( jQuery );

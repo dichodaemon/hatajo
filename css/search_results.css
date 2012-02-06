@@ -44,6 +44,7 @@
 
 #search_results img.main {
   max-width: 150px;
+  min-height: 200px;
 }
 
 #search_results ul.description {

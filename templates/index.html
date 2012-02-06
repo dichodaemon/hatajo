@@ -1,6 +1,7 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="base_public.html"/>
 <%namespace name="core" file="core.mako"/>
+<%namespace name="recommendation" file="recommendation.mako"/>
 <%core:add_css name="three_columns"/>
 
 <div id="column_container">
@@ -15,7 +16,12 @@
   </div>
 </div>
 <div class="indent1">
-  <%include file="recommendation.html"/>
+  <%recommendation:recommendation
+    title="Recomendaciones para usted"
+    method="random"/>
+  <%recommendation:recommendation
+    title="Novedades"
+    method="random"/>
 </div>
 
 
