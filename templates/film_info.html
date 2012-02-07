@@ -18,11 +18,12 @@ def main_image( product ):
     if product["images"]["values"][i]:
       return "/load_image?id=%i" % product["images"]["ids"][i]
   return "#"
+
 def other_images( product ):
   result = []
   for i in xrange( len( product["images"]["ids"] ) ):
     if not product["images"]["values"][i]:
-      result.append( product["images"]["ids"][i]
+      result.append( product["images"]["ids"][i] )
   return result
 %>
 
@@ -43,7 +44,7 @@ def other_images( product ):
   <div id="left" class="column">
     <div class="film_images">
       <img src="${main_image( data )}" class="main"/>
-      %for i in other_images( product ):
+      %for i in other_images( data ):
       <a href="/film_info?id=${data["id"]}"><img src="/load_image?id=${i}" class="micro"/></a>
       %endfor
     </div>
