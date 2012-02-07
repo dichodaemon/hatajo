@@ -1,10 +1,10 @@
 ## -*- coding: utf-8 -*-
-<%inherit file="base_public.html"/>
-<%namespace name="core" file="core.mako"/>
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
-<%core:add_css name="three_columns"/>
-<%core:add_css name="film_images"/>
-<%core:add_css name="ratings"/>
+<%core:add_css name="public/three_columns"/>
+<%core:add_css name="public/film_images"/>
+<%core:add_css name="public/ratings"/>
 <%core:add_js name="ratings"/>
 <%core:add_code>
   $( "#c0" ).ratings( 3, false );
@@ -12,40 +12,27 @@
   $( "#c2" ).ratings( 3, false );
   $( "#c3" ).ratings( 3, false );
 </%core:add_code>
-<%!
-def main_image( product ):
-  for i in xrange( len( product["images"]["ids"] ) ):
-    if product["images"]["values"][i]:
-      return "/load_image?id=%i" % product["images"]["ids"][i]
-  return "#"
-
-def other_images( product ):
-  result = []
-  for i in xrange( len( product["images"]["ids"] ) ):
-    if not product["images"]["values"][i]:
-      result.append( product["images"]["ids"][i] )
-  return result
-%>
+<%! import hatajo.webapp.template_helpers as h %>
 
 <div id="column_container">
   <div id="center" class="column">
     <div class="film_description">
       <ul>
-        <li class="title"><a href="/film_info">${data["name"]}</a> ( Titulo original )</li>
+        <li class="title"><a href="/public/film_info">${data["name"]}</a> ( Titulo original )</li>
         <li>Director: ${", ".join( [d for d in data["directors"]["values"]] )} </li>
         <li>${", ".join( [a for a in data["actors"]["values"]] )}</li>
         <li class="media">${data["media"]["value"]}</li>
         <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
-        <li class="delivery"><a href="/film_info">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
+        <li class="delivery"><a href="/public/film_info">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
         <li class="special">Envío gratis en la compra de 3 películas</li>
       </ul>
     </div>
   </div>
   <div id="left" class="column">
     <div class="film_images">
-      <img src="${main_image( data )}" class="main"/>
-      %for i in other_images( data ):
-      <a href="/film_info?id=${data["id"]}"><img src="/load_image?id=${i}" class="micro"/></a>
+      <img src="${h.main_image( data )}" class="main"/>
+      %for i in h.other_images( data ):
+      <a href="/public/film_info?id=${data["id"]}"><img src="/services/load_image?id=${i}" class="micro"/></a>
       %endfor
     </div>
   </div>
