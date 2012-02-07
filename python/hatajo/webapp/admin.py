@@ -28,12 +28,8 @@ class Admin( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
-  @cherrypy.tools.render( template = "admin/index.html" )
   def index( self ):
-    result = {
-      "pageTitle": u"Página principal"
-    }
-    return result
+    raise cherrypy.HTTPRedirect( "/admin/product_edit" )
 
   #-----------------------------------------------------------------------------
 

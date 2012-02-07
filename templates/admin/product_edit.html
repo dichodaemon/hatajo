@@ -1,11 +1,20 @@
 ## -*- coding: utf-8 -*-
-<%inherit file="base_administration.html"/>
-<%namespace name="core" file="core.mako"/>
-<%namespace name="forms" file="forms.mako"/>
-<%core:add_css name="two_columns"/>
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="admin/forms"/>
 
-<div id="column_container">
-  <div id="center" class="column">
+<div id="local_info_bar" class="column_container">
+  <div class="column main">
+  </div>
+  <div class="column left">
+    <h1>Editar producto</h1>
+  </div>
+</div>
+
+<div id="content" class="column_container">
+  <div class="column main">
     <%forms:form action="product_edit" method="post">
       <h1>Datos del producto</h1>
       <input type="hidden" id="id" name="id" value="${id}"/>
@@ -118,7 +127,11 @@
       </table>
     </%forms:form>
   </div>
-  <div id="left" class="column">
-    <%include file="genre_menu.html"/>
+  <div id="left_menu" class="column left">
+    <h1>Acciones</h1>
+    <ul>
+      <li><a href="#">Lista</a></li>
+      <li><a href="/admin/product_edit">Nuevo</a></li>
+    </ul>
   </div>
 </div>

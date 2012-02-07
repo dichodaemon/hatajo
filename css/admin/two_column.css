@@ -1,0 +1,85 @@
+div.outer {
+  padding: 0px 20px 0px 30px;
+  margin: 0px;
+  clear: both;
+}
+
+div.column_container {
+  padding-left: 200px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+div.column_container .column {
+  position: relative;
+  float: left;
+}
+
+div.main {
+  width: 100%;
+  text-align: left;
+}
+
+div.left {
+  width: 200px;
+  right: 200px;
+  margin-left: -100%;
+  padding-left: 30px;
+  padding-top: 0px;  
+}
+
+/* IE6 FIX */
+* html .left {
+  left: 150px;
+}
+
+#global_info_bar {
+  background: #EEEEEC;
+  border-bottom: 1px solid #888A85;
+  height: 30px;
+}
+
+#global_info_bar div {
+  line-height: 30px;
+}
+
+#global_info_bar img.logo{
+  padding: 5px 0px 5px 0px;
+}
+
+#local_info_bar {
+  border-bottom: 1px solid #888A85;
+  height: 40px;
+}
+#local_info_bar div {
+  height: 35px;
+}
+
+#local_info_bar h1 {
+  font-size: 16px;
+  color: #A40000;
+}
+
+#local_info_bar div.main {
+  padding-top: 0px;
+}
+
+#left_menu h1 {
+  font-size: 14px;
+  color: #A40000;
+}
+
+#left_menu ul {
+  padding: 0px;
+  list-style: none;
+  font-size: 14px;
+}
+
+#left_menu ul li {
+  line-height: 20px;
+}
+
+#left_menu a {
+  text-decoration: none;
+  color: #2E3436;
+}

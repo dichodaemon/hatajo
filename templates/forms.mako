@@ -38,8 +38,6 @@ def q( text ):
 </%def>
 
 <%def name="multi_catalog( field, catalog, label, hint, tabindex=None )">
-  <%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
-  <%core:add_css name="forms"/>
   <%core:add_js name="jquery-ui-1.8.17.custom.min"/>
   <%core:add_js name="forms"/>
   <%core:add_code>
@@ -64,8 +62,6 @@ def q( text ):
 
 <%def name="catalog( field, catalog, label, hint, tabindex=None )">
   <% prefix = field + "__s__" + catalog + "__" %> 
-  <%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
-  <%core:add_css name="forms"/>
   <%core:add_js name="jquery-ui-1.8.17.custom.min"/>
   <%core:add_js name="forms"/>
   <%core:add_code>

@@ -1,0 +1,20 @@
+#upper_menu {
+  line-height: 30px;
+  font-size: 14px;
+  background: #A40000;
+  color: #FFF;
+}
+
+#upper_menu ul {
+  display: inline;
+  list-style: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+#upper_menu ul li {
+  display: inline;
+  margin: 0px 20px 0px 0px;
+  padding: 0px;
+}
+

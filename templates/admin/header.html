@@ -1,12 +1,23 @@
-
 ## -*- coding: utf-8 -*-
 <%namespace name="core" file="/core.mako"/>
 
+<%core:add_css name="admin/two_column"/>
 <%core:add_css name="admin/header"/>
 
-<div id="header">
-  <ul class="menu">
+<div id="upper_menu" class="outer">
+  <ul>
     <li>Pendientes<li/>
     <li>Productos<li/>
   </ul>
 </div>
+
+<div id="global_info_bar" class="column_container">
+  <div class="column main">
+    Usuario: Enrique
+  </div>
+  <div class="column left">
+    <!--<img src="/img/logo-small.png" class="logo"/>-->
+    Mis-Pelis
+  </div>
+</div>
+

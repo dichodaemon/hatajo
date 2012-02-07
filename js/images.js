@@ -6,9 +6,9 @@
     $( "#" + field + "__values" ).append( $list_item );
     var $td = $( "<td class='thumbnail'></td>" );
     $list_item.append( $td );
-    var $imagea = $( "<a href='/load_image?id=" + key + "'></a>" );
+    var $imagea = $( "<a href='/services/load_image?id=" + key + "'></a>" );
     var $image  = $( "<img class='thumbnail'/>" );
-    $image.attr( "src", "/load_image?id=" + key ); 
+    $image.attr( "src", "/services/load_image?id=" + key ); 
     $imagea.append( $image )
     $imagea.imgPreview( {
       containerID: "imgPreviewWithStyles",
@@ -49,7 +49,7 @@
 
     var uploader = new qq.FileUploaderBasic( {
       button: $add,
-      action: "upload_image", 
+      action: "/services/upload_image", 
       sizeLimit: 1000000,
       allowedExtensions: ["png", "jpg"],
       params: {}, 

@@ -108,7 +108,7 @@
     $add.hint( hint );
 
     $add.autocomplete( {
-      source   : "find_in_catalog/?catalog_name=" + catalog,
+      source   : "/services/find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
       select   : function( event, ui ) {
         if ( $( "#" + field + "__values option[value=" + ui.item.id + "]" ).length > 0 ) {
@@ -148,7 +148,7 @@
     $description.hint( hint );
     $description.enter2tab();
     $description.autocomplete( {
-      source   : "find_in_catalog/?catalog_name=" + catalog,
+      source   : "/services/find_in_catalog/?catalog_name=" + catalog,
       minLength: 2,
       select   : function( event, ui ) {
         $id.attr( "value", ui.item.id );

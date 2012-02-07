@@ -1,3 +1,7 @@
+form.main_form h1 {
+  font-size: 14px;
+  color: #A40000;
+}
 form.main_form {
   text-align: left;
   margin-left: 40px;
