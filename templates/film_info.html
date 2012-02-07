@@ -12,6 +12,19 @@
   $( "#c2" ).ratings( 3, false );
   $( "#c3" ).ratings( 3, false );
 </%core:add_code>
+<%!
+def main_image( product ):
+  for i in xrange( len( product["images"]["ids"] ) ):
+    if product["images"]["values"][i]:
+      return "/load_image?id=%i" % product["images"]["ids"][i]
+  return "#"
+def other_images( product ):
+  result = []
+  for i in xrange( len( product["images"]["ids"] ) ):
+    if not product["images"]["values"][i]:
+      result.append( product["images"]["ids"][i]
+  return result
+%>
 
 <div id="column_container">
   <div id="center" class="column">
@@ -29,9 +42,9 @@
   </div>
   <div id="left" class="column">
     <div class="film_images">
-      <img src="/load_image?id=${data['images']['ids'][0]}" class="main"/>
-      %for i in data['images']['ids'][1:]:
-      <a href="/film_info"><img src="/load_image?id=${i}" class="micro"/></a>
+      <img src="${main_image( data )}" class="main"/>
+      %for i in other_images( product ):
+      <a href="/film_info?id=${data["id"]}"><img src="/load_image?id=${i}" class="micro"/></a>
       %endfor
     </div>
   </div>
