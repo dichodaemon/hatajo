@@ -89,15 +89,19 @@
   </dl>
 </div>
 
+%if data["special_features"].strip() != "":
 <div class="large_text">
   <h2>Características especiales:</h2>
   ${data["special_features"]}
 </div>
+%endif
 
+%if data["summary"].strip() != "":
 <div class="large_text">
   <h2>Reseña de la distribuidora:</h2>
   ${data["summary"]}
 </div>
+%endif
 
 <div class="large_text">
   <h2>Comentarios de los usuarios:</h2>

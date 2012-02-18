@@ -45,33 +45,26 @@ class Admin( object ):
 
   @cherrypy.expose
   #@cherrypy.tools.render( template = "product_list.html" )
-  def product_support( self, **args ):
+  def product_pager( self, **args ):
+    pprint.pprint( args, width = 80 )
+    data = self.backend.product_pager( 
+      args["sSearch"],
+      int( args["iDisplayLength"] ),
+      int( args["iDisplayStart"] )
+    )
+    data = [
+      [
+        "<a href=/admin/product_edit?id=%s>%s</a>" % ( d["id"],  d["name"] ),
+        ", ".join( d["actors"]["values"] )
+      ]
+      for d in data
+    ]
+    pprint.pprint( data, width = 80 )
     return json.dumps( {
       "sEcho": args["sEcho"],
       "iTotalRecords": 10,
       "iTotalDisplayRecords": 10,
-      "aaData": [
-        [ 1, "a", True],
-        [ 2, "b", True],
-        [ 3, "c", True],
-        [ 4, "d", True],
-        [ 5, "e", True],
-        [ 6, "f", True],
-        [ 7, "g", True],
-        [ 8, "h", True],
-        [ 9, "i", True],
-        [10, "j", True],
-        [11, "k", True],
-        [12, "l", True],
-        [13, "m", True],
-        [14, "n", True],
-        [15, "o", True],
-        [16, "p", True],
-        [17, "q", True],
-        [18, "r", True],
-        [19, "s", True],
-        [20, "t", True]
-      ]
+      "aaData": data 
     } )
 
   #-----------------------------------------------------------------------------

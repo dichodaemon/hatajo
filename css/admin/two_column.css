@@ -83,3 +83,8 @@ div.left {
   text-decoration: none;
   color: #2E3436;
 }
+
+div.list h1 {
+  font-size: 14px;
+  color: #A40000;
+}

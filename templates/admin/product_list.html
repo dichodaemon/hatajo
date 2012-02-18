@@ -1,41 +1,45 @@
 ## -*- coding: utf-8 -*-
-<%inherit file="base_administration.html"/>
-<%namespace name="core" file="core.mako"/>
-<%core:add_css name="two_columns"/>
+<%inherit file="product.html"/>
+<%namespace name="core" file="/core.mako"/>
 <%core:add_css name="dataTables/table"/>
 <%core:add_js name="dataTables/jquery.dataTables.min"/>
 <%core:add_code>
   $( "#product_list" ).dataTable( {
     "bProcessing": true,
     "bServerSide": true,
-    "sAjaxSource": "/product_pager",
+    "sAjaxSource": "/admin/product_pager",
     "oLanguage": 
       {
         "sSearch"      : "Buscar",
-        "sLengthMenu"  : "Mostrar _MENU_ elementos por página",
+        "sLengthMenu"  : "Mostrar _MENU_ elementos",
         "sZeroRecords" : "Lo siento, no hay elementos correspondientes",
         "sInfo"        : "Mostrando de _START_ a _END_ de _TOTAL_ elementos",
         "sInfoEmpty"   : "Mostrando 0 elementos",
         "sInfoFiltered": "(filtrados de un total de _MAX_ registros)"
-      }
+    },
+    "sDom": 'frl<"toolbar">tip'
   } );
-</%core:add_code>
+  $( "div.toolbar" ).append( $( "#toolbar_menu" ) );
+  $( "#product_list tbody tr" ).live( "click", function( e ) {
+    $( "#product_list tr.selected" ).removeClass( "selected" );
+    $( this ).addClass( "selected" );
+  } );
 
-<div id="column_container">
-  <div id="center" class="column">
-    <table id="product_list">
-      <thead>
-        <tr>
-          <td>Número</td>
-          <td>Letra</td>
-          <td>Booleano</td>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
-  <div id="left" class="column">
-    <%include file="genre_menu.html"/>
-  </div>
+</%core:add_code>
+<ul id="toolbar_menu">
+  <li><a href="#">Editar</a></li>
+  <li><a href="#">Borrar</a></li>
+</ul>
+<div class="list">
+  <h1>Lista de productos</h1>
+  <table id="product_list">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Reparto</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 </div>

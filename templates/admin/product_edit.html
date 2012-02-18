@@ -1,137 +1,118 @@
 ## -*- coding: utf-8 -*-
-<%inherit file="base.html"/>
+<%inherit file="product.html"/>
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="forms" file="/forms.mako"/>
 <%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
 <%core:add_css name="admin/forms"/>
 
-<div id="local_info_bar" class="column_container">
-  <div class="column main">
-  </div>
-  <div class="column left">
-    <h1>Editar producto</h1>
-  </div>
-</div>
-
-<div id="content" class="column_container">
-  <div class="column main">
-    <%forms:form action="product_edit" method="post">
-      <h1>Datos del producto</h1>
-      <input type="hidden" id="id" name="id" value="${id}"/>
-      <table cellpadding="0" cellspacing="0">
-        <%forms:text_field
-          field="name"
-          label="Nombre"
-          tabindex="1"
-          hint="escriba el nombre del producto">
-          $( "#name" ).focus();
-        </%forms:text_field>
-        <%forms:multi_catalog
-          field="genres"
-          catalog="genres"
-          label="Géneros"
-          tabindex="2"
-          hint="agregue los géneros de esta película"/>
-        <%forms:multi_catalog
-          field="actors"
-          catalog="actors"
-          label="Actor(es)"
-          tabindex="3"
-          hint="agregue un actor"/>
-        <%forms:multi_catalog
-          field="directors"
-          catalog="directors"
-          label="Director(es)"
-          tabindex="4"
-          hint="agregue un director"/>
-        <%forms:catalog
-          field="format"
-          catalog="formats"
-          hint="escriba un formato"
-          tabindex="5"
-          label="Formato"/>
-        <%forms:multi_catalog
-          field="languages"
-          catalog="languages"
-          hint="escriba los idiomas"
-          tabindex="6"
-          label="Idiomas"/>
-        <%forms:multi_catalog
-          field="subtitles"
-          catalog="subtitles"
-          hint="escriba los idioma de subtítulos"
-          tabindex="7"
-          label="Subtítulos"/>
-        <%forms:catalog
-          field="region"
-          catalog="regions"
-          hint="escriba una región"
-          tabindex="8"
-          label="Región"/>
-        <%forms:text_field
-          field="item_count"
-          label="No. de discos"
-          tabindex="9"
-          hint="escriba el número de discos"/>
-        <%forms:catalog
-          field="age_rating"
-          catalog="age_ratings"
-          hint="escriba una clasificación"
-          tabindex="10"
-          label="Clasificación"/>
-        <%forms:catalog
-          field="studio"
-          catalog="studios"
-          hint="escriba un estudio"
-          tabindex="11"
-          label="Estudio"/>
-        <%forms:catalog
-          field="media"
-          catalog="medias"
-          hint="escriba un tipo de medio"
-          tabindex="12"
-          label="Medio"/>
-        <%forms:text_field
-          field="duration"
-          label="Duración"
-          tabindex="13"
-          hint="escriba la duración de la película"/>
-        <%forms:text_field
-          field="rtc"
-          label="RTC"
-          tabindex="14"
-          hint="escriba el código RTC del producto"/>
-        <%forms:text_field
-          field="bar_code"
-          label="Código de barras"
-          tabindex="15"
-          hint="escriba el código de barras del producto"/>
-        <%forms:images
-          field="images"
-          label="Imágenes"
-          tabindex="16"
-          hint ="Agregue las imágenes del producto"/>
-        <%forms:rich_text
-          field="special_features"
-          label="Características especiales"
-          tabindex="17"/> 
-        <%forms:rich_text
-          field="summary"
-          label="Reseña de la distribuidora"
-          tabindex="18"/> 
-        <tr class="buttons">
-          <td colspan="2">
-            <input type="submit" tabindex="19" value="Enviar" class="button"/>
-          </td>
-        </tr>
-      </table>
-    </%forms:form>
-  </div>
-  <div id="left_menu" class="column left">
-    <h1>Acciones</h1>
-    <ul>
-      <li><a href="#">Lista</a></li>
-      <li><a href="/admin/product_edit">Nuevo</a></li>
-    </ul>
-  </div>
-</div>
+<%forms:form action="product_edit" method="post">
+  <h1>Datos del producto</h1>
+  <input type="hidden" id="id" name="id" value="${id}"/>
+  <table cellpadding="0" cellspacing="0">
+    <%forms:text_field
+      field="name"
+      label="Nombre"
+      tabindex="1"
+      hint="escriba el nombre del producto">
+      $( "#name" ).focus();
+    </%forms:text_field>
+    <%forms:multi_catalog
+      field="genres"
+      catalog="genres"
+      label="Géneros"
+      tabindex="2"
+      hint="agregue los géneros de esta película"/>
+    <%forms:multi_catalog
+      field="actors"
+      catalog="actors"
+      label="Actor(es)"
+      tabindex="3"
+      hint="agregue un actor"/>
+    <%forms:multi_catalog
+      field="directors"
+      catalog="directors"
+      label="Director(es)"
+      tabindex="4"
+      hint="agregue un director"/>
+    <%forms:catalog
+      field="format"
+      catalog="formats"
+      hint="escriba un formato"
+      tabindex="5"
+      label="Formato"/>
+    <%forms:multi_catalog
+      field="languages"
+      catalog="languages"
+      hint="escriba los idiomas"
+      tabindex="6"
+      label="Idiomas"/>
+    <%forms:multi_catalog
+      field="subtitles"
+      catalog="subtitles"
+      hint="escriba los idioma de subtítulos"
+      tabindex="7"
+      label="Subtítulos"/>
+    <%forms:catalog
+      field="region"
+      catalog="regions"
+      hint="escriba una región"
+      tabindex="8"
+      label="Región"/>
+    <%forms:text_field
+      field="item_count"
+      label="No. de discos"
+      tabindex="9"
+      hint="escriba el número de discos"/>
+    <%forms:catalog
+      field="age_rating"
+      catalog="age_ratings"
+      hint="escriba una clasificación"
+      tabindex="10"
+      label="Clasificación"/>
+    <%forms:catalog
+      field="studio"
+      catalog="studios"
+      hint="escriba un estudio"
+      tabindex="11"
+      label="Estudio"/>
+    <%forms:catalog
+      field="media"
+      catalog="medias"
+      hint="escriba un tipo de medio"
+      tabindex="12"
+      label="Medio"/>
+    <%forms:text_field
+      field="duration"
+      label="Duración"
+      tabindex="13"
+      hint="escriba la duración de la película"/>
+    <%forms:text_field
+      field="rtc"
+      label="RTC"
+      tabindex="14"
+      hint="escriba el código RTC del producto"/>
+    <%forms:text_field
+      field="bar_code"
+      label="Código de barras"
+      tabindex="15"
+      hint="escriba el código de barras del producto"/>
+    <%forms:images
+      field="images"
+      label="Imágenes"
+      tabindex="16"
+      hint ="Agregue las imágenes del producto"/>
+    <%forms:rich_text
+      field="special_features"
+      label="Características especiales"
+      tabindex="17"/> 
+    <%forms:rich_text
+      field="summary"
+      label="Reseña de la distribuidora"
+      tabindex="18"/> 
+    <tr class="buttons">
+      <td colspan="2">
+        <input type="submit" tabindex="19" value="Enviar" class="button"/>
+      </td>
+    </tr>
+  </table>
+</%forms:form>

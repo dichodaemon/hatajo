@@ -118,7 +118,6 @@ def q( text ):
 </%def>
 
 <%def name="images( field, label, hint, tabindex=None )">
-  <%core:add_css name="forms"/>
   <%core:add_js name="jquery-ui-1.8.17.custom.min"/>
   <%core:add_js name="fileuploader"/>
   <%core:add_js name="images"/>

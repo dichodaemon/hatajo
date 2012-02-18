@@ -68,6 +68,20 @@ class Backend( object ):
     pprint.pprint( result, width = 80 )
     return result
 
+  def product_pager( self, query, limit, offset ):
+    print "-" * 80
+    result = db.session().query( db.Product )\
+             .filter( db.Product.name.like( "%%%s%%" % query ) )\
+             .limit( limit )\
+             .offset( offset )\
+             .all()
+    result = [ 
+        helpers.product.to_dictionary( p )
+      for p in result
+    ]
+    pprint.pprint( result, width = 80 )
+    return result
+
   def save_binary( self, filename, content_type, content ):
     content = content.decode( "base64" )
     hash = hashlib.md5( content ).hexdigest()
