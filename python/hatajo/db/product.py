@@ -7,25 +7,27 @@ class Product( Base ):
   __tablename__ = 'products'
   id         = Column( Integer, primary_key = True )
   name       = Column( String )
-  format_id  = Column( Integer, ForeignKey( "catalog_entries.id" ) )
-  region_id  = Column( Integer, ForeignKey( "catalog_entries.id" ) )
-  item_count = Column( Integer )
+  original_name = Column( String )
+  year          = Column( Integer )
+  norm_id       = Column( Integer, ForeignKey( "catalog_entries.id" ) )
+  screen_format_id  = Column( Integer, ForeignKey( "catalog_entries.id" ) )
+  format_id     = Column( Integer, ForeignKey( "catalog_entries.id" ) )
+  item_count    = Column( Integer )
   age_rating_id = Column( Integer, ForeignKey( "catalog_entries.id" ) )
   studio_id     = Column( Integer, ForeignKey( "catalog_entries.id" ) )
-  media_id      = Column( Integer, ForeignKey( "catalog_entries.id" ) )
-  duration   = Column( String )
-  rtc        = Column( String )
-  bar_code   = Column( String )
+  duration      = Column( String )
+  rtc           = Column( String )
+  bar_code      = Column( String )
   special_features = Column( String )
   summary          = Column( String )
 
 
 
+  norm = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.norm_id == CatalogEntry.id" )
+  screen_format = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.screen_format_id == CatalogEntry.id" )
   format = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.format_id == CatalogEntry.id" )
-  region = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.region_id == CatalogEntry.id" )
   age_rating = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.age_rating_id == CatalogEntry.id" )
   studio = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.studio_id == CatalogEntry.id" )
-  media = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.media_id == CatalogEntry.id" )
 
   by_id   = classmethod( by_id )
 
@@ -67,4 +69,18 @@ ProductSubtitle = Table( "product_subtitle", metadata,
 )
 
 Product.subtitles = relation( CatalogEntry, secondary = ProductSubtitle )
+
+ProductRegion = Table( "product_region", metadata,
+  Column( "product_id", Integer, ForeignKey( Product.id ) ),
+  Column( "region_id", Integer, ForeignKey( CatalogEntry.id ) )
+)
+
+Product.regions = relation( CatalogEntry, secondary = ProductRegion )
+
+ProductMedia = Table( "product_media", metadata,
+  Column( "product_id", Integer, ForeignKey( Product.id ) ),
+  Column( "media_id", Integer, ForeignKey( CatalogEntry.id ) )
+)
+
+Product.medias = relation( CatalogEntry, secondary = ProductMedia )
 

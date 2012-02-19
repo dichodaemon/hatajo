@@ -49,7 +49,7 @@ class Services( object ):
     return """
     <html><body><script type="text/javascript">
     window.parent.CKEDITOR.tools.callFunction(%s, '%s','%s');
-    </script></body></html>""" % ( CKEditorFuncNum, "/load_image?id=%i" % result, "" )
+    </script></body></html>""" % ( CKEditorFuncNum, "/services/load_image?id=%i" % result, "" )
     
 
   #-----------------------------------------------------------------------------
@@ -70,3 +70,14 @@ class Services( object ):
     cherrypy.response.headers["Content-Type"] = result["content_type"]
     return result["content"].decode( "base64" )
 
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def product_delete( self, id ):
+    return json.dumps( self.backend.product_delete( int( id ) ) )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def ad_delete( self, id ):
+    return json.dumps( self.backend.ad_delete( int( id ) ) )

@@ -1,0 +1,42 @@
+## -*- coding: utf-8 -*-
+<%inherit file="ad.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="admin/forms"/>
+
+<%forms:form action="ad_edit" method="post">
+  <h1>Datos del anuncio</h1>
+  <input type="hidden" id="id" name="id" value="${id}"/>
+  <table cellpadding="0" cellspacing="0">
+    <%forms:text_field
+      field="name"
+      label="Nombre"
+      tabindex="1"
+      hint="escriba el nombre del anuncio">
+      $( "#name" ).focus();
+    </%forms:text_field>
+    <%forms:checkbox
+      field="enabled"
+      label="Activo"
+      tabindex="2"/>
+    <%forms:date
+      field="valid_until"
+      label="Válido hasta"
+      tabindex="3"/>
+    <%forms:dropdown_catalog
+      field="ad_type"
+      catalog="ad_types"
+      label="Tipo de anuncio"
+      tabindex="3"/>
+    <%forms:rich_text
+      field="content"
+      label="Contenido"
+      tabindex="4"/> 
+    <tr class="buttons">
+      <td colspan="2">
+        <input type="submit" tabindex="5" value="Enviar" class="button"/>
+      </td>
+    </tr>
+  </table>
+</%forms:form>

@@ -10,7 +10,7 @@ import time
 import datetime
 import pprint
 from collections import defaultdict
-from helpers import cleanup_arguments
+import helpers
 import random
 import httplib
 import time
@@ -44,41 +44,78 @@ class Admin( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
-  #@cherrypy.tools.render( template = "product_list.html" )
-  def product_pager( self, **args ):
-    pprint.pprint( args, width = 80 )
-    data = self.backend.product_pager( 
-      args["sSearch"],
-      int( args["iDisplayLength"] ),
-      int( args["iDisplayStart"] )
-    )
-    data = [
+  def product_list_elements( self, **args ):
+    result = helpers.datatable_helper( self.backend, "Product", "name", ["name", "year" ], **args )
+    result["aaData"] = [
       [
-        "<a href=/admin/product_edit?id=%s>%s</a>" % ( d["id"],  d["name"] ),
-        ", ".join( d["actors"]["values"] )
+        "<a id='%s' href=/admin/product_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
+        d["year"],
+        ", ".join( [director for director in d["directors"]["values"]] )
       ]
-      for d in data
+      for d in result["aaData"]
     ]
-    pprint.pprint( data, width = 80 )
-    return json.dumps( {
-      "sEcho": args["sEcho"],
-      "iTotalRecords": 10,
-      "iTotalDisplayRecords": 10,
-      "aaData": data 
-    } )
+    return json.dumps( result )
 
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "admin/product_edit.html" )
   def product_edit( self, **kargs ):
-    kargs = cleanup_arguments( kargs )
+    kargs = helpers.cleanup_arguments( kargs )
     kargs, warnings, errors = self.backend.product_update( kargs )
     result = {
       "pageTitle": u"Información de producto",
       "errors": errors,
       "warnings": warnings,
-      "data": kargs
+      "data": kargs,
+      "catalogs": {
+        "norms": self.backend.catalog( "norms" )
+      }
+    }
+    result.update( kargs )
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/ad_list.html" )
+  def ad_list( self ):
+    result = {
+      "pageTitle": u"Lista de anuncios"
+    }
+    return result
+
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def ad_list_elements( self, **args ):
+    result = helpers.datatable_helper( self.backend, "Ad", "name", ["name", "enabled", "valid_until" ], **args )
+    result["aaData"] = [
+      [
+        "<a id='%s' href=/admin/ad_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
+        d["enabled"] and "si" or "no",
+        d["valid_until"]
+      ]
+      for d in result["aaData"]
+    ]
+    return json.dumps( result )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/ad_edit.html" )
+  def ad_edit( self, **kargs ):
+    kargs = helpers.cleanup_arguments( kargs )
+    kargs, warnings, errors = self.backend.ad_update( kargs )
+    result = {
+      "pageTitle": u"Edición de anuncio",
+      "errors": errors,
+      "warnings": warnings,
+      "data": kargs,
+      "catalogs": {
+        "ad_types": self.backend.catalog( "ad_types" )
+      }
     }
     result.update( kargs )
     return result

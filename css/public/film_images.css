@@ -38,6 +38,7 @@ div.film_images {
 
 .film_description ul .title {
   font-size: 14pt;
+  color: #204A87;
 }
 
 .film_description ul .media {
@@ -167,7 +168,11 @@ div.bar_inner {
   height: 15px;
 }
 
-
-
-
-
+#imgPreviewWithStyles {
+  background: #FFF;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  padding: 5px;
+  z-index: 999;
+  border: solid 2px #BABDB6;
+}

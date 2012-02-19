@@ -2,6 +2,7 @@
 
 import db
 import collections
+import datetime
 
 def main_form( f ):
   def result( self, arguments ):
@@ -39,6 +40,15 @@ def get_product_image( table, product, image_id, value ):
   else:
     result.value = value
   return result
+
+def field_to_date( field ):
+  return datetime.datetime.strptime( field, "%d/%m/%Y" )
+
+def date_to_field( date ):
+  if date != None:
+    return date.strftime( "%d/%m/%Y" )
+  else:
+    return ""
 
 def catalog_to_dictionary( entry ):
   result = {}
@@ -83,13 +93,21 @@ class Helper( object ):
   def to_record( self, dic, record ):
     result = {}
     for f, info in self.fields.items():
-      if f in dic:
+      if not f in dic:
+        if info == None and type( getattr( record, f ) ) == bool:
+          setattr( record, f, False )
+      else:
         value = dic[f]
         if info == None:
           setattr( record, f, value )
+        elif info == "date":
+          entry = field_to_date( value )
+          setattr( record, f, entry ) 
         elif info == "catalog":
-          print "Here:", value
           entry = get_catalog_entry( value["table"], value["id"], value["value"] )
+          setattr( record, f, entry ) 
+        elif info == "dropdown_catalog":
+          entry = db.CatalogEntry.by_id( value["id"] )
           setattr( record, f, entry ) 
         elif info == "multi":
           ids = value["ids"]
@@ -116,11 +134,15 @@ class Helper( object ):
       value = getattr( record, f )
       if info == None or info == "id":
         result[f] = value
+        if value == None:
+          result[f] = ""
       if info == "catalog":
         result[f] = catalog_to_dictionary( value )
       elif info == "multi":
         result[f] = multi_to_dictionary( value )
       elif info == "images":
         result[f] = images_to_dictionary( value )
+      elif info == "date":
+        result[f] = date_to_field( value )
     return result
 

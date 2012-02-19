@@ -62,22 +62,6 @@ class Public( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
-  @cherrypy.tools.render( template = "public/product_edit.html" )
-  def product_edit( self, **kargs ):
-    kargs = cleanup_arguments( kargs )
-    kargs, warnings, errors = self.backend.product_update( kargs )
-    result = {
-      "pageTitle": u"Información de producto",
-      "errors": errors,
-      "warnings": warnings,
-      "data": kargs
-    }
-    result.update( kargs )
-    return result
-
-  #-----------------------------------------------------------------------------
-
-  @cherrypy.expose
   @cherrypy.tools.render( template = "public/recommendation.html" )
   def recommendation( self, title, method = "" ):
     done = False
@@ -99,3 +83,14 @@ class Public( object ):
       }
     }
 
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def ad( self, ad_type ):
+    while True:
+      try:
+        return self.backend.ad( ad_type )["content"]
+      except httplib.CannotSendRequest:
+        time.sleep( random.random() )
+      except httplib.ResponseNotReady:
+        time.sleep( random.random() )

@@ -1,0 +1,23 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import sys
+import os
+
+BASE_DIR = os.path.abspath( os.path.join( os.path.dirname( __file__ ), ".." ) )
+path     = os.path.abspath( os.path.join( BASE_DIR, "python" ) )
+if os.path.exists( path ):
+  sys.path.append( path )
+
+import hatajo
+import ConfigParser
+import codecs
+
+#-------------------------------------------------------------------------------
+
+config = ConfigParser.SafeConfigParser()
+config.readfp( codecs.open( sys.argv[1], "r", "utf-8" ) )
+hatajo.db.create( config.get( "db", "url" ).strip( '"' ) )
+hatajo.db.session().commit()
+
+

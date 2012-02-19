@@ -1,18 +1,15 @@
 ## -*- coding: utf-8 -*-
-<%inherit file="product.html"/>
+<%inherit file="ad.html"/>
 <%namespace name="core" file="/core.mako"/>
 <%core:add_css name="admin/lists"/>
 <%core:add_js name="dataTables/jquery.dataTables.min"/>
 <%core:add_js name="table"/>
 <%core:add_code>
-  var table = $( "#product_list" );
+  var table = $( "#ad_list" );
   table.table( {
     "menu": ".toolbar_menu",
     "tableOptions": {
-      "sAjaxSource": "/admin/product_list_elements",
-      "aoColumnDefs": [
-        { "bSortable": false, "aTargets": [2] }
-      ]
+      "sAjaxSource": "/admin/ad_list_elements"
     }
   } );
 
@@ -20,7 +17,7 @@
     event.preventDefault();
     var row = table.selectedRow();
     if ( row != null ) {
-      window.location = "/admin/product_edit?id=" + row.find( "a" ).attr( "id" );
+      window.location = "/admin/ad_edit?id=" + row.find( "a" ).attr( "id" );
     }
   } );
 
@@ -35,7 +32,7 @@
         $.ajax( {
           type: "post",
           dataType: "json",
-          url: "/services/product_delete",
+          url: "/services/ad_delete",
           data: { id: parseInt( item.attr( "id" ) ) },
           cache: false,
           success: function( ok ) {
@@ -55,13 +52,13 @@
   <li><a href="delete" class="delete">Borrar</a></li>
 </ul>
 <div class="list">
-  <h1>Lista de productos</h1>
-  <table id="product_list">
+  <h1>Lista de anuncios</h1>
+  <table id="ad_list">
     <thead>
       <tr>
         <th>Nombre</th>
-        <th>Año</th>
-        <th>Director(es)</th>
+        <th>Activo</th>
+        <th>Valido hasta</th>
       </tr>
     </thead>
     <tbody>

@@ -3,16 +3,20 @@
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
 <%core:add_css name="public/three_columns"/>
+<%core:add_code>
+  $( "#main_ad" ).load( "/public/ad?ad_type=Grande" );
+  $( "#small_ad" ).load( "/public/ad?ad_type=Chico" );
+</%core:add_code>
 
 <div id="column_container">
   <div id="center" class="column">
-    <img src="/img/test/serbian.png"/>
+    <div id="main_ad"></div>
   </div>
   <div id="left" class="column">
     <%include file="genre_menu.html"/>
   </div>
   <div id="right" class="column">
-    right
+    <div id="small_ad"></div>
   </div>
 </div>
 <div class="indent1">

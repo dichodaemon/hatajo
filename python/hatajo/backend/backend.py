@@ -4,6 +4,8 @@ import db
 from db import session, CatalogEntry
 import hashlib
 import pprint
+import datetime
+import random
 
 import helpers
 
@@ -15,6 +17,14 @@ class Backend( object ):
     result = db.session().query( db.CatalogEntry )\
       .filter( db.CatalogEntry.catalog_name == catalog_name )\
       .filter( db.CatalogEntry.value.like( "%%%s%%" % term ) )\
+      .all()
+    return [
+      { "id": v.id, "value": v.value } for v in result
+    ]
+
+  def catalog( self, catalog_name ):
+    result = db.session().query( db.CatalogEntry )\
+      .filter( db.CatalogEntry.catalog_name == catalog_name )\
       .all()
     return [
       { "id": v.id, "value": v.value } for v in result
@@ -41,46 +51,51 @@ class Backend( object ):
       else:
         errors["images"].append( u"Es necesario dar de alta una imagen" )
       if len( errors ) == 0:
-        helpers.product.to_record( arguments, product )
+        helpers.get( db.Product ).to_record( arguments, product )
         db.session().add( product )
         db.session().commit()
-        arguments = helpers.product.to_dictionary( product )
+        arguments = helpers.get( db.Product ).to_dictionary( product )
     else:
-      arguments = helpers.product.to_dictionary( product )
+      arguments = helpers.get( db.Product ).to_dictionary( product )
     print
     pprint.pprint( arguments, width = 80 )
     return arguments
 
   def product_info( self, id ):
-    print "-" * 80
     product = db.Product.by_id( id )
-    result = helpers.product.to_dictionary( product )
-    pprint.pprint( result, width = 80 )
+    result = helpers.get( db.Product ).to_dictionary( product )
     return result
 
   def products( self ):
-    print "-" * 80
     result = db.session().query( db.Product ).all()
     result = [ 
-        helpers.product.to_dictionary( p )
+        helpers.get( db.Product ).to_dictionary( p )
       for p in result
     ]
-    pprint.pprint( result, width = 80 )
     return result
 
-  def product_pager( self, query, limit, offset ):
-    print "-" * 80
-    result = db.session().query( db.Product )\
-             .filter( db.Product.name.like( "%%%s%%" % query ) )\
-             .limit( limit )\
-             .offset( offset )\
-             .all()
+  def pager( self, table, filter_field, filter, sort_by, descending, offset, limit ):
+    table = db.__dict__[table]
+    def build_query( query ):
+      if filter != "":
+        for f in filter.split():
+          query = query.filter( getattr( table, filter_field ).like( "%%%s%%" % filter ) )
+      if not descending:
+        query = query.order_by( db.func.lower( getattr( table, sort_by ) ).asc() )
+      else:
+        query = query.order_by( db.func.lower( getattr( table, sort_by ) ).desc() )
+      query = query.distinct()
+      return query
+
+    result = build_query( db.session().query( table ) )
+    count  = build_query( db.session().query( db.func.count( db.distinct( table.id ) ) ) ).one()[0]
+    result = result.limit( limit ).offset( offset ).all()
+
     result = [ 
-        helpers.product.to_dictionary( p )
+        helpers.get( table ).to_dictionary( p )
       for p in result
     ]
-    pprint.pprint( result, width = 80 )
-    return result
+    return result, count
 
   def save_binary( self, filename, content_type, content ):
     content = content.decode( "base64" )
@@ -97,7 +112,6 @@ class Backend( object ):
 
   def load_binary( self, id ):
     result = db.BinaryContent.by_id( id )
-    print id, result
     return {
       "name": result.name,
       "hash": result.hash,
@@ -105,3 +119,54 @@ class Backend( object ):
       "content_type": result.content_type
     }
 
+  def product_delete( self, id ):
+    product = db.Product.by_id( id )
+    if id == None:
+      return False
+    db.session().delete( product )
+    db.session().commit()
+    return True
+
+  @helpers.main_form
+  def ad_update( self, arguments, warnings, errors ):
+    print "-" * 80
+    pprint.pprint( arguments, width = 80 )
+
+    if arguments["id"] == "new": 
+      ad = db.Ad()
+    else:
+      ad = db.Ad.by_id( arguments["id"] )
+
+    if len( arguments ) > 1:
+      if arguments["name"].strip() == "":
+        errors["name"].append( u"Es necesario asignar un nombre al anuncio" )
+      if len( errors ) == 0:
+        helpers.get( db.Ad ).to_record( arguments, ad )
+        db.session().add( ad )
+        db.session().commit()
+        arguments = helpers.get( db.Ad ).to_dictionary( ad )
+    else:
+      arguments = helpers.get( db.Ad ).to_dictionary( ad )
+    pprint.pprint( arguments, width = 80 )
+    return arguments
+
+  def ad_delete( self, id ):
+    record = db.Ad.by_id( id )
+    if id == None:
+      return False
+    db.session().delete( record )
+    db.session().commit()
+    return True
+
+  def ad( self, ad_type ):
+    ad_type = db.session().query( db.CatalogEntry )\
+              .filter( db.CatalogEntry.catalog_name == "ad_types" )\
+              .filter( db.CatalogEntry.value == ad_type )\
+              .first()
+    result = db.session().query( db.Ad )\
+             .filter( db.Ad.ad_type == ad_type )\
+             .filter( db.Ad.valid_until > datetime.datetime.now().date() )\
+             .filter( db.Ad.enabled == True )\
+             .all()
+    result = random.sample( result, 1 )[0]
+    return helpers.get( db.Ad ).to_dictionary( result )

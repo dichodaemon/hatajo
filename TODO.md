@@ -1,6 +1,9 @@
 TODO
 ----
 
+* Add pagers in search.
+* Add search.
+* Add comments.
 * Shrinking tables for recommended items.
 * Check if ajax calls are protected by access control.
 * Modify multicatalog to use tables.

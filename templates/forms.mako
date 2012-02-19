@@ -82,6 +82,27 @@ def q( text ):
   </%self:field>
 </%def>
 
+<%def name="dropdown_catalog( field, catalog, label, tabindex=None )">
+  <% prefix = field + "__s__" + catalog + "__" %> 
+  <%self:field field="${field}" label="${label}">
+    %if tabindex != None:
+    <select id="${prefix}id" name="${prefix}id" tabindex="${tabindex}">
+    %else:
+    <select id="${prefix}id" name="${prefix}id">
+    %endif
+    %if catalog in catalogs:
+    %for c in catalogs[catalog]:
+    %if field in data and str( data[field]["id"] ) == str( c['id'] ):
+    <option value="${c['id']}" selected="selected">${c['value']}</option>
+    %else:
+    <option value="${c['id']}">${c['value']}</option>
+    %endif
+    %endfor
+    %endif
+    </select>
+  </%self:field>
+</%def>
+
 <%def name="text_field( field, label, hint, tabindex=None )">
   <%core:add_code>
     %if field in data:
@@ -113,6 +134,42 @@ def q( text ):
     <textarea id="${field}" name="${field}" tabindex="${tabindex}">${context.get( field, "" ) | h}</textarea>
     %else:
     <textarea id="${field}" name="${field}">${context.get( field, "" ) | h}</textarea>
+    %endif
+  </%self:field>
+</%def>
+
+<%def name="date( field, label, tabindex=None )">
+  <%core:add_js name="jquery.ui.datepicker-es"/>
+  <%core:add_js name="jquery-ui-1.8.17.custom.min"/>
+  <%core:add_code>
+    $( "#${field}" ).datepicker();
+    $( "#${field}" ).datepicker( "option", $.datepicker.regional["es"] );    
+    ${caller.body()}
+  </%core:add_code>
+  <%self:field field="${field}" label="${label}">
+    %if tabindex != None:
+    <input type="text" id="${field}" name="${field}" tabindex="${tabindex}" value="${context.get( field, "" ) | h}"></input>
+    %else:
+    <input type="text" id="${field}" name="${field}" value="${context.get( field, "" ) | h}"></input>
+    %endif
+  </%self:field>
+</%def>
+
+<%def name="checkbox( field, label, tabindex=None )">
+  <% prefix = field + "__c__"%> 
+  <%core:add_code>
+    ${caller.body()}
+  </%core:add_code>
+  <%self:field field="${field}" label="${label}">
+    <%
+    checked=""
+    if context.get( field, False ):
+      checked="checked='checked'"
+    %>
+    %if tabindex != None:
+    <input type="checkbox" id="${prefix}value" name="${prefix}value" tabindex="${tabindex}" ${checked}></input>
+    %else:
+    <input type="checkbox" id="${prefix}value" name="${prefix}value" ${checked}></input>
     %endif
   </%self:field>
 </%def>

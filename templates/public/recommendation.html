@@ -10,7 +10,7 @@
       <td>
         <a href="/public/film_info?id=${p["id"]}"><img src="${h.main_image( p )}"/></a>
         <ul>
-          <li class="title"><a href="/public/film_info?id=${p["id"]}">${p["name"]}</a> ( Titulo original )</li>
+          <li class="title"><a href="/public/film_info?id=${p["id"]}">${p["name"]} (${p["year"]})</a></li>
           %for a in p["actors"]["values"][:2]:
           <li>${a}</li>
           %endfor

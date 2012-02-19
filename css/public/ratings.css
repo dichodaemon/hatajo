@@ -13,6 +13,10 @@
   text-indent: -99999px;
 }
 
+.ratings_count {
+  color: #204A87;
+}
+
 .ratings .done{
   background: url( "/img/star-full.png" ) no-repeat;
   width: 9px;
