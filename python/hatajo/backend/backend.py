@@ -57,6 +57,11 @@ class Backend( object ):
         arguments = helpers.get( db.Product ).to_dictionary( product )
     else:
       arguments = helpers.get( db.Product ).to_dictionary( product )
+      arguments["total_reviews"] = len( product.reviews )
+      if len( product.reviews ) == 0:
+        arguments["review_avg"] = 3
+      else:
+        arguments["review_avg"] = sum( [ r.rating for r in product.reviews] ) / len( product.reviews )
     print
     pprint.pprint( arguments, width = 80 )
     return arguments
@@ -67,11 +72,16 @@ class Backend( object ):
     return result
 
   def products( self ):
-    result = db.session().query( db.Product ).all()
-    result = [ 
-        helpers.get( db.Product ).to_dictionary( p )
-      for p in result
-    ]
+    data = db.session().query( db.Product ).all()
+    result = []
+    for p in data:
+      d = helpers.get( db.Product ).to_dictionary( p )
+      d["total_reviews"] = len( p.reviews )
+      if len( p.reviews ) == 0:
+        d["review_avg"] = 3
+      else:
+        d["review_avg"] = sum( [ r.rating for r in p.reviews] ) / len( p.reviews )
+      result.append( d )
     return result
 
   def pager( self, table, filter_field, filter, sort_by, descending, offset, limit ):

@@ -5,9 +5,6 @@
 <%core:add_css name="public/search_results"/>
 <%core:add_css name="public/ratings"/>
 <%core:add_js name="ratings"/>
-<%core:add_code>
-  $( "#c0" ).ratings( 3, false );
-</%core:add_code>
 <%!import hatajo.webapp.template_helpers as h%>
 <div id="column_container">
   <div id="center" class="column">
@@ -20,6 +17,9 @@
         <%i = 0 %>
         % for p in data:
         <%i += 1 %>
+        <%core:add_code>
+          $( "#r_${p["id"]}" ).ratings( ${int(p["review_avg"])}, false );
+        </%core:add_code>
         <li>
         <em>${i}</em>
           <a href="/public/film_info?id=${p["id"]}"><img src="${h.main_image( p )}" class="main"/></a>
@@ -27,7 +27,7 @@
             <li class="title"><a href="/public/film_info?id=${p["id"]}">${p["name"]}</a> (${( p["original_name"] + " " + str( p["year"] ) ).strip()})</li>
             <li>Director: ${", ".join( [d for d in p["directors"]["values"]] )} </li>
             <li>${", ".join( [a for a in p["actors"]["values"]] )}</li>
-            <li><span id="c0"></span> <span class="ratings_count">128 Comentarios</span></li>
+            <li><div id="r_${p["id"]}"></div> <span class="ratings_count">${p["total_reviews"]} Comentarios</span></li>
             <li class="media">${", ".join( [a for a in p["medias"]["values"]] )}</li>
             <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
             <li class="delivery"><a href="/public/film_info?id=${p["id"]}">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
