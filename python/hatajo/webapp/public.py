@@ -115,6 +115,11 @@ class Public( object ):
   @cherrypy.tools.render( template = "public/review_edit.html" )
   def review_edit( self, **kargs  ):
     kargs = helpers.cleanup_arguments( kargs )
+    if "rating" in kargs:
+      if kargs["rating"].strip() == "":
+        kargs["rating"] = float( kargs["rating"] )
+      else:
+        kargs["rating"] = 0
     kargs, warnings, errors = self.backend.review_update( kargs )
     if kargs["id"] != "new" and len( errors ) == 0:
       raise cherrypy.HTTPRedirect( "/public/film_info?id=%i" % kargs["product_id"] )
