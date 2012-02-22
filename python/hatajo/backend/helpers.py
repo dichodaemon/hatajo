@@ -36,6 +36,15 @@ helpers = {
     "content": None,
     "enabled": None,
     "valid_until": "date"
+  } ),
+  db.Review: Helper( {
+    "id": "id",
+    "product_id": None,
+    "name": None,
+    "alias": None,
+    "date": "date",
+    "rating": None,
+    "content": None
   } )
 }
 

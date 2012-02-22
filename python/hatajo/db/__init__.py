@@ -4,4 +4,5 @@ from catalog_entry  import *
 from product        import *
 from binary_content import *
 from product_image  import *
+from review         import *
 

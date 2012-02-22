@@ -6,6 +6,7 @@ import time
 import pprint
 import random
 import httplib
+import helpers
 
 import render
 
@@ -45,7 +46,20 @@ class Public( object ):
   def film_info( self, id ):
     result = {
       "pageTitle": u"Detalles de la película",
-      "data": self.backend.product_info( id )
+      "data": self.backend.product_info( id ),
+      "product_reviews": self.backend.reviews( id )
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/product_reviews.html" )
+  def product_reviews( self, id ):
+    result = {
+      "pageTitle": u"Comentarios de los usuarios",
+      "data": self.backend.product_info( id ),
+      "product_reviews": self.backend.reviews( id )
     }
     return result
 
@@ -94,3 +108,21 @@ class Public( object ):
         time.sleep( random.random() )
       except httplib.ResponseNotReady:
         time.sleep( random.random() )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/review_edit.html" )
+  def review_edit( self, **kargs  ):
+    kargs = helpers.cleanup_arguments( kargs )
+    kargs, warnings, errors = self.backend.review_update( kargs )
+    if kargs["id"] != "new" and len( errors ) == 0:
+      raise cherrypy.HTTPRedirect( "/public/film_info?id=%i" % kargs["product_id"] )
+    result = {
+      "pageTitle": u"Escriba su comentario",
+      "product": self.backend.product_info( kargs["product_id"] ),
+      "errors": [],
+      "warnings": [],
+      "data": kargs
+    }
+    return result

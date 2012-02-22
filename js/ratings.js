@@ -1,14 +1,14 @@
 ( function( $ ) {
-  $.fn.ratings = function( value, edit ) {
+  $.fn.ratings = function( value, edit, field ) {
     return this.each( function() {
       var container = $( this );
       initContainer( container, edit );
-      updateRatings( container, value );
+      updateRatings( container, value, field );
       if ( edit ) {
         $( "span", $( this ) ).each( function() {
           var $span = $( this );
           $span.click( function() {
-            updateRatings( container, parseFloat( $span.attr( "rel" ) ) );
+            updateRatings( container, parseFloat( $span.attr( "rel" ) ), field );
           } );    
         } );
       }
@@ -30,8 +30,11 @@
     }
   }
 
-  function updateRatings( container, value ) 
+  function updateRatings( container, value, field ) 
   {
+    if ( field ) {
+      $( field ).attr( "value", value );
+    }
     container.find( "span" ).each( function( i ) {
       if ( parseFloat( $( this ).attr( "rel" ) ) <= value ) {
         $( this ).attr( { "class": "done" } );

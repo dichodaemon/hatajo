@@ -3,7 +3,7 @@
 from sqlalchemy                 import Table, Column, Integer, Date, DateTime
 from sqlalchemy                 import String, MetaData, ForeignKey
 from sqlalchemy                 import LargeBinary
-from sqlalchemy                 import Boolean
+from sqlalchemy                 import Boolean, Float
 from sqlalchemy                 import or_, and_, not_
 from sqlalchemy                 import func, distinct
 from sqlalchemy.orm             import relation

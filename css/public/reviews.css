@@ -1,0 +1,58 @@
+div.reviews {
+  clear: both;
+  border-top: 1px dotted #2E3436;
+  padding-top: 20px;
+  margin: 20px;
+}
+div.reviews h1 {
+  font-size: 18px;
+  color: #2E3436;
+}
+
+div.reviews h2 {
+  font-size: 14px;
+  color: #2E3436;
+  margin-bottom: 0px;
+}
+
+div.reviews h3 {
+  font-size: 12px;
+  font-weight: bold;
+  color: #2E3436;
+  margin-top: 5px;
+}
+
+div.reviews span.title {
+  font-weight: bold;
+}
+
+div.reviews span.user {
+  color: #CE5C00;
+}
+
+div.reviews span.date {
+  color: #555753;
+}
+
+div.reviews span.name {
+  font-weight: normal;
+}
+
+div.reviews div.content {
+  margin-bottom: 20px;
+}
+
+div.bar_outer {
+  display: inline-block;
+  background: #EEEEEC;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100px;
+  height: 15px;
+}
+
+div.bar_inner {
+  background: #FCAF3E;
+  width: 50px;
+  height: 15px;
+}

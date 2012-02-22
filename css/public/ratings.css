@@ -3,7 +3,7 @@
   overflow: hidden;
 }
 
-.ratings .undone, .rating .fade {
+.ratings .undone, .ratings .fade {
   background: url( "/img/star-empty.png" ) no-repeat;
   width: 9px;
   display: block;
@@ -30,3 +30,23 @@
 .ratings_edit span.undone:hover{
   background: url( "/img/star-full.png" ) no-repeat;
 }
+
+div.rating_container {
+  display: inline;
+}
+
+.rating_list {
+  list-style: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.rating_list li a {
+  color: #3465A4;
+  text-decoration: none;
+}
+
+.rating_list li a:hover {
+  text-decoration: underline;
+}
+

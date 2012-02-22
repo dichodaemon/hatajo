@@ -1,0 +1,33 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="ratings" file="/ratings.mako"/>
+<%namespace name="reviews" file="reviews.mako"/>
+<%namespace name="recommendation" file="recommendation.mako"/>
+<%core:add_css name="public/two_columns"/>
+<%core:add_css name="public/ratings"/>
+<%core:add_css name="public/film_images"/>
+<%core:add_css name="public/reviews"/>
+<%core:add_js name="ratings"/>
+<%core:add_js name="imgpreview.full.jquery"/>
+<%! import hatajo.webapp.template_helpers as h %>
+<%
+  total_reviews, review_avg, reviews_by_rating = h.review_stats(  product_reviews )
+%>
+<div class="large_text">
+  ${reviews.review_summary( data, product_reviews )}
+</div>
+
+% if len( product_reviews ) > 0:
+<div class="reviews">
+  % for review in product_reviews:
+  ${reviews.review_details( review, data )}
+  % endfor
+</div>
+% endif
+
+<div class="indent1">
+  <%recommendation:recommendation
+    title="Quien compró esta película tambien compró..."
+    method="random"/>
+</div>

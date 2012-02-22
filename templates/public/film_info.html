@@ -1,18 +1,20 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="base.html"/>
 <%namespace name="core" file="/core.mako"/>
+<%namespace name="ratings" file="/ratings.mako"/>
+<%namespace name="reviews" file="reviews.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
 <%core:add_css name="public/three_columns"/>
-<%core:add_css name="public/film_images"/>
 <%core:add_css name="public/ratings"/>
+<%core:add_css name="public/film_images"/>
+<%core:add_css name="public/reviews"/>
 <%core:add_js name="ratings"/>
 <%core:add_js name="imgpreview.full.jquery"/>
+<%! import hatajo.webapp.template_helpers as h %>
+<%
+  total_reviews, review_avg, reviews_by_rating = h.review_stats(  product_reviews )
+%>
 <%core:add_code>
-  $( "#c0" ).ratings( 3, false );
-  $( "#c1" ).ratings( 3, false );
-  $( "#c2" ).ratings( 3, false );
-  $( "#c3" ).ratings( 3, false );
-  $( "#c4" ).ratings( 3, false );
   $( ".film_images a" ).each( function() {
     $( this ).imgPreview( {
       containerID: "imgPreviewWithStyles",
@@ -29,7 +31,7 @@
     } );
   } );
 </%core:add_code>
-<%! import hatajo.webapp.template_helpers as h %>
+${ratings.show_rating( "div.film_ratings", review_avg )}
 
 <div id="column_container">
   <div id="center" class="column">
@@ -38,7 +40,7 @@
         <li class="title">${data["name"]} (${(data["original_name"] + " " + str( data["year"] ) ).strip()})</li>
         <li>Director: ${", ".join( [d for d in data["directors"]["values"]] )} </li>
         <li>${", ".join( [a for a in data["actors"]["values"]] )}</li>
-        <li><span id="c0"></span> <span class="ratings_count">128 Comentarios</span></li>
+        <li><div class="film_ratings"></div> <span class="ratings_count">${total_reviews} Comentarios</span></li>
         <li class="media">${", ".join( [a for a in data["medias"]["values"]] )}</li>
         <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
         <li class="delivery"><a href="/public/film_info">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
@@ -99,7 +101,7 @@
     <dt>Duración:</dt>
     <dd>${data["duration"]}</dd>
     <dt>Comentarios:</dt>
-    <dd><span id="c0"></span> en 128 Comentarios</dd>
+    <dd><div class="film_ratings"></div> en ${total_reviews} Comentarios</dd>
     <dt>RTC:</dt>
     <dd>${data["rtc"]}</dd>
     <dt>Código de barras:</dt>
@@ -124,33 +126,16 @@
 %endif
 
 <div class="large_text">
-  <h2>Comentarios de los usuarios:</h2>
-  <ul class="rating_list">
-    <li><a href="#">5 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145) <span id="c1"></span> en 500 comentarios</li>
-    <li><a href="#">4 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
-    <li><a href="#">3 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
-    <li><a href="#">2 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
-    <li><a href="#">1 estrellas</a><div class="bar_outer"><div class="bar_inner"></div></div>(145)</li>
-  </ul>
+  ${reviews.review_summary( data, product_reviews )}
 </div>
 
-<div class="large_text">
-  <dl class="comments">
-    <dt><span class="user">Ivan Mercader</span> <span id="c2"></span> rating 3 de 5 estrellas <span class="date">25 Noviembre 2011</span></dt>
-    <dd>
-      Desafortunadamente, esta película de Batman fue una de las peores que haya
-      visto nunca. La primera película con Michael Keaton era la mejor y ha ido
-      empeorando en los últimos años. En primer lugar, el casting fue totalmente
-      irreal. El interés del amor de Batman y la fiscal de distrito es 
-      prácticamente nulo.
-    </dd>
-    <dt><span class="user">Ivan Mercader</span> <span id="c3"></span> 3 de 5 estrellas <span class="date">25 Noviembre 2011</span></dt>
-    <dd>
-      Desafortunadamente, esta película de Batman fue una de las peores que haya
-      visto nunca. La primera película con Michael Keaton era la mejor y ha ido
-      empeorando en los últimos años. En primer lugar, el casting fue totalmente
-      irreal. El interés del amor de Batman y la fiscal de distrito es 
-      prácticamente nulo.
-    </dd>
-  </dl>
+% if len( product_reviews ) > 0:
+<div class="reviews">
+  % for review in product_reviews[:3]:
+  ${reviews.review_details( review, data )}
+  % endfor
+  % if len( product_reviews ) > 3:
+  <a href="/public/product_reviews?id=${data["id"]}" class="all_reviews">Ver todos los comentarios</a>
+  % endif
 </div>
+% endif

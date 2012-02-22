@@ -170,3 +170,40 @@ class Backend( object ):
              .all()
     result = random.sample( result, 1 )[0]
     return helpers.get( db.Ad ).to_dictionary( result )
+
+  @helpers.main_form
+  def review_update( self, arguments, warnings, errors ):
+    print "-" * 80
+    pprint.pprint( arguments, width = 80 )
+
+    if arguments["id"] == "new": 
+      record = db.Review()
+    else:
+      record = db.Review.by_id( arguments["id"] )
+
+    if len( arguments ) > 1:
+      if arguments["name"].strip() == "":
+        errors["name"].append( u"Es necesario asignar un nombre al comentario" )
+      if arguments["alias"].strip() == "":
+        errors["alias"].append( u"Es necesario capturar un nombre de usuario" )
+      if len( arguments["content"].split() ) < 10:
+        errors["content"].append( u"El comentario debe tener al menos 10 palabras" )
+      if len( errors ) == 0:
+        helpers.get( db.Review ).to_record( arguments, record )
+        record.date = datetime.datetime.now()
+        db.session().add( record )
+        db.session().commit()
+        arguments = helpers.get( db.Review ).to_dictionary( record )
+    else:
+      arguments = helpers.get( db.Review ).to_dictionary( record )
+    pprint.pprint( arguments, width = 80 )
+    return arguments
+
+  def reviews( self, product_id ):
+    record = db.Product.by_id( product_id )
+    result =  [
+      helpers.get( db.Review ).to_dictionary( r )
+      for r in record.reviews
+    ]
+    pprint.pprint( result, width = 80 )
+    return result

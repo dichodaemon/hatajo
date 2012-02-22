@@ -9,7 +9,7 @@ def main_form( f ):
     warnings = collections.defaultdict( list )
     errors   = collections.defaultdict( list )
     if not "id" in arguments:
-      arguments = { "id": "new" }
+      arguments["id"] = "new"
     else:
       arguments = f( self, arguments, warnings, errors )
     return arguments, dict( warnings ), dict( errors )

@@ -5,6 +5,8 @@ def cleanup_arguments( args ):
   ids    = {}
   checks = []
   for key, value in args.items():
+    if type( value ) == str:
+      value = value.strip()
     if key.find( "__" ) == -1:
       #Normal fields
       result[key] = value

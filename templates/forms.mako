@@ -106,7 +106,7 @@ def q( text ):
 <%def name="text_field( field, label, hint, tabindex=None )">
   <%core:add_code>
     %if field in data:
-    $( "#${field}" ).attr( "value", "${context[field] | q}" );
+    $( "#${field}" ).attr( "value", "${data[field] | q}" );
     %endif
     $( "#${field}" ).hint( "${hint}" ).enter2tab();
     ${caller.body()}
