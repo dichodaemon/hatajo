@@ -6,6 +6,7 @@ import hashlib
 import pprint
 import datetime
 import random
+import math
 
 import helpers
 
@@ -57,11 +58,6 @@ class Backend( object ):
         arguments = helpers.get( db.Product ).to_dictionary( product )
     else:
       arguments = helpers.get( db.Product ).to_dictionary( product )
-      arguments["total_reviews"] = len( product.reviews )
-      if len( product.reviews ) == 0:
-        arguments["review_avg"] = 3
-      else:
-        arguments["review_avg"] = sum( [ r.rating for r in product.reviews] ) / len( product.reviews )
     print
     pprint.pprint( arguments, width = 80 )
     return arguments
@@ -76,17 +72,14 @@ class Backend( object ):
     result = []
     for p in data:
       d = helpers.get( db.Product ).to_dictionary( p )
-      d["total_reviews"] = len( p.reviews )
-      if len( p.reviews ) == 0:
-        d["review_avg"] = 3
-      else:
-        d["review_avg"] = sum( [ r.rating for r in p.reviews] ) / len( p.reviews )
       result.append( d )
     return result
 
-  def pager( self, table, filter_field, filter, sort_by, descending, offset, limit ):
+  def pager( self, table, filter_field, filter, sort_by, descending, page, limit, prefilter=[] ):
     table = db.__dict__[table]
     def build_query( query ):
+      for field, value in prefilter:
+        query = query.filter( getattr( table, field ) == value )
       if filter != "":
         for f in filter.split():
           query = query.filter( getattr( table, filter_field ).like( "%%%s%%" % filter ) )
@@ -99,13 +92,14 @@ class Backend( object ):
 
     result = build_query( db.session().query( table ) )
     count  = build_query( db.session().query( db.func.count( db.distinct( table.id ) ) ) ).one()[0]
-    result = result.limit( limit ).offset( offset ).all()
+    result = result.limit( limit ).offset( page * limit ).all()
 
     result = [ 
         helpers.get( table ).to_dictionary( p )
       for p in result
     ]
-    return result, count
+    print count, limit
+    return result, int( math.ceil( 1.0 * count / limit ) )
 
   def save_binary( self, filename, content_type, content ):
     content = content.decode( "base64" )

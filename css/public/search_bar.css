@@ -25,6 +25,7 @@ div.searchbox {
 .searchbox form {
   background: #FFF;
   width: 300px;
+  margin: 0px;
 }
 
 .searchbox input.text {

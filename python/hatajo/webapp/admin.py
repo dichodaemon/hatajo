@@ -90,11 +90,12 @@ class Admin( object ):
 
   @cherrypy.expose
   def ad_list_elements( self, **args ):
-    result = helpers.datatable_helper( self.backend, "Ad", "name", ["name", "enabled", "valid_until" ], **args )
+    result = helpers.datatable_helper( self.backend, "Ad", "name", ["name", "enabled", "ad_type", "valid_until" ], **args )
     result["aaData"] = [
       [
         "<a id='%s' href=/admin/ad_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
         d["enabled"] and "si" or "no",
+        d["ad_type"]["value"],
         d["valid_until"]
       ]
       for d in result["aaData"]

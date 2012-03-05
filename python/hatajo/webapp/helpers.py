@@ -1,4 +1,5 @@
 import collections
+import pprint
 
 def cleanup_arguments( args ):
   result = {}
@@ -54,25 +55,26 @@ def cleanup_arguments( args ):
   return result
 
 def pager_helper( 
-  call, id=None, filter="", sort_by="date", 
-  descending=True, offset=0, limit=10
+  call, table, filter_field, filter="", sort_by="date", 
+  descending=True, page=0, limit=10, prefilter = []
 ):
   if type( descending ) in [unicode, str]:
     descending = descending == "checked"
   if type( filter ) == int:
     filter = ""
-  offset = int( offset )
+  if type( page ) != int:
+    page = int( page )
+  page = int( page )
   limit = int( limit )
-  content, page_count = call( symbol, filter, sort_by, descending, offset, limit )
+  items, page_count = call( table, filter_field, filter, sort_by, descending, page, limit, prefilter )
   return {
     "page_count": page_count,
-    "offset": offset,
-    "articles": articles,
+    "page": page,
     "filter": filter,
     "sort_by": sort_by,
     "descending": descending,
-    "limit": limit, 
-    "date": date
+    "limit": limit,
+    "items": items
   }
 
 def datatable_helper(

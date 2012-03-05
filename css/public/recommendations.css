@@ -13,6 +13,7 @@ div.recommendation {
 
 .recommendation table td {
   text-align: center;
+  vertical-align: top;
 }
 
 .recommendation table ul {

@@ -133,8 +133,11 @@ div.film_images {
 }
 
 .rating_list {
-  width: 300;
   float: left;
+}
+
+ul.rating_list {
+  width: 400px;
 }
 
 div.add_review {

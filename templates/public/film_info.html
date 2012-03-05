@@ -11,9 +11,6 @@
 <%core:add_js name="ratings"/>
 <%core:add_js name="imgpreview.full.jquery"/>
 <%! import hatajo.webapp.template_helpers as h %>
-<%
-  total_reviews, review_avg, reviews_by_rating = h.review_stats(  product_reviews )
-%>
 <%core:add_code>
   $( ".film_images a" ).each( function() {
     $( this ).imgPreview( {
@@ -31,7 +28,7 @@
     } );
   } );
 </%core:add_code>
-${ratings.show_rating( "div.film_ratings", review_avg )}
+${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
 
 <div id="column_container">
   <div id="center" class="column">
@@ -40,7 +37,7 @@ ${ratings.show_rating( "div.film_ratings", review_avg )}
         <li class="title">${data["name"]} (${(data["original_name"] + " " + str( data["year"] ) ).strip()})</li>
         <li>Director: ${", ".join( [d for d in data["directors"]["values"]] )} </li>
         <li>${", ".join( [a for a in data["actors"]["values"]] )}</li>
-        <li><div class="film_ratings"></div> <span class="ratings_count">${total_reviews} Comentarios</span></li>
+        <li><div class="film_ratings"></div> <span class="ratings_count">${data["total_reviews"]} Comentarios</span></li>
         <li class="media">${", ".join( [a for a in data["medias"]["values"]] )}</li>
         <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
         <li class="delivery"><a href="/public/film_info">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
@@ -89,7 +86,7 @@ ${ratings.show_rating( "div.film_ratings", review_avg )}
     <dt>Idiomas:</dt>
     <dd>${", ".join( [a for a in data["languages"]["values"]] )}</dd>
     <dt>Subtítulos:</dt>
-    <dd>${", ".join( [a for a in data["languages"]["values"]] )}</dd>
+    <dd>${", ".join( [a for a in data["subtitles"]["values"]] )}</dd>
     <dt>Regiones:</dt>
     <dd>${", ".join( [a for a in data["regions"]["values"]] )}</dd>
     <dt>No. de discos:</dt>
@@ -101,7 +98,7 @@ ${ratings.show_rating( "div.film_ratings", review_avg )}
     <dt>Duración:</dt>
     <dd>${data["duration"]}</dd>
     <dt>Comentarios:</dt>
-    <dd><div class="film_ratings"></div> en ${total_reviews} Comentarios</dd>
+    <dd><div class="film_ratings"></div> en ${data["total_reviews"]} Comentarios</dd>
     <dt>RTC:</dt>
     <dd>${data["rtc"]}</dd>
     <dt>Código de barras:</dt>

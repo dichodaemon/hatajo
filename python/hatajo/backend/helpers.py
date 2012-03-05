@@ -2,9 +2,10 @@
 
 import db
 from helper import Helper, main_form
+from product_helper import ProductHelper
 
 helpers = {
-  db.Product: Helper( {
+  db.Product: ProductHelper( {
     "id": "id",
     "name": None,
     "original_name": None,
