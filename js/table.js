@@ -8,7 +8,7 @@
       var dataTable = table.dataTable();
       $( "div.toolbar" ).append( $( opts.menu ) );
       table.find( "tbody tr" ).live( "click", function( e ) {
-        $( "#product_list tr.selected" ).removeClass( "selected" );
+        table.find( "tr.selected" ).removeClass( "selected" );
         $( this ).addClass( "selected" );
       } );
     } );

@@ -16,11 +16,11 @@
   padding: 3px 20px;
 }
 
-#search_results ul {
+ul.search_results {
   margin-right: 40px;
 }
 
-#search_results ul li {
+ul.search_results li {
   padding: 10px 0px 10px 0px;
   border-bottom: dotted 1px #2E3436;
   list-style: none;
@@ -29,7 +29,7 @@
   position: relative;
 }
 
-#search_results ul em {
+ul.search_results em {
   color: #555753;
   font-size: 10pt;
   font-style: normal;
@@ -49,7 +49,7 @@
 
 #search_results ul.description {
   float: left;
-  height: 250px;
+  height: 190px;
   position: absolute;
   top: 15%;
   left: 200px;

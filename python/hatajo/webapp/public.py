@@ -32,11 +32,18 @@ class Public( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/search_results.html" )
-  def search_results( self ):
+  def search_results( self, filter="", sort_by="name", descending=True, page=0, limit=10 ):
     result = {
       "pageTitle": u"Su búsqueda",
-      "data": self.backend.products()
+      "base_url": "/public/search_results?",
+      "sort_fields": [("name", u"Nombre"), ("year", u"Año")],
     }
+    result.update( 
+      helpers.pager_helper( 
+        self.backend.pager, "Product", "name", filter, sort_by, descending, page, limit 
+      )
+    )
+    pprint.pprint( result, width = 80 )
     return result
 
   #-----------------------------------------------------------------------------
@@ -55,12 +62,26 @@ class Public( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/product_reviews.html" )
-  def product_reviews( self, id ):
+  def product_reviews( self, id, filter="", sort_by="name", descending=True, page=0, limit=5, rating = 0 ):
     result = {
       "pageTitle": u"Comentarios de los usuarios",
       "data": self.backend.product_info( id ),
-      "product_reviews": self.backend.reviews( id )
+      "base_url": "/public/product_reviews?id=%s&" % id,
+      "sort_fields": [("name", u"Nombre"), ("date", u"Fecha"), ("rating", "Nota")],
+      "rating": rating
     }
+    if rating != None and rating != "" and rating != "0" and rating != 0:
+      select = [( "product_id", id ), ( "rating", int( rating ) )]
+    else:
+      select = [( "product_id", id )]
+
+    result.update( 
+      helpers.pager_helper( 
+        self.backend.pager, "Review", "name", filter, sort_by, descending, page,
+        limit, select
+      )
+    )
+    pprint.pprint( result, width = 80 )
     return result
 
   #-----------------------------------------------------------------------------

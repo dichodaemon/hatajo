@@ -8,7 +8,7 @@ count = 0
   <% global count %>
   <%core:add_css name="public/recommendations"/>
   <%core:add_code>
-    $( "#recommendation_${count}" ).load( "/public/recommendation?title=${title | u}&method=${method | u}" )
+    $( "#recommendation_${count}" ).load( "/public/recommendation?title=${title | u}&method=${method | u}" );
     ${caller.body()}
   </%core:add_code>
   <div id="recommendation_${count}"></div>

@@ -1,0 +1,46 @@
+div.pager {
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  width: 600px;
+}
+
+div.pager input.search {
+  margin-right: 30px;
+  width: 235px;
+}
+
+div.pager select {
+  margin-right: 30px;
+}
+
+ul.pager {
+  clear: both;
+  padding: 0px;
+  padding-top: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+ul.pager li {
+  display: inline;
+  margin-right: 10px;
+}
+
+ul.pager a {
+  text-decoration: none;
+  color: #204A87;
+}
+
+ul.pager a.previous {
+  font-weight: bold;
+  margin-right: 20px;
+  text-decoration: underline;
+}
+
+ul.pager a.next {
+  font-weight: bold;
+  margin-left: 20px;
+  text-decoration: underline;
+}
+
