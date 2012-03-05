@@ -79,17 +79,17 @@
   ${caller.body()}
   <ul class="pager">
     % if page != 0:
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page - 1}&limit=${limit}&rating=${rating}" class="previous">Anterior</a></li>
+    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page - 1}&limit=${limit}" class="previous">Anterior</a></li>
     % endif
     % for p in xrange( max( page - 5, 0 ), page ):
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}&rating=${rating}">${p + 1}</a></li>
+    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}">${p + 1}</a></li>
     %endfor
     <li>${page + 1}</li>
     % for p in xrange( page + 1, min( page + 5, page_count ) ):
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}&rating=${rating}">${p + 1}</a></li>
+    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}">${p + 1}</a></li>
     % endfor
     % if page < page_count -1:
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page + 1}&limit=${limit}&rating=${rating}" class="next">Siguiente</a></li>
+    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page + 1}&limit=${limit}" class="next">Siguiente</a></li>
     % endif
   </ul>
 </%def>
