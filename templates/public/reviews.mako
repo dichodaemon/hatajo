@@ -6,7 +6,7 @@
 <%def name="review_summary( product, reviews )">
   <%core:add_code>
     % for i in xrange( 1, 6 ):
-    % if total_reviews > 0:
+    % if product["total_reviews"] > 0:
     $( "#${i}_stars" ).width( ${int( 100 * product["reviews_by_rating"][i] / product["total_reviews"] )} );
     % else:
     $( "#${i}_stars" ).width( 0 );
