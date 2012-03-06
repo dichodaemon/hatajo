@@ -13,11 +13,12 @@ class Product( Base ):
   screen_format_id  = Column( Integer, ForeignKey( "catalog_entries.id" ) )
   format_id     = Column( Integer, ForeignKey( "catalog_entries.id" ) )
   item_count    = Column( Integer )
-  age_rating_id = Column( Integer, ForeignKey( "catalog_entries.id" ) )
-  studio_id     = Column( Integer, ForeignKey( "catalog_entries.id" ) )
-  duration      = Column( String )
-  rtc           = Column( String )
-  bar_code      = Column( String )
+  age_rating_id  = Column( Integer, ForeignKey( "catalog_entries.id" ) )
+  productor_id     = Column( Integer, ForeignKey( "catalog_entries.id" ) )
+  distributor_id   = Column( Integer, ForeignKey( "catalog_entries.id" ) )
+  duration         = Column( String )
+  rtc              = Column( String )
+  bar_code         = Column( String )
   special_features = Column( String )
   summary          = Column( String )
 
@@ -27,7 +28,8 @@ class Product( Base ):
   screen_format = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.screen_format_id == CatalogEntry.id" )
   format = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.format_id == CatalogEntry.id" )
   age_rating = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.age_rating_id == CatalogEntry.id" )
-  studio = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.studio_id == CatalogEntry.id" )
+  productor = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.productor_id == CatalogEntry.id" )
+  distributor = relation( "CatalogEntry", uselist = False, primaryjoin = "Product.distributor_id == CatalogEntry.id" )
 
   by_id   = classmethod( by_id )
 

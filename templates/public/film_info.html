@@ -48,7 +48,7 @@ ${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
   <div id="left" class="column">
     <div class="film_images">
       <img src="${h.main_image( data )}" class="main"/>
-      %for i in h.other_images( data ):
+      %for i in data["images"]["ids"]:
       <a href="/services/load_image?id=${i}"><img src="/services/load_image?id=${i}" class="micro"/></a>
       %endfor
     </div>
@@ -93,8 +93,10 @@ ${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
     <dd>${data["item_count"]}</dd>
     <dt>Clasificación:</dt>
     <dd>${data["age_rating"]["value"]}</dd>
-    <dt>Estudio:</dt>
-    <dd>${data["studio"]["value"]}</dd>
+    <dt>Productora:</dt>
+    <dd>${data["productor"]["value"]}</dd>
+    <dt>Distribuidora:</dt>
+    <dd>${data["distributor"]["value"]}</dd>
     <dt>Duración:</dt>
     <dd>${data["duration"]}</dd>
     <dt>Comentarios:</dt>
