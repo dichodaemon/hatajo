@@ -31,6 +31,58 @@ class Public( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
+  @cherrypy.tools.render( template = "public/login.html" )
+  def login( self, email=None, existing=True, password=None, destination="" ):
+    if existing == "False":
+      raise cherrypy.HTTPRedirect( "/public/new_user?email=%s&destination=%s" % ( email, destination ) )
+    if email and password:
+      if cherrypy.tools.form_authentication.login( email, password ):
+        if destination != "":
+          raise cherrypy.HTTPRedirect( destination )
+        else:
+          raise cherrypy.HTTPRedirect( "/" )
+    result = {
+      "pageTitle": u"Página principal",
+      "destination": destination
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/new_user.html" )
+  def new_user( self, user="", email="", email_confirm="", password="", password_confirm="", destination="" ):
+    errors = {}
+    if email_confirm != "":
+      kargs, warnings, errors = self.backend.new_user( user, email, email_confirm, password, password_confirm )
+      if len( errors ) == 0:
+        raise cherrypy.HTTPRedirect( "/public/login?email=%s" % email )
+    data = { 
+      "user": user,
+      "email": email, 
+      "email_confirm": email_confirm, 
+      "password": password, 
+      "password_confirm": password_confirm 
+    }
+    result = {
+      "pageTitle": u"Alta de cuenta",
+      "data": data,
+      "destination": destination,
+      "errors": errors,
+      "warnings": {}
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def logout( self ):
+    cherrypy.tools.form_authentication.logout()
+    raise cherrypy.HTTPRedirect( "/" )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
   @cherrypy.tools.render( template = "public/search_results.html" )
   def search_results( self, filter="", sort_by="name", descending=True, page=0, limit=10 ):
     result = {
@@ -51,6 +103,11 @@ class Public( object ):
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/film_info.html" )
   def film_info( self, id ):
+    visited = cherrypy.session.get( "visited", [] )
+    visited = visited[:10]
+    visited.append( id )
+    cherrypy.session["visited"] = visited
+
     result = {
       "pageTitle": u"Detalles de la película",
       "data": self.backend.product_info( id ),
@@ -103,8 +160,17 @@ class Public( object ):
     while not done:
       try:
         done = True
-        elements = self.backend.products()
-        random.shuffle( elements )
+        if method == "random":
+          elements = self.backend.products()
+          random.shuffle( elements )
+        elif method == "recent":
+          elements = []
+          for id in cherrypy.session.get( "visited", [] ):
+            if not id in elements:
+              elements.append( self.backend.product_info( id ) )
+          for id in self.backend.products():
+            if not id in elements:
+              elements.append( id )
       except httplib.CannotSendRequest:
         time.sleep( random.random() )
         done = False

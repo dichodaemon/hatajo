@@ -1,0 +1,41 @@
+## -*- coding: utf-8 -*-
+<%inherit file="product.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="admin/forms"/>
+
+<%forms:form action="inventory_edit" method="post">
+  <h1>Actualizar existencia: ${data["product"]["name"]}</h1>
+  <input type="hidden" id="id" name="id" value="new"/>
+  <input type="hidden" id="product_id" name="product_id" value="${data["product"]["id"]}"/>
+  <table cellpadding="0" cellspacing="0">
+    <%forms:text_field
+      field="normal_price"
+      label="Precio"
+      tabindex="1"
+      hint="escriba el precio del producto">
+      $( "#normal_price" ).focus();
+    </%forms:text_field>
+    <%forms:text_field
+      field="discounted_price"
+      label="Precio de promoción"
+      tabindex="2"
+      hint="escriba el precio de promoción del producto"/>
+    <%forms:text_field
+      field="units"
+      label="Unidades"
+      tabindex="3"
+      hint="escriba el número de unidades del producto"/>
+    <%forms:rich_text
+      field="note"
+      label="Notas"
+      tabindex="4"/> 
+    <tr class="buttons">
+      <td colspan="2">
+        <input type="submit" tabindex="5" value="Enviar" class="button"/>
+      </td>
+    </tr>
+  </table>
+</%forms:form>
+

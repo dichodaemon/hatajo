@@ -7,12 +7,47 @@ import pprint
 import datetime
 import random
 import math
+from collections import defaultdict
 
 import helpers
 
 class Backend( object ):
-  def __init__( self ):
-    pass
+  def __init__( self, key ):
+    self.key = key
+
+
+  def authenticate( self, email, password ):
+    user = db.User.by_email( email )
+    if user == None:
+      return False
+    else:
+      if user.authenticate( password, self.key ):
+        return helpers.get( db.User ).to_dictionary( user )
+      else:
+        return True
+
+  def new_user( self, user, email, email_confirm, password, password_confirm ):
+    u = db.User.by_email( email )
+    if u != None:
+      return {}, {}, { "email": [u"La dirección '%s' ya está dada de alta, escoja otra." % email] }
+    errors = defaultdict( list )
+    if len( user.strip() ) < 4:
+      errors["user"].append( "El nombre de usuario debe tener al menos 4 caracteres." )
+    if email != email_confirm:
+      errors["email_confirm"].append( "La dirección de correo y la confirmación no coinciden" )
+    if len( password.strip() ) < 6:
+      errors["password"].append( "La contraseña debe tener 6 caracteres o más" )
+    if password != password_confirm:
+      errors["password_confirm"].append( "La contraseña y la confirmación deben coincidir" )
+    if len( errors ) == 0:
+      u = db.User()
+      u.email = email
+      u.set_password( password, self.key )
+      u.name = user
+      db.session().add( u )
+      db.session().commit()
+      return helpers.get( db.User ).to_dictionary( u ), {}, {}
+    return {}, {}, dict( errors )
 
   def find_in_catalog( self, catalog_name, term ):
     result = db.session().query( db.CatalogEntry )\
@@ -100,6 +135,37 @@ class Backend( object ):
     ]
     print count, limit
     return result, int( math.ceil( 1.0 * count / limit ) )
+
+  @helpers.main_form
+  def inventory_update( self, arguments, warnings, errors ):
+    print "-" * 80
+    pprint.pprint( arguments, width = 80 )
+
+    inventory = db.Inventory()
+    if "product_id" in arguments:
+      inventory.product = db.Product.by_id( arguments["product_id"] )
+    inventory.date = datetime.datetime.now()
+
+    if len( arguments ) > 2:
+      if arguments["product_id"].strip() == "":
+        errors["normal_price"].append( u"No se seleccionó un producto" )
+      if int( arguments["normal_price"].strip() ) <= 0:
+        errors["normal_price"].append( u"Es necesario entrar un valor positivo para el precio" )
+      if int( arguments["discounted_price"].strip() ) <= 0:
+        errors["discounted_price"].append( u"Es necesario entrar un valor positivo para el precio" )
+      if int( arguments["units"].strip() ) <= 0:
+        errors["units"].append( u"Es necesario entrar un valor positivo para las unidades" )
+      if len( errors ) == 0:
+        helpers.get( db.Inventory ).to_record( arguments, inventory )
+        db.session().add( inventory )
+        db.session().commit()
+        arguments = helpers.get( db.Inventory ).to_dictionary( inventory )
+    else:
+      arguments = helpers.get( db.Inventory ).to_dictionary( inventory )
+    arguments["product"] = helpers.get( db.Product ).to_dictionary( inventory.product )
+    print
+    pprint.pprint( arguments, width = 80 )
+    return arguments
 
   def save_binary( self, filename, content_type, content ):
     content = content.decode( "base64" )

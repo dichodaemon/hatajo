@@ -50,7 +50,8 @@ class Admin( object ):
       [
         "<a id='%s' href=/admin/product_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
         d["year"],
-        ", ".join( [director for director in d["directors"]["values"]] )
+        ", ".join( [director for director in d["directors"]["values"]] ),
+        d["units"]
       ]
       for d in result["aaData"]
     ]
@@ -72,6 +73,25 @@ class Admin( object ):
         "norms": self.backend.catalog( "norms" )
       }
     }
+    result.update( kargs )
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/inventory_edit.html" )
+  def inventory_edit( self, **kargs ):
+    kargs = helpers.cleanup_arguments( kargs )
+    kargs, warnings, errors = self.backend.inventory_update( kargs )
+    result = {
+      "pageTitle": u"Actualización de Inventario",
+      "errors": errors,
+      "warnings": warnings,
+      "data": kargs
+    }
+    pprint.pprint( kargs, width=80 )
+    if len( errors ) == 0 and len( warnings ) == 0 and kargs["id"] != "new" and kargs["id"] != "":
+      raise cherrypy.HTTPRedirect( "/admin/product_list" )
     result.update( kargs )
     return result
 

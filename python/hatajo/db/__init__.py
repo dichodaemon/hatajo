@@ -5,4 +5,5 @@ from product        import *
 from binary_content import *
 from product_image  import *
 from review         import *
-
+from user           import *
+from inventory      import *

@@ -20,33 +20,20 @@ class FormAuthentication( cherrypy.Tool ):
     self._name       = None
     self._priority   = 50
     self.backend     = None
-    self.cookieName  = "b_blue"
 
   #-----------------------------------------------------------------------------
 
-  def login( self, username, password ):
-    user = self.backend.authenticate( username, password )
-    if user:
-      sessionId  = hashlib.md5( os.urandom( 32 ) ).hexdigest()
-      cherrypy.session["sessionId"] = sessionId
+  def login( self, user_name, password ):
+    user = self.backend.authenticate( user_name, password )
+    if type( user ) == dict:
       cherrypy.session["user"] = user
-      try:
-        cherrypy.response.cookie["%s_sid" % self.cookieName] = sessionId
-      except KeyError:
-        pass
       return True
     return False
 
   #-----------------------------------------------------------------------------
 
   def logout( self ):
-    cherrypy.session["sessionId"] = None
     cherrypy.session["user"]      = None
-    try:
-      cherrypy.response.cookie["%s_sid" % self.cookieName] = ""
-      cherrypy.response.cookie["%s_sid" % self.cookieName]["expires"] = 0
-    except KeyError:
-      pass
 
   #-----------------------------------------------------------------------------
 
@@ -58,8 +45,8 @@ class FormAuthentication( cherrypy.Tool ):
             if cherrypy.request.path_info != "/":
               raise cherrypy.HTTPRedirect( "/" )
           else:
-            #~ raise cherrypy.HTTPRedirect( "/login?destination=%s" % destination )
-            raise cherrypy.HTTPRedirect( "/login" )
+            destination  = urllib.quote( cherrypy.request.request_line.split()[1] )
+            raise cherrypy.HTTPRedirect( "/public/login?destination=%s" % destination )
 
   #-----------------------------------------------------------------------------
 
@@ -74,24 +61,12 @@ class FormAuthentication( cherrypy.Tool ):
   def name_is( self, userNames ):
     user = cherrypy.session.get( "user" )
     if user:
-      return user["username"] in userNames
+      return user["user_name"] in userNames
     return False
 
   #-----------------------------------------------------------------------------
 
   def logged( self, value = True ):
-    result     = True
-    try:
-      sessionId  = cherrypy.request.cookie["%s_sid" % self.cookieName].value
-    except KeyError:
-      result = False
-      
-    if result:
-      result = cherrypy.session.get( "sessionId" ) == sessionId
-    if value:
-      return result
-    else:
-      return not result
-
+    return cherrypy.session.has_key( "user" ) and cherrypy.session["user"] != None
 
 cherrypy.tools.form_authentication = FormAuthentication()

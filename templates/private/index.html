@@ -1,0 +1,78 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%core:add_js name="jquery.inlineedit"/>
+<%core:add_code>
+  var options = {
+    buttons: '<button class="save">enviar</button> <button class="cancel">anular</button>'
+  };
+  $( "#user__name" ).inlineEdit( options );
+  $( "#user__email" ).inlineEdit( options );
+  $( "#user__password" ).inlineEdit( $.extend( true, { control: 'input[type="password"]' }, options  ) );
+</%core:add_code>
+
+<h1>Órdenes recientes</h1>
+<div class="section">
+<ul>
+  <li><a href="#">Mis órdenes recientes</a></li>
+  <li>
+    <a href="#">Mis órdenes por fecha</a>
+    <select id="order_period" name="order_period">
+      <option value="0" selected="selected">Últimos 30 días</option>
+      <option value="1">Últimos 6 meses</option>
+      <option value="2">Últimos 12 meses</option>
+      <option value="3">Todas</option>
+    </select>
+  </li>
+</ul>
+</div>
+
+<h1>Formas de Pago</h1>
+<div class="section">
+<p class="hint">Seleccione su forma de pago preferente</p>
+<input type="radio" id="payment1" name="payment" value="paypal" checked="checked"/>
+<label for="payment1">Paypal</label><br/>
+<input type="radio" id="payment2" name="payment" value="google"/>
+<label for="payment2">Google checkout</label>
+<div>
+<br/>
+<img src="https://www.paypal.com/fr_FR/FR/Marketing/i/logo/PayPal_logo_80x35.gif" border="0" alt="Logo PayPal standard"/>
+&nbsp;
+<img src="https://checkout.google.com/seller/images/acceptancelogo/logo-0-f-en_us.png"/>
+</div>
+</div>
+
+<h1>Envíos y direcciones</h1>
+<div class="section">
+  <p class="hint">Seleccione su mensajería</p>
+  <p>
+    Mensajería por servicio postal mexicano (SEPOMEX) a toda la república mexicana en:
+  </p>
+
+  <p>
+    <input type="radio" id="shipping1" name="shipping" value="1"/><label for="shipping1">en 3 días hábiles $125 pesos - <em>Mex Post</em></label><br/>
+    <input type="radio" id="shipping2" name="shipping" value="2" checked="checked"/><label for="shipping2">en 7 días hábiles $40 pesos - <em>Paq Post</em></label><br/>
+    <div class="separator"></div></br>
+    <input type="radio" id="shipping3" name="shipping" value="3"/><label for="shipping3">mensajería privada sólo para la Ciudad de México</label><br/>
+    <input type="radio" id="shipping4" name="shipping" value="4"/><label for="shipping4">Cuernavaca entrega en 1 o 2 días hábiles $120 pesos</label>
+  </p>
+  <p>
+    <a href="#">ver direcciones de envío</a><br/>
+    <a href="#">agregar dirección</a>
+  </p>
+</div>
+
+<h1>Información de la cuenta</h1>
+<div class="section">
+<p class="hint">
+Haga click en el texto para cambiar un campo.
+</p>
+<dl>
+  <dt>Nombre</dt>
+  <dd><div id="user__name">${user["name"].strip()}</div></dd>
+  <dt>e-Mail</dt>
+  <dd><div id="user__email">${user["email"].strip()}</div></dd>
+  <dt>Contraseña</dt>
+  <dd><div id="user__password">${"*" * 10}</div></dd>
+</dl>
+</div>

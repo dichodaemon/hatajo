@@ -314,3 +314,6 @@ ul.toolbar_menu .delete {
   background: url( "/img/edit-delete.png" ) no-repeat left;
 }
 
+ul.toolbar_menu .inventory {
+  background: url( "/img/directory-object.png" ) no-repeat left;
+}

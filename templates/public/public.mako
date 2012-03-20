@@ -11,7 +11,7 @@
     <li class="title"><a href="/public/film_info?id=${product["id"]}">${product["name"]}</a> (${( product["original_name"] + " " + str( product["year"] ) ).strip()})</li>
     <li>Director: ${", ".join( [d for d in product["directors"]["values"]] )} </li>
     <li>${", ".join( [a for a in product["actors"]["values"]] )}</li>
-    <li><div id="r_${product["id"]}"></div> <span class="ratings_count">${product["total_reviews"]} Comentarios</span></li>
+    <li><div id="r_${product["id"]}"></div> <a href="/public/product_reviews?id=${product["id"]}" class="ratings_count">${product["total_reviews"]} Comentarios</a></li>
     <li class="media">${", ".join( [a for a in product["medias"]["values"]] )}</li>
     <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
     <li class="delivery"><a href="/public/film_info?id=${product["id"]}">Ordena ahora y recíbela antes del 24 de noviembre</a></li>

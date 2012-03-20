@@ -1,0 +1,54 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="public/forms"/>
+<%! import hatajo.webapp.template_helpers as h %>
+
+<div class="form clear">
+  <div class="left">
+    <%forms:form action="new_user" method="post">
+      <input type="hidden" name="destination" value="${destination}"/>
+      <h1>Crear una cuenta</h1>
+      <h2>Registro</h2>
+      <table cellpadding="0" cellspacing="10">
+        <%forms:text_field
+          field="user"
+          label="Nombre"
+          tabindex="1"
+          hint="escriba su nombre o pseudónimo">
+          $( "#name" ).focus();
+        </%forms:text_field>
+        <%forms:text_field
+          field="email"
+          label="email"
+          tabindex="2"
+          hint="escriba su email"/>
+        <%forms:text_field
+          field="email_confirm"
+          label="Confirmar email"
+          tabindex="3"
+          hint="confirme su email"/>
+      </table>
+      Proteja su información con una contraseña segura.
+      <table cellpadding="0" cellspacing="10">
+        <%forms:text_field
+          field="password"
+          label="Contraseña"
+          tabindex="4"
+          hint="escriba una contraseña"/>
+        <%forms:text_field
+          field="password_confirm"
+          label="Confirmar contraseña"
+          tabindex="5"
+          hint="confirme su contraseña"/>
+      </table>
+        <tr class="buttons">
+          <td colspan="2">
+            <input type="submit" tabindex="6" value="Dar de alta" class="button"/>
+          </td>
+        </tr>
+      </table>
+    </%forms:form>
+  </div>
+</div>

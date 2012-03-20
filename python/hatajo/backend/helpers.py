@@ -31,6 +31,20 @@ helpers = {
     "special_features": None,
     "summary": None
   } ),
+  db.Inventory: Helper( {
+    "id": "id",
+    "product_id": None,
+    "date": "date",
+    "normal_price": None,
+    "discounted_price": None,
+    "units": None,
+    "note": None
+  } ),
+  db.User: Helper( {
+    "id": "id",
+    "name": None,
+    "email": None
+  } ),
   db.Ad: Helper( {
     "id": "id",
     "name": None,
