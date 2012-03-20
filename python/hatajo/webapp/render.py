@@ -31,6 +31,7 @@ def transform( template = None ):
       params["_css"] = []
       params["_code"] = []
       params["_head"] = []
+      params["user"] = cherrypy.session.get( "user" )
       t = lookup.get_template( template )
       t.output_encoding = 'utf-8'
       result = t.render_unicode( **params )

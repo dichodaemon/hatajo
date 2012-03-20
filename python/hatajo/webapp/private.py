@@ -2,27 +2,30 @@
 
 import cherrypy
 import logging
-from public import Public
-from private  import Private
-from admin import Admin
-from services import Services
+import time
+import pprint
+import random
+import httplib
+import helpers
 
+import render
 
 logger = logging.getLogger( "WebApp" )
 
 #-------------------------------------------------------------------------------
 
-class WebApp( object ):
+class Private( object ):
   def __init__( self, backend ):
     self.backend = backend
-    self.public  = Public( backend )
-    self.private = Private( backend )
-    self.admin   = Admin( backend )
-    self.services = Services( backend )
     
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
+  @cherrypy.tools.render( template = "private/index.html" )
   def index( self ):
-    raise cherrypy.HTTPRedirect( "/public/" )
+    result = {
+      "pageTitle": u"Página principal",
+      "pageDescription": u"Mi cuenta"
+    }
+    return result
 

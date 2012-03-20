@@ -1,0 +1,12 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base.html"/>
+<%namespace name="core" file="/core.mako"/>
+
+<%core:add_css name="private/base"/>
+
+<%include file="header.html"/>
+<div id="content">
+${next.body()}
+</div>
+<%include file="footer.html"/>
+

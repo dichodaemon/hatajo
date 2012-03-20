@@ -24,9 +24,10 @@ import codecs
 def start():
   config = ConfigParser.SafeConfigParser()
   config.readfp( codecs.open( sys.argv[1], "r", "utf-8" ) )
+  key = str( config.get( "security", "key" ).strip( '"' ) ) 
 
   hatajo.db.init( config.get( "db", "url" ).strip( '"' ) )
-  backend = hatajo.backend.Backend()
+  backend = hatajo.backend.Backend( key )
   
   reactor.listenTCP( 
     config.getint( "global", "port" ), 

@@ -23,6 +23,7 @@ if os.path.exists( DATA_FILE ):
 config = ConfigParser.SafeConfigParser()
 config.readfp( codecs.open( sys.argv[1], "r", "utf-8" ) )
 hatajo.db.create( config.get( "db", "url" ).strip( '"' ) )
+key = str( config.get( "security", "key" ).strip( '"' ) ) 
 
 hatajo.db.session().add( hatajo.db.CatalogEntry( "norms", u"NTSC" ) )
 hatajo.db.session().add( hatajo.db.CatalogEntry( "norms", u"PAL" ) )
@@ -47,6 +48,12 @@ hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Mexicanas" ) )
 hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Romance" ) )
 hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Series" ) )
 hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Terror" ) )
+
+user = hatajo.db.User()
+user.name  = "Dizan Vasquez"
+user.email = "dichodaemon@gmail.com"
+user.set_password( "watusi", key )
+hatajo.db.session().add( user )
 
 hatajo.db.session().commit()
 

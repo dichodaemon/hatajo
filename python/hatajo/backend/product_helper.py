@@ -23,5 +23,18 @@ class ProductHelper( Helper ):
     d["total_reviews"] = total_reviews
     d["review_avg"] = review_avg
     d["reviews_by_rating"] = reviews_by_rating
+    units = 0
+    normal_price = 0
+    discounted_price = 0
+    date = None
+    for r in record.inventory:
+      if r.units > 0 and not date or r.date > date:
+        date = r.date
+        normal_price = r.normal_price
+        discounted_price = r.discounted_price
+      units += r.units
+    d["units"] = units
+    d["normal_price"] = normal_price
+    d["discounted_price"] = discounted_price
     return d
 
