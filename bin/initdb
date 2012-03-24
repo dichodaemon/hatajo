@@ -55,5 +55,11 @@ user.email = "dichodaemon@gmail.com"
 user.set_password( "watusi", key )
 hatajo.db.session().add( user )
 
+user = hatajo.db.User()
+user.name  = "Administrador del sistema"
+user.email = "admin@gmail.com"
+user.set_password( "admin", key )
+hatajo.db.session().add( user )
+
 hatajo.db.session().commit()
 
