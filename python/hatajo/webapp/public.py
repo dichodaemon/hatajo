@@ -201,6 +201,7 @@ class Public( object ):
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/review_edit.html" )
   def review_edit( self, **kargs  ):
+    pprint.pprint( kargs, width = 80 )
     kargs = helpers.cleanup_arguments( kargs )
     if "rating" in kargs:
       if kargs["rating"].strip() != "":
