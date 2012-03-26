@@ -44,6 +44,10 @@ class Backend( object ):
       u.email = email
       u.set_password( password, self.key )
       u.name = user
+      u.groups.append( db.session().query( db.CatalogEntry )\
+                       .filter( db.CatalogEntry.catalog_name == "user_groups" )\
+                       .filter( db.CatalogEntry.value == "Usuarios" )\
+                       .first() )
       db.session().add( u )
       db.session().commit()
       return helpers.get( db.User ).to_dictionary( u ), {}, {}
@@ -277,3 +281,29 @@ class Backend( object ):
     ]
     pprint.pprint( result, width = 80 )
     return result
+
+  @helpers.main_form
+  def user_update( self, arguments, warnings, errors ):
+    print "-" * 80
+    pprint.pprint( arguments, width = 80 )
+
+    if arguments["id"] == "new": 
+      user = db.User()
+    else:
+      user = db.User.by_id( arguments["id"] )
+
+    if len( arguments ) > 1:
+      if arguments["name"].strip() == "":
+        errors["name"].append( u"Es necesario asignar un nombre al usuario" )
+      if arguments["email"].strip() == "":
+        errors["name"].append( u"Es necesario asignar un email al usuario" )
+      if len( errors ) == 0:
+        helpers.get( db.User ).to_record( arguments, user )
+        db.session().add( user )
+        db.session().commit()
+        arguments = helpers.get( db.User ).to_dictionary( user )
+    else:
+      arguments = helpers.get( db.User ).to_dictionary( user )
+    print
+    pprint.pprint( arguments, width = 80 )
+    return arguments

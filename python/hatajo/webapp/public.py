@@ -31,6 +31,16 @@ class Public( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
+  @cherrypy.tools.render( template = "public/forbidden.html" )
+  def forbidden( self ):
+    result = {
+      "pageTitle": u"Página inexistente o restringida"
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
   @cherrypy.tools.render( template = "public/login.html" )
   def login( self, email=None, existing=True, password=None, destination="" ):
     if existing == "False":
@@ -92,7 +102,7 @@ class Public( object ):
     }
     result.update( 
       helpers.pager_helper( 
-        self.backend.pager, "Product", "name", filter, sort_by, descending, page, limit 
+        self.backend.product_pager, "Product", "name", filter, sort_by, descending, page, limit 
       )
     )
     pprint.pprint( result, width = 80 )
@@ -161,7 +171,7 @@ class Public( object ):
       try:
         done = True
         if method == "random":
-          elements = self.backend.products()
+          elements = filter( lambda r: r["normal_price"] > 0, self.backend.products() )
           random.shuffle( elements )
         elif method == "recent":
           elements = []

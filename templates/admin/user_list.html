@@ -5,13 +5,13 @@
 <%core:add_js name="dataTables/jquery.dataTables.min"/>
 <%core:add_js name="table"/>
 <%core:add_code>
-  var table = $( "#product_list" );
+  var table = $( "#user_list" );
   table.table( {
     "menu": ".toolbar_menu",
     "tableOptions": {
-      "sAjaxSource": "/admin/product_list_elements",
+      "sAjaxSource": "/admin/user_list_elements",
       "aoColumnDefs": [
-        { "bSortable": false, "aTargets": [2, 3] }
+        { "bSortable": false, "aTargets": [2] }
       ]
     }
   } );
@@ -20,7 +20,7 @@
     event.preventDefault();
     var row = table.selectedRow();
     if ( row != null ) {
-      window.location = "/admin/product_edit?id=" + row.find( "a" ).attr( "id" );
+      window.location = "/admin/user_edit?id=" + row.find( "a" ).attr( "id" );
     }
   } );
 
@@ -35,7 +35,7 @@
         $.ajax( {
           type: "post",
           dataType: "json",
-          url: "/services/product_delete",
+          url: "/services/user_delete",
           data: { id: parseInt( item.attr( "id" ) ) },
           cache: false,
           success: function( ok ) {
@@ -50,28 +50,19 @@
     }
   } );
 
-  $( "a[href='inventory']" ).click( function( event ) {
-    event.preventDefault();
-    var row = table.selectedRow();
-    if ( row != null ) {
-      window.location = "/admin/inventory_edit?id=new&product_id=" + row.find( "a" ).attr( "id" );
-    }
-  } );
 </%core:add_code>
 <ul class="toolbar_menu">
   <li><a href="edit"  class="edit">Editar</a></li>
   <li><a href="delete" class="delete">Borrar</a></li>
-  <li><a href="inventory" class="inventory">Existencias</a></li>
 </ul>
 <div class="list">
-  <h1>Lista de productos</h1>
-  <table id="product_list">
+  <h1>Lista de usuarios</h1>
+  <table id="user_list">
     <thead>
       <tr>
         <th>Nombre</th>
-        <th>Año</th>
-        <th>Director(es)</th>
-        <th>Existencia</th>
+        <th>email</th>
+        <th>Grupos</th>
       </tr>
     </thead>
     <tbody>

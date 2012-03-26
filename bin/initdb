@@ -49,16 +49,24 @@ hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Romance" ) )
 hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Series" ) )
 hatajo.db.session().add( hatajo.db.CatalogEntry( "genres", u"Terror" ) )
 
+adminGroup = hatajo.db.CatalogEntry( "user_groups", "Administradores" )
+hatajo.db.session().add( adminGroup )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "user_groups", "Inventario" )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "user_groups", "Contenido" )
+hatajo.db.session().add( hatajo.db.CatalogEntry( "user_groups", "Usuarios" )
+
 user = hatajo.db.User()
 user.name  = "Dizan Vasquez"
 user.email = "dichodaemon@gmail.com"
 user.set_password( "watusi", key )
+user.groups.add( adminGroup )
 hatajo.db.session().add( user )
 
 user = hatajo.db.User()
 user.name  = "Administrador del sistema"
 user.email = "admin@gmail.com"
 user.set_password( "admin", key )
+user.groups.add( adminGroup )
 hatajo.db.session().add( user )
 
 hatajo.db.session().commit()

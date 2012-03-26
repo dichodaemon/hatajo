@@ -18,4 +18,10 @@ class Inventory( Base ):
     uselist = False, 
     backref = backref( "inventory", cascade = "all,delete-orphan" ) 
   )
+  
+  def __init__( self ):
+    self.units = 0
+    self.normal_price = 0
+    self.discounted_price = 0
+    self.note = ""
 

@@ -1,0 +1,22 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="public" file="public.mako"/>
+<%namespace name="ratings" file="/ratings.mako"/>
+<%namespace name="recommendation" file="recommendation.mako"/>
+<%core:add_css name="public/two_columns"/>
+<%core:add_css name="public/ratings"/>
+<%core:add_css name="public/film_images"/>
+<%core:add_js name="ratings"/>
+
+<div class="indent1">
+  <%recommendation:recommendation
+    title="Historia Reciente"
+    method="recent"/>
+</div>
+
+<div class="indent1">
+  <%recommendation:recommendation
+    title="Quien compró esta película tambien compró..."
+    method="random"/>
+</div>

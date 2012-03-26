@@ -20,10 +20,12 @@
         <ul class="search_results">
           <%i = 0 %>
           % for p in items:
+          % if p["normal_price"] > 0:
           <%i += 1 %>
           <li>
           <em>${i}</em>${public.product( p )}
           </li>
+          % endif
           % endfor
         </ul>
       </%public:pager>

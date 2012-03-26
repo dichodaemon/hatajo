@@ -13,8 +13,15 @@
     <li>${", ".join( [a for a in product["actors"]["values"]] )}</li>
     <li><div id="r_${product["id"]}"></div> <a href="/public/product_reviews?id=${product["id"]}" class="ratings_count">${product["total_reviews"]} Comentarios</a></li>
     <li class="media">${", ".join( [a for a in product["medias"]["values"]] )}</li>
-    <li class="price">Precio Normal <span class="normal">$4.99</span> Precio de promoción <span class="discounted">$1.99</span></li>
-    <li class="delivery"><a href="/public/film_info?id=${product["id"]}">Ordena ahora y recíbela antes del 24 de noviembre</a></li>
+    <li class="price">Precio Normal <span class="normal">$${product["normal_price"]}</span> Precio de promoción <span class="discounted">$${product["discounted_price"]}</span></li>
+    % if product["units"] > 0:
+    <li class="delivery"><a href="/public/film_info?id=${product["id"]}">Ordena ahora y recíbela antes del ${h.next_date( 5 )}</a></li>
+    % else:
+    <li class="delivery"><a href="/public/film_info?id=${product["id"]}">Disponible en una semana</a></li>
+    % endif
+    % if product["units"] < 4 and product["units"] > 0:
+    <li class="delivery"><a href="/public/film_info?id=${product["id"]}">Stock reducido ¡ordene pronto!</a></li>
+    %endif
     <li class="special">Envío gratis en la compra de 3 películas</li>
   </ul>
 </%def>

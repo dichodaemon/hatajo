@@ -16,6 +16,7 @@ def main_form( f ):
   return result
 
 def get_catalog_entry( table, id, value ):
+  print table, id, value
   c = None
   if id == "new":
     c = db.session().query( db.CatalogEntry )\
@@ -114,7 +115,7 @@ class Helper( object ):
           values = value["values"]
           entries = []
           for i in xrange( len( ids ) ):
-            entry = get_catalog_entry( f, ids[i], values[i] )
+            entry = get_catalog_entry( value["table"], ids[i], values[i] )
             if entry != None:
               entries.append( entry )
           setattr( record, f, entries )

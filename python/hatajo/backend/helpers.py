@@ -43,7 +43,8 @@ helpers = {
   db.User: Helper( {
     "id": "id",
     "name": None,
-    "email": None
+    "email": None,
+    "groups": "multi"
   } ),
   db.Ad: Helper( {
     "id": "id",

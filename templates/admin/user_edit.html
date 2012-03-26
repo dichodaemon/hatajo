@@ -1,0 +1,36 @@
+## -*- coding: utf-8 -*-
+<%inherit file="user.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="admin/forms"/>
+
+<%forms:form action="user_edit" method="post">
+  <h1>Datos del usuario</h1>
+  <input type="hidden" id="id" name="id" value="${id}"/>
+  <table cellpadding="0" cellspacing="0">
+    <%forms:text_field
+      field="name"
+      label="Nombre"
+      tabindex="1"
+      hint="escriba el nombre del usuario">
+      $( "#name" ).focus();
+    </%forms:text_field>
+    <%forms:text_field
+      field="email"
+      label="email"
+      tabindex="2"
+      hint="escriba la dirección de correo del usuario"/>
+    <%forms:multi_catalog
+      field="groups"
+      catalog="user_groups"
+      label="Grupos"
+      tabindex="3"
+      hint="agregue los groupos a los que pertenece el usuario"/>
+    <tr class="buttons">
+      <td colspan="2">
+        <input type="submit" tabindex="4" value="Enviar" class="button"/>
+      </td>
+    </tr>
+  </table>
+</%forms:form>

@@ -14,7 +14,7 @@
           %for a in p["actors"]["values"][:2]:
           <li>${a}</li>
           %endfor
-          <li class="price">$4.99</li>
+          <li class="price">$${p["normal_price"]}</li>
         </ul>
       </td>
       %endfor

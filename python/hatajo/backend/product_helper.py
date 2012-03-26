@@ -28,10 +28,11 @@ class ProductHelper( Helper ):
     discounted_price = 0
     date = None
     for r in record.inventory:
-      if r.units > 0 and not date or r.date > date:
+      if r.units > 0 and not date or date and r.date > date:
         date = r.date
         normal_price = r.normal_price
         discounted_price = r.discounted_price
+      print r
       units += r.units
     d["units"] = units
     d["normal_price"] = normal_price

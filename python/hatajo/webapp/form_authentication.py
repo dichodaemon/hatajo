@@ -42,8 +42,7 @@ class FormAuthentication( cherrypy.Tool ):
       if hasattr( self, k ):
         if not getattr( self, k )( v ):
           if self.logged():
-            if cherrypy.request.path_info != "/":
-              raise cherrypy.HTTPRedirect( "/" )
+            raise cherrypy.HTTPRedirect( "/public/forbidden" )
           else:
             destination  = urllib.quote( cherrypy.request.request_line.split()[1] )
             raise cherrypy.HTTPRedirect( "/public/login?destination=%s" % destination )
@@ -52,8 +51,11 @@ class FormAuthentication( cherrypy.Tool ):
 
   def member_of( self, groups ):
     user = cherrypy.session.get( "user" )
-    if user and "group" in user:
-      return user["group"] in groups
+    if user and "groups" in user:
+      for g in groups:
+        if g in user["groups"]["values"]:
+          return True
+      return False
     return False
 
   #-----------------------------------------------------------------------------
@@ -61,7 +63,7 @@ class FormAuthentication( cherrypy.Tool ):
   def name_is( self, userNames ):
     user = cherrypy.session.get( "user" )
     if user:
-      return user["user_name"] in userNames
+      return user["name"] in userNames
     return False
 
   #-----------------------------------------------------------------------------

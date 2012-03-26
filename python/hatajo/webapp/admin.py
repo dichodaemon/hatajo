@@ -29,7 +29,7 @@ class Admin( object ):
 
   @cherrypy.expose
   def index( self ):
-    raise cherrypy.HTTPRedirect( "/admin/product_edit" )
+    raise cherrypy.HTTPRedirect( "/admin/product_list" )
 
   #-----------------------------------------------------------------------------
 
@@ -140,3 +140,49 @@ class Admin( object ):
     }
     result.update( kargs )
     return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/user_list.html" )
+  def user_list( self ):
+    result = {
+      "pageTitle": u"Lista de usuarios"
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def user_list_elements( self, **args ):
+    result = helpers.datatable_helper( self.backend, "User", "name", ["name", "email" ], **args )
+    result["aaData"] = [
+      [
+        "<a id='%s' href=/admin/user_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
+        d["email"],
+        ", ".join( [group for group in d["groups"]["values"]] )
+      ]
+      for d in result["aaData"]
+    ]
+    return json.dumps( result )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/user_edit.html" )
+  def user_edit( self, **kargs ):
+    kargs = helpers.cleanup_arguments( kargs )
+    pprint.pprint( kargs, width = 80 )
+    kargs, warnings, errors = self.backend.user_update( kargs )
+    result = {
+      "pageTitle": u"Información de usuario",
+      "errors": errors,
+      "warnings": warnings,
+      "data": kargs,
+      "catalogs": {
+        "user_groups": self.backend.catalog( "user_groups" )
+      }
+    }
+    result.update( kargs )
+    return result
+

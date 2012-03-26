@@ -16,7 +16,7 @@ def cleanup_arguments( args ):
       parts = key.split( "__" )
       field, field_type = parts[:2]
       args = parts[2:]
-      print field, field_type
+      print field, field_type, args
 
       if field_type == "c":
         print field
@@ -39,6 +39,7 @@ def cleanup_arguments( args ):
           table, tag = args
           d[tag] = value
           d["table"] = table
+          print d
         if field_type == "i":
           if not "values" in d:
             d["values"] = []
