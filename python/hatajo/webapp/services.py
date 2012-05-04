@@ -166,7 +166,7 @@ class Services( object ):
       params["PAYERID"] = PayerID
       params["PAYMENTREQUEST_0_AMT"] = fields["AMT"]
       params["TOKEN"] = token
-      params["METHOD"] = "GetExpressCheckoutDetails"
+      params["METHOD"] = "DoExpressCheckoutPayment"
       params = urllib.urlencode( params )
       request = urllib2.Request( url, params )
       response = urllib2.urlopen( request )
