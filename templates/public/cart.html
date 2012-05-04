@@ -8,7 +8,8 @@
 <%core:add_css name="public/cart"/>
 <%core:add_code>
   $( ".checkout" ).click( function ( event ) {
-    window.location = "/services/paypal_checkout";
+    //window.location = "/services/paypal_checkout";
+    window.location = "/private/confirm_order";
   } );
 </%core:add_code>
 <%!import hatajo.webapp.template_helpers as h%>

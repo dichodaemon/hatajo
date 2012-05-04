@@ -1,0 +1,86 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%core:add_css name="public/cart"/>
+<%core:add_css name="public/formatting"/>
+<%!import hatajo.webapp.template_helpers as h%>
+
+<%core:add_code>
+  $( ".checkout" ).click( function ( event ) {
+    window.location = "/services/paypal_checkout";
+  } );
+</%core:add_code>
+
+<h1>Carrito de Compras</h1>
+<div class="items">
+<table>
+<thead>
+  <tr>
+    <th></th><th></th><th></th><th class="fixed_200">Precio</th><th class="fixed_100">Cantidad</th>
+  </tr>
+</thead>
+<tbody>
+<%i = 0 %>
+% for item in cart["items"]:
+  <%i += 1 %>
+  <tr>
+    <td class="numbering"><em>${i}.</em></td>
+    <td><a href="#"><img src="${h.main_image( item["data"] )}" class="main"/></a></td>
+    <td>  
+      <ul class="description">
+        <li class="title"><a href="#">${item["data"]["name"]}</a> (${( item["data"]["original_name"] + " " + str( item["data"]["year"] ) ).strip()})</li>
+        <li class="media">${", ".join( [a for a in item["data"]["medias"]["values"]] )}</li>
+      </ul>
+    </td>
+    <td class="price">
+      <p>
+        <em>$${item["data"]["discounted_price"]}</em>
+      </p>
+    </td>
+    <td>
+      <p>${item["quantity"]}</p>
+    </td>
+  </tr>
+% endfor
+</tbody>
+</table>
+</div>
+<div class="extra_info">
+  <div class="summary">
+    <dl>
+      <dt class="subtotal">Subtotal (${cart["item_count"]} artículos):</dt><dd><span class="price">$${cart["total"]}</span></dd>
+    </dl>
+    <button class="red_button_small checkout">Coloque su Órden</button>
+  </div>
+</div>
+
+<h1>Formas de Pago</h1>
+<div class="section">
+<p class="hint">Seleccione su forma de pago preferente</p>
+<input type="radio" id="payment1" name="payment" value="paypal" checked="checked"/>
+<label for="payment1">Paypal</label><br/>
+<input type="radio" id="payment2" name="payment" value="google" disabled="disabled"/>
+<label for="payment2">Google checkout</label>
+<div>
+<br/>
+<img src="https://www.paypal.com/fr_FR/FR/Marketing/i/logo/PayPal_logo_80x35.gif" border="0" alt="Logo PayPal standard"/>
+&nbsp;
+<img src="https://checkout.google.com/seller/images/acceptancelogo/logo-0-f-en_us.png"/>
+</div>
+</div>
+
+<h1>Mensajería</h1>
+<div class="section">
+  <p class="hint">Seleccione su mensajería</p>
+  <p>
+    Mensajería por servicio postal mexicano (SEPOMEX) a toda la república mexicana en:
+  </p>
+
+  <p>
+    <input type="radio" id="shipping1" name="shipping" value="1"/><label for="shipping1">en 3 días hábiles $125 pesos - <em>Mex Post</em></label><br/>
+    <input type="radio" id="shipping2" name="shipping" value="2" checked="checked"/><label for="shipping2">en 7 días hábiles $40 pesos - <em>Paq Post</em></label><br/>
+    <div class="separator"></div></br>
+    <input type="radio" id="shipping3" name="shipping" value="3"/><label for="shipping3">mensajería privada sólo para la Ciudad de México</label><br/>
+    <input type="radio" id="shipping4" name="shipping" value="4"/><label for="shipping4">Cuernavaca entrega en 1 o 2 días hábiles $120 pesos</label>
+  </p>
+</div>
