@@ -61,7 +61,7 @@ ${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
     </div>
   </div>
   <div id="right" class="column">
-    <form class="add_to_cart">
+    <form class="add_to_cart" action="/public/add_to_cart?id=${data["id"]}" method="post">
       <div class="top">
         <label for="quantity">Cantidad:</label>
         <input id="quantity" name="quantity" class="quantity" type="text" value="1"/>

@@ -1,0 +1,133 @@
+h1 {
+  font-size: 24px;
+  color: #A40000;
+}
+
+div.items {
+  float: left;
+}
+
+div.extra_info {
+  float: left;
+  width: 300px;
+  margin-left: 10px;
+}
+
+.numbering em {
+  color: #555753;
+  font-size: 10pt;
+  font-style: normal;
+}
+
+.price {
+  color: #A40000;
+  text-align: center;
+}
+
+.price em {
+  font-size: 14pt;
+}
+
+.fixed_200 {
+  width: 200px;
+}
+
+.fixed_100 {
+  width: 100px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 800px;
+  color: #2E3436;
+  margin-bottom: 40px;
+}
+
+table input {
+  width: 50px;
+}
+
+thead {
+  background: #FFC0C0;
+  color: #A40000;
+  padding: 5px 10px;
+}
+
+thead th {
+  text-align: center;
+}
+
+tbody {
+  vertical-align: top;
+}
+
+tbody td {
+  padding: 10px;
+}
+
+tbody tr {
+  border-bottom: dotted 1px #2E3436;
+}
+
+ul.description {
+  list-style: none;
+  float: left;
+}
+
+ul.description li {
+  border-bottom: none;
+  margin: 3px 0px 0px 0px;
+  padding: 0px;
+}
+
+ul.description a {
+  text-decoration: none;
+  color: #204A87;
+}
+
+ul.description a:hover {
+  text-decoration: underline;
+  color: #204A87;
+}
+
+ul.description .title {
+  font-size: 12pt;
+}
+
+ul.description .media {
+  color: #555753;
+}
+
+div.summary {
+  display: inline-block;
+  text-align: center;
+  float: left;
+  background: #CBDBED;
+  height: 120px;
+  min-width: 250px;
+  padding: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+div.summary dt {
+  display: inline;
+  float: center;
+  clear: left;
+}
+
+div.summary dd {
+  display: inline;
+  float: center;
+  margin-left: 10px;
+}
+
+div.summary dt.subtotal {
+  font-weight: bold;
+  color: #204A87;
+}
+
+div.summary button {
+  margin-top: 10px;
+}

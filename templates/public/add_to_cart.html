@@ -2,17 +2,45 @@
 <%inherit file="base.html"/>
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="public" file="public.mako"/>
-<%namespace name="ratings" file="/ratings.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
 <%core:add_css name="public/two_columns"/>
-<%core:add_css name="public/ratings"/>
 <%core:add_css name="public/film_images"/>
-<%core:add_js name="ratings"/>
+<%core:add_css name="public/add_to_cart"/>
+<%core:add_code>
+  $( "#edit_cart" ).click( function() { window.location = "/public/cart"; } );
+</%core:add_code>
+<%! import hatajo.webapp.template_helpers as h %>
 
 <div class="indent1">
-  <%recommendation:recommendation
-    title="Historia Reciente"
-    method="recent"/>
+  <h1><img src="/img/true.png"/>1 Producto agregado al carrito</h1>
+  <div class="cart_item">
+    <div class="image">
+      <img src="${h.main_image( data )}" class="main"/>
+    </div>
+    <div class="description">
+      <dl>
+        <dt>Título:</dt><dd>${data["name"]}</dd>
+        <dt>Director:</dt><dd> ${", ".join( [d for d in data["directors"]["values"]] )} </dd>
+        <dt>Actores:</dt><dd>${", ".join( [a for a in data["actors"]["values"]] )}</dd>
+        <dt>Precio:</dt><dd><span class="price">$${data["discounted_price"]}</span></dd>
+        <dt>Cantidad:</dt><dd>${quantity}</dd>
+      </dl>
+      <ul>
+        <li class="stock">En existencia (${data["units"]})</li>
+        % if data["units"] - quantity < 2:
+        <li class="order_soon">Ordene pronto</li>
+        % endif
+      </ul>
+    </div>
+    <div class="summary">
+      <dl>
+        <dt class="subtotal">Subtotal de la orden:</dt><dd><span class="price">$${cart["total"]}</span></dd>
+        <dt>Discos en el carrito:</dt><dd>${cart["item_count"]}</dd>
+      </dl>
+      <button id="edit_cart" class="red_button_small">Editar Carrito</button>
+      <button class="red_button_small">Coloque su Órden</button>
+    </div>
+  </div>
 </div>
 
 <div class="indent1">

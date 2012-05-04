@@ -1,0 +1,17 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="public/forms"/>
+<%! import hatajo.webapp.template_helpers as h %>
+
+Gracias por su pedido!
+
+<table>
+% for k, v in fields:
+<tr>
+  <td>${k}</td>
+  <td>${v}</td>
+</tr>
+% endfor
+</table>

@@ -114,6 +114,32 @@ class Backend( object ):
       result.append( d )
     return result
 
+  def product_pager( self, table, filter_field, filter, sort_by, descending, page, limit, prefilter=[] ):
+    table = db.__dict__[table]
+    def build_query( query ):
+      for field, value in prefilter:
+        query = query.filter( getattr( table, field ) == value )
+      if filter != "":
+        for f in filter.split():
+          query = query.filter( getattr( table, filter_field ).like( "%%%s%%" % filter ) )
+      if not descending:
+        query = query.order_by( db.func.lower( getattr( table, sort_by ) ).asc() )
+      else:
+        query = query.order_by( db.func.lower( getattr( table, sort_by ) ).desc() )
+      query = query.distinct()
+      return query
+
+    result = build_query( db.session().query( table ) )
+    count  = build_query( db.session().query( db.func.count( db.distinct( table.id ) ) ) ).one()[0]
+    result = result.limit( limit ).offset( page * limit ).all()
+
+    result = [ 
+        helpers.get( table ).to_dictionary( p )
+      for p in result
+    ]
+    print count, limit
+    return result, int( math.ceil( 1.0 * count / limit ) )
+
   def pager( self, table, filter_field, filter, sort_by, descending, page, limit, prefilter=[] ):
     table = db.__dict__[table]
     def build_query( query ):
