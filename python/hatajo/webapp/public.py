@@ -282,6 +282,6 @@ class Public( object ):
   def order_processed( self ):
     result = {
       "pageTitle": u"Gracias por su pedido",
-      "fields": cherrpy.session["fields"]
+      "fields": cherrypy.session["fields"]
     }
     return result
