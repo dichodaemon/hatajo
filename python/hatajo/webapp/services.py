@@ -6,6 +6,8 @@ import logging
 import time
 import random
 import httplib
+import urllib
+import urllib2
 
 logger = logging.getLogger( "WebApp" )
 
@@ -81,3 +83,79 @@ class Services( object ):
   @cherrypy.expose
   def ad_delete( self, id ):
     return json.dumps( self.backend.ad_delete( int( id ) ) )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def modify_cart( self, id, quantity  ):
+    data = self.backend.product_info( id )
+    quantity = int( quantity )
+    selected = None
+    for item in cherrypy.session["cart"]["items"]:
+      if item["id"] == id:
+        selected = item
+        cherrypy.session["cart"]["total"] -= data["discounted_price"] * item["quantity"]
+        cherrypy.session["cart"]["item_count"] -= item["quantity"]
+        item["quantity"] = quantity
+        cherrypy.session["cart"]["total"] += data["discounted_price"] * quantity
+        cherrypy.session["cart"]["item_count"] += quantity 
+    if selected != None and quantity == 0:
+      cherrypy.session["cart"]["items"].remove( selected )
+    raise cherrypy.HTTPRedirect( "/public/cart" )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def paypal_checkout( self ):
+    url = "https://api-3t.sandbox.paypal.com/nvp"
+    params = {}
+    params["USER"]       = "seller_1336112701_biz_api1.gmail.com"
+    params["PWD"]        = "1336112740"
+    params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
+    params["VERSION"]    = "88.0"
+    params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale"
+    params["PAYMENTREQUEST_0_AMT"] = cherrypy.session["cart"]["total"]
+    params["RETURNURL"] = "http://hatajo.dizanvasquez.info/services/paypal_returnurl"
+    params["CANCELURL"] = "http://www.yahoo.com"
+    params["METHOD"] = "SetExpressCheckout"
+    params = urllib.urlencode( params )
+    request = urllib2.Request( url, params )
+    response = urllib2.urlopen( request )
+    fields = {}
+    for l in urllib.unquote_plus( response.read() ).split( "&" ):
+      key, value = l.split( "=" )
+      fields[key] = value
+    print "=" * 80
+    print fields
+    print "=" * 80
+    if fields["ACK"] == "Success":
+      raise cherrypy.HTTPRedirect( "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=%s" % fields["TOKEN"] )
+    else:
+      raise cherrypy.HTTPRedirect( "/public/order_processed" )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def paypal_returnurl( self, token, PayerID ):
+    url = "https://api-3t.sandbox.paypal.com/nvp"
+    params = {}
+    params["USER"]       = "seller_1336112701_biz_api1.gmail.com"
+    params["PWD"]        = "1336112740"
+    params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
+    params["VERSION"]    = "88.0"
+    params["TOKEN"] = token
+    params["METHOD"] = "GetExpressCheckoutDetails"
+    params = urllib.urlencode( params )
+    request = urllib2.Request( url, params )
+    response = urllib2.urlopen( request )
+    fields = {}
+    for l in urllib.unquote_plus( response.read() ).split( "&" ):
+      key, value = l.split( "=" )
+      fields[key] = value
+    print "=" * 80
+    print fields
+    print "=" * 80
+    if fields["ACK"] == "Success":
+      cherrypy.session["fields"] = fields
+      raise cherrypy.HTTPRedirect( "/public/order_processed" )
+      

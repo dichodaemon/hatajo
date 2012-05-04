@@ -1,0 +1,90 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="public" file="public.mako"/>
+<%namespace name="recommendation" file="recommendation.mako"/>
+<%core:add_css name="public/two_columns"/>
+<%core:add_css name="public/film_images"/>
+<%core:add_css name="public/cart"/>
+<%core:add_code>
+  $( ".checkout" ).click( function ( event ) {
+    window.location = "/services/paypal_checkout";
+  } );
+</%core:add_code>
+<%!import hatajo.webapp.template_helpers as h%>
+
+<div class="indent1">
+<h1>Carrito de Compras</h1>
+<div class="items">
+% if cart["item_count"] > 0:
+<table>
+<thead>
+  <tr>
+    <th></th><th></th><th></th><th class="fixed_200">Precio</th><th class="fixed_100">Cantidad</th>
+  </tr>
+</thead>
+<tbody>
+<%i = 0 %>
+% for item in cart["items"]:
+  <%i += 1 %>
+  <tr>
+    <td class="numbering"><em>${i}.</em></td>
+    <td><a href="/public/film_info?id=${item["id"]}"><img src="${h.main_image( item["data"] )}" class="main"/></a></td>
+    <td>  
+      <ul class="description">
+        <li class="title"><a href="/public/film_info?id=${item["data"]["id"]}">${item["data"]["name"]}</a> (${( item["data"]["original_name"] + " " + str( item["data"]["year"] ) ).strip()})</li>
+        <li class="media">${", ".join( [a for a in item["data"]["medias"]["values"]] )}</li>
+        % if item["data"]["units"] > 0:
+        <li class="delivery"><a href="/public/film_info?id=${item["data"]["id"]}">Ordena ahora y recíbela antes del ${h.next_date( 5 )}</a></li>
+        % else:
+        <li class="delivery"><a href="/public/film_info?id=${item["data"]["id"]}">Disponible en una semana</a></li>
+        % endif
+        % if item["data"]["units"] < 4 and item["data"]["units"] > 0:
+        <li class="delivery"><a href="/public/film_info?id=${item["data"]["id"]}">Stock reducido ¡ordene pronto!</a></li>
+        %endif
+      </ul>
+    </td>
+    <td class="price">
+      <p>
+        <em>$${item["data"]["discounted_price"]}</em>
+      </p>
+      <p>
+        Ahorro:<br/>
+        <% savings = item["data"]["normal_price"] - item["data"]["discounted_price"] %>
+        $${savings} ( ${int( 100 * savings / item["data"]["normal_price"] )}% )
+      </p>
+    </td>
+    <td>
+      <p><input id="i_${item["id"]}" value="${item["quantity"]}"/></p>
+      <p><a href="/services/modify_cart?id=${item["id"]}&quantity=0" class="red_button_small">Borrar</a>
+      <%core:add_code>
+      $( "#i_${item["id"]}" ).change( function( event ) { 
+        window.location =  "/services/modify_cart?id=${item["id"]}&quantity=" + $( "#i_${item["id"]}" ).attr( "value" ); 
+      } );
+      </%core:add_code>
+    </td>
+  </tr>
+% endfor
+</tbody>
+</table>
+</div>
+<div class="extra_info">
+  <div class="summary">
+    <img src="/img/true.png"/> Califica para envío gratuito
+    <dl>
+      <dt class="subtotal">Subtotal (${cart["item_count"]} artículos):</dt><dd><span class="price">$${cart["total"]}</span></dd>
+    </dl>
+    <button class="red_button_small checkout">Coloque su Órden</button>
+  </div>
+% else:
+<p>
+El carrito está vacío
+</p>
+% endif
+</div>
+</div>
+<div class="indent1">
+  <%recommendation:recommendation
+    title="Recomendaciones para usted"
+    method="random"/>
+</div>

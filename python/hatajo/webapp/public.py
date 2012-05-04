@@ -229,3 +229,59 @@ class Public( object ):
       "data": kargs
     }
     return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/add_to_cart.html" )
+  def add_to_cart( self, id, quantity  ):
+    data = self.backend.product_info( id )
+    quantity = int( quantity )
+    if not cherrypy.session.has_key( "cart" ):
+      cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
+    found = False
+    old_quantity = 0
+    for item in cherrypy.session["cart"]["items"]:
+      if item["id"] == id:
+        item["quantity"] += quantity
+        old_quantity = quantity
+        found = True
+    if not found:
+      cherrypy.session["cart"]["items"].append( { "id": id, "quantity": quantity } )
+    cherrypy.session["cart"]["total"] += data["discounted_price"] * quantity
+    cherrypy.session["cart"]["item_count"] += quantity
+    result = {
+      "pageTitle": u"Agregar al carrito de compras",
+      "data": data,
+      "quantity": quantity + old_quantity,
+      "cart": cherrypy.session["cart"]
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/cart.html" )
+  def cart( self ):
+    if not cherrypy.session.has_key( "cart" ):
+      cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
+    cart = cherrypy.session["cart"]
+    for i in cart["items"]:
+      i["data"] = self.backend.product_info( i["id"] )
+      
+    result = {
+      "pageTitle": u"Editar carrito de compras",
+      "cart": cherrypy.session["cart"]
+    }
+    return result
+    
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/order_processed.html" )
+  def order_processed( self ):
+    result = {
+      "pageTitle": u"Gracias por su pedido",
+      "fields": cherrpy.session["fields"]
+    }
+    return result

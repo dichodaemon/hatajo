@@ -16,3 +16,16 @@
   line-height: 25px;
 }
 
+.red_button_small {
+  background: #A40000; /* for non-css3 browsers */
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF6163', endColorstr='#9A2035'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#FF6163), to(#9A2035)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #FF6163,  #9A2035); /* for firefox 3.6+ */ 
+  text-decoration: none;
+  
+  border: none;
+  color: #FFF;
+  padding: 0px 5px;
+  line-height: 18px;
+  height: 20px;
+}
