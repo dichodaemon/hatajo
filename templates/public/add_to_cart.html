@@ -8,6 +8,10 @@
 <%core:add_css name="public/add_to_cart"/>
 <%core:add_code>
   $( "#edit_cart" ).click( function() { window.location = "/public/cart"; } );
+  $( ".checkout" ).click( function ( event ) {
+    //window.location = "/services/paypal_checkout";
+    window.location = "/private/confirm_order";
+  } );
 </%core:add_code>
 <%! import hatajo.webapp.template_helpers as h %>
 
@@ -38,7 +42,7 @@
         <dt>Discos en el carrito:</dt><dd>${cart["item_count"]}</dd>
       </dl>
       <button id="edit_cart" class="red_button_small">Editar Carrito</button>
-      <button class="red_button_small">Coloque su Órden</button>
+      <button class="red_button_small checkout">Coloque su Órden</button>
     </div>
   </div>
 </div>

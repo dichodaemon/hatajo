@@ -117,7 +117,11 @@ class Services( object ):
     params["PAYMENTREQUEST_0_AMT"] = cherrypy.session["cart"]["total"]
     params["RETURNURL"] = "http://hatajo.dizanvasquez.info/services/paypal_returnurl"
     params["CANCELURL"] = "http://www.yahoo.com"
+    params["EMAIL"]     = cherrypy.session["user"]["email"]
     params["METHOD"] = "SetExpressCheckout"
+    print ">" * 80
+    print params
+    print ">" * 80
     params = urllib.urlencode( params )
     request = urllib2.Request( url, params )
     response = urllib2.urlopen( request )
