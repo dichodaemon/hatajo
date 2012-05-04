@@ -162,7 +162,7 @@ class Services( object ):
       params["PWD"]        = "1336112740"
       params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
       params["VERSION"]    = "88.0"
-      params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Authorization"
+      params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale"
       params["PAYERID"] = PayerID
       params["PAYMENTREQUEST_0_AMT"] = fields["AMT"]
       params["TOKEN"] = token
