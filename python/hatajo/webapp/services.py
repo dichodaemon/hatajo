@@ -157,5 +157,25 @@ class Services( object ):
     print "=" * 80
     if fields["ACK"] == "Success":
       cherrypy.session["fields"] = fields
+      params = {}
+      params["USER"]       = "seller_1336112701_biz_api1.gmail.com"
+      params["PWD"]        = "1336112740"
+      params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
+      params["VERSION"]    = "88.0"
+      params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Authorization"
+      params["PAYERID"] = PayerID
+      params["PAYMENTREQUEST_0_AMT"] = fields["AMT"]
+      params["TOKEN"] = token
+      params["METHOD"] = "GetExpressCheckoutDetails"
+      params = urllib.urlencode( params )
+      request = urllib2.Request( url, params )
+      response = urllib2.urlopen( request )
+      fields = {}
+      for l in urllib.unquote_plus( response.read() ).split( "&" ):
+        key, value = l.split( "=" )
+        fields[key] = value
+      print "=" * 80
+      print fields
+      print "=" * 80
       raise cherrypy.HTTPRedirect( "/public/order_processed" )
       
