@@ -172,7 +172,7 @@ class Services( object ):
       response = urllib2.urlopen( request )
       fields = {}
       for l in urllib.unquote_plus( response.read() ).split( "&" ):
-        key, value = l.split( "=" )
+        key, value = l.split( "*" )
         fields[key] = value
       print "=" * 80
       print fields
