@@ -138,6 +138,7 @@ class Backend( object ):
       for p in result
     ]
     print count, limit
+    print result
     return result, int( math.ceil( 1.0 * count / limit ) )
 
   @helpers.main_form
@@ -153,9 +154,9 @@ class Backend( object ):
     if len( arguments ) > 2:
       if arguments["product_id"].strip() == "":
         errors["normal_price"].append( u"No se seleccionó un producto" )
-      if int( arguments["normal_price"].strip() ) <= 0:
+      if float( arguments["normal_price"].strip() ) <= 0:
         errors["normal_price"].append( u"Es necesario entrar un valor positivo para el precio" )
-      if int( arguments["discounted_price"].strip() ) <= 0:
+      if float( arguments["discounted_price"].strip() ) <= 0:
         errors["discounted_price"].append( u"Es necesario entrar un valor positivo para el precio" )
       if int( arguments["units"].strip() ) <= 0:
         errors["units"].append( u"Es necesario entrar un valor positivo para las unidades" )
