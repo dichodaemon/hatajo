@@ -195,7 +195,7 @@ class Services( object ):
         key, value = l.split( "=" )
         fields[key] = value
       if fields["ACK"] == "Success":
-        cherrypy.session["cart"] = None
+        cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
       print "*" * 80
       print fields
       print "*" * 80
