@@ -55,6 +55,30 @@ def cleanup_arguments( args ):
 
   return result
 
+def product_helper( 
+  call, filter_field, filter="", sort_by="date", 
+  descending=True, page=0, limit=10, genre="", prefilter = []
+):
+  if type( descending ) in [unicode, str]:
+    descending = descending == "checked"
+  if type( filter ) == int:
+    filter = ""
+  if type( page ) != int:
+    page = int( page )
+  page = int( page )
+  limit = int( limit )
+  items, page_count = call( filter_field, filter, sort_by, descending, page, limit, genre, prefilter )
+  return {
+    "page_count": page_count,
+    "page": page,
+    "filter": filter,
+    "sort_by": sort_by,
+    "descending": descending,
+    "limit": limit,
+    "genre" : genre,
+    "items": items
+  }
+
 def pager_helper( 
   call, table, filter_field, filter="", sort_by="date", 
   descending=True, page=0, limit=10, prefilter = []

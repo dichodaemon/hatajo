@@ -62,6 +62,12 @@ class Backend( object ):
       { "id": v.id, "value": v.value } for v in result
     ]
 
+  def find_id_in_catalog( self, id ):
+    result = db.session().query( db.CatalogEntry )\
+      .filter( db.CatalogEntry.id == id )\
+      .one()
+    return { "id": result.id, "value": result.value }
+
   def catalog( self, catalog_name ):
     result = db.session().query( db.CatalogEntry )\
       .filter( db.CatalogEntry.catalog_name == catalog_name )\
@@ -114,27 +120,30 @@ class Backend( object ):
       result.append( d )
     return result
 
-  def product_pager( self, table, filter_field, filter, sort_by, descending, page, limit, prefilter=[] ):
-    table = db.__dict__[table]
+  def product_pager( self, filter_field, filter, sort_by, descending, page, limit, genre="", prefilter=[] ):
     def build_query( query ):
+      if genre != "":
+        print "Genre:", genre
+        query = query.join( db.Product.genres )
+        query = query.filter( "product_genre_1.genre_id = %s" % genre )
       for field, value in prefilter:
-        query = query.filter( getattr( table, field ) == value )
+        query = query.filter( getattr( db.Product, field ) == value )
       if filter != "":
         for f in filter.split():
-          query = query.filter( getattr( table, filter_field ).like( "%%%s%%" % filter ) )
+          query = query.filter( getattr( db.Product, filter_field ).like( "%%%s%%" % filter ) )
       if not descending:
-        query = query.order_by( db.func.lower( getattr( table, sort_by ) ).asc() )
+        query = query.order_by( db.func.lower( getattr( db.Product, sort_by ) ).asc() )
       else:
-        query = query.order_by( db.func.lower( getattr( table, sort_by ) ).desc() )
+        query = query.order_by( db.func.lower( getattr( db.Product, sort_by ) ).desc() )
       query = query.distinct()
       return query
 
-    result = build_query( db.session().query( table ) )
-    count  = build_query( db.session().query( db.func.count( db.distinct( table.id ) ) ) ).one()[0]
+    result = build_query( db.session().query( db.Product ) )
+    count  = build_query( db.session().query( db.func.count( db.distinct( db.Product.id ) ) ) ).one()[0]
     result = result.limit( limit ).offset( page * limit ).all()
 
     result = [ 
-        helpers.get( table ).to_dictionary( p )
+        helpers.get( db.Product ).to_dictionary( p )
       for p in result
     ]
     print count, limit

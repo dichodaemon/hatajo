@@ -7,9 +7,9 @@
   <a href="/"><img src="/img/logo.png" class="logo"/></a>
   <div class="text">
     % if user:
-    Hola ${user["name"].split()[0]} <a href="#">recomendaciones para ti</a>  (<a href="/public/logout">¿no eres ${user["name"].split()[0]}?</a>)
+    Hola ${user["name"].split()[0]}  (<a href="/public/logout">¿no eres ${user["name"].split()[0]}?</a>)
     % else:
-    Hola. <a href="/public/login">Conéctese</a> para obtener recomendaciones personalizadas. ¿Nuevo cliente? <a href="/public/login">comience aquí</a>
+    Hola. <a href="/public/login">Conéctese</a> para tener acceso a toda la funcionalidad del sitio. ¿Nuevo cliente? <a href="/public/login">comience aquí</a>
     % endif
   </div>
   <a href="#" class="help"><img src="/img/help.png"> Ayuda</a>

@@ -36,65 +36,65 @@ div.extra_info {
   width: 100px;
 }
 
-table {
+.items table {
   border-collapse: collapse;
   width: 800px;
   color: #2E3436;
   margin-bottom: 40px;
 }
 
-table input {
+.items table input {
   width: 50px;
 }
 
-thead {
+.items thead {
   background: #FFC0C0;
   color: #A40000;
   padding: 5px 10px;
 }
 
-thead th {
+.items thead th {
   text-align: center;
 }
 
-tbody {
+.items tbody {
   vertical-align: top;
 }
 
-tbody td {
+.items tbody td {
   padding: 10px;
 }
 
-tbody tr {
+.items tbody tr {
   border-bottom: dotted 1px #2E3436;
 }
 
-ul.description {
+.items ul.description {
   list-style: none;
   float: left;
 }
 
-ul.description li {
+.items ul.description li {
   border-bottom: none;
   margin: 3px 0px 0px 0px;
   padding: 0px;
 }
 
-ul.description a {
+.items ul.description a {
   text-decoration: none;
   color: #204A87;
 }
 
-ul.description a:hover {
+.items ul.description a:hover {
   text-decoration: underline;
   color: #204A87;
 }
 
-ul.description .title {
+.items ul.description .title {
   font-size: 12pt;
 }
 
-ul.description .media {
+.items ul.description .media {
   color: #555753;
 }
 

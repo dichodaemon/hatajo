@@ -2,6 +2,7 @@
 <%inherit file="base.html"/>
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="public" file="public.mako"/>
+<%namespace name="recommendation" file="recommendation.mako"/>
 <%core:add_css name="public/two_columns"/>
 <%core:add_css name="public/search_results"/>
 <%core:add_css name="public/ratings"/>
@@ -12,7 +13,7 @@
 <div id="column_container">
   <div id="center" class="column">
     <div id="search_results">
-      <h2>DRAMA</h2>
+      <h2>${genre_name}</h2>
       <p class="header">
         ${len( items )} RESULTADOS
       </p>
@@ -33,5 +34,9 @@
   </div>
   <div id="left" class="column">
     <%include file="genre_menu.html"/>
+    <%recommendation:recommendation
+      title="Historia reciente"
+      method="recent"
+      layout="vertical"/>
   </div>
 </div>

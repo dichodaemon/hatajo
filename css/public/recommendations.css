@@ -38,3 +38,30 @@ div.recommendation {
   color: #CC0000;
 }
 
+.recommendation_vertical img {
+  max-width: 80px;
+}
+
+.recommendation_vertical h1 {
+  font-size: 14pt;
+  color: #888A85;
+}
+
+.recommendation_vertical ul {
+  list-style: none;
+  padding: 0px;
+}
+
+
+.recommendation_vertical li.title a {
+  color: #3465A4;
+  text-decoration: none;
+}
+
+.recommendation_vertical li.title a:hover {
+  text-decoration: underline;
+}
+
+.recommendation_vertical li.price {
+  color: #CC0000;
+}

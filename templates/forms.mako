@@ -2,7 +2,7 @@
 <%namespace name="core" file="core.mako"/>
 <%!
 def q( text ):
-  return text.replace( "\"", "\\\"" )
+  return text.replace( "\"", "\\"+"\"" )
 %>
 <%def name="form( action, method )">
   <%core:add_js name="forms"/>
