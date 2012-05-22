@@ -246,7 +246,7 @@ class Public( object ):
   def add_to_cart( self, id, quantity  ):
     data = self.backend.product_info( id )
     quantity = int( quantity )
-    if not cherrypy.session.has_key( "cart" ):
+    if not cherrypy.session.has_key( "cart" ) or cherrypy.session["cart"] == None:
       cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
     found = False
     old_quantity = 0
