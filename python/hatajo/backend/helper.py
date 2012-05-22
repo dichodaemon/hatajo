@@ -16,7 +16,6 @@ def main_form( f ):
   return result
 
 def get_catalog_entry( table, id, value ):
-  print table, id, value
   c = None
   if id == "new":
     c = db.session().query( db.CatalogEntry )\

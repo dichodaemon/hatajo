@@ -2,9 +2,10 @@
 <%namespace name="core" file="/core.mako"/>
 <%! import hatajo.webapp.template_helpers as h %>
 
+% if data["layout"] == "horizontal":
 <div class="recommendation">
   <h2>${data["title"]}</h2>
-  <table class="recommendation">
+  <table>
     <tr>
       %for p in data["elements"][:5]:
       <td>
@@ -21,3 +22,27 @@
     </tr>
   </table>
 </div>
+% else:
+<div class="recommendation_vertical">
+  <h1>${data["title"]}</h1>
+  <table>
+    %for p in data["elements"][:5]:
+    <tr>
+      <td>
+        <a href="/public/film_info?id=${p["id"]}"><img src="${h.main_image( p )}"/></a>
+      </td>
+      <td>
+        <ul>
+          <li class="title"><a href="/public/film_info?id=${p["id"]}">${p["name"]}</a></li>
+          <li>${p["year"]}</li>
+          % if len( p["medias"]["values"] ) > 0:
+          <li>${p["medias"]["values"][0]}</li>
+          % endif
+          <li class="price">$${p["normal_price"]}</li>
+        </ul>
+      </td>
+    </tr>
+    %endfor
+  </table>
+</div>
+% endif

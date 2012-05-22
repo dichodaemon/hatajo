@@ -36,7 +36,6 @@ class Product( Base ):
   def __init__( self, name ):
     self.name  = name
 
-
 ProductGenre = Table( "product_genre", metadata,
   Column( "product_id", Integer, ForeignKey( Product.id ) ),
   Column( "genre_id", Integer, ForeignKey( CatalogEntry.id ) )

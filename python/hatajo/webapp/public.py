@@ -94,15 +94,20 @@ class Public( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/search_results.html" )
-  def search_results( self, filter="", sort_by="name", descending=True, page=0, limit=10 ):
+  def search_results( self, filter="", genre="", sort_by="name", descending=True, page=0, limit=10 ):
+    if genre == "":
+      genre_name = "Resultados"
+    else:
+      genre_name = self.backend.find_id_in_catalog( int( genre ) )["value"]
     result = {
       "pageTitle": u"Su búsqueda",
       "base_url": "/public/search_results?",
+      "genre_name": genre_name,
       "sort_fields": [("name", u"Nombre"), ("year", u"Año")],
     }
     result.update( 
-      helpers.pager_helper( 
-        self.backend.product_pager, "Product", "name", filter, sort_by, descending, page, limit 
+      helpers.product_helper( 
+        self.backend.product_pager, "name", filter, sort_by, descending, page, limit, genre 
       )
     )
     pprint.pprint( result, width = 80 )
@@ -115,7 +120,7 @@ class Public( object ):
   def film_info( self, id ):
     visited = cherrypy.session.get( "visited", [] )
     visited = visited[:10]
-    visited.append( id )
+    visited.insert( 0, int( id ) )
     cherrypy.session["visited"] = visited
 
     result = {
@@ -165,7 +170,7 @@ class Public( object ):
 
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/recommendation.html" )
-  def recommendation( self, title, method = "" ):
+  def recommendation( self, title, method = "", layout="horizontal" ):
     done = False
     while not done:
       try:
@@ -174,13 +179,16 @@ class Public( object ):
           elements = filter( lambda r: r["normal_price"] > 0, self.backend.products() )
           random.shuffle( elements )
         elif method == "recent":
+          added = set()
           elements = []
           for id in cherrypy.session.get( "visited", [] ):
-            if not id in elements:
+            if not id in added:
               elements.append( self.backend.product_info( id ) )
-          for id in self.backend.products():
-            if not id in elements:
-              elements.append( id )
+              added.add( id )
+          for p in self.backend.products():
+            if not p["id"] in added:
+              elements.append( p )
+              added.add( p["id"] )
       except httplib.CannotSendRequest:
         time.sleep( random.random() )
         done = False
@@ -189,9 +197,10 @@ class Public( object ):
         done = False
     return {
       "data": {
+        "layout": layout,
         "title": title,
         "elements": elements
-      }
+      },
     }
 
   #-----------------------------------------------------------------------------
@@ -247,7 +256,7 @@ class Public( object ):
         old_quantity = quantity
         found = True
     if not found:
-      cherrypy.session["cart"]["items"].append( { "id": id, "quantity": quantity } )
+      cherrypy.session["cart"]["items"].append( { "id": id, "quantity": quantity, "name": data["name"], "price": data["discounted_price"] } )
     cherrypy.session["cart"]["total"] += data["discounted_price"] * quantity
     cherrypy.session["cart"]["item_count"] += quantity
     result = {

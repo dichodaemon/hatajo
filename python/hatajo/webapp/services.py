@@ -11,6 +11,10 @@ import urllib2
 
 logger = logging.getLogger( "WebApp" )
 
+ppuser = "dichod_1337712011_biz_api1.gmail.com"
+pppwd  = "1337712043"
+ppsignature = "AvHZ32NRViZxM6AlqwC6-eHkFYd5AGlk0L.D2Y2BUiwZhwP1DQ6YGGEq"
+
 #-------------------------------------------------------------------------------
 
 class Services( object ):
@@ -109,20 +113,29 @@ class Services( object ):
   def paypal_checkout( self ):
     url = "https://api-3t.sandbox.paypal.com/nvp"
     params = {}
-    params["USER"]       = "seller_1336112701_biz_api1.gmail.com"
-    params["PWD"]        = "1336112740"
-    params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
+    params["USER"]       = ppuser
+    params["PWD"]        = pppwd
+    params["SIGNATURE"]  = ppsignature
     params["VERSION"]    = "88.0"
     params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale"
-    params["PAYMENTREQUEST_0_AMT"] = cherrypy.session["cart"]["total"]
     params["RETURNURL"] = "http://hatajo.dizanvasquez.info/services/paypal_returnurl"
     params["CANCELURL"] = "http://www.yahoo.com"
     params["EMAIL"]     = cherrypy.session["user"]["email"]
     params["METHOD"] = "SetExpressCheckout"
+
+    cart = cherrypy.session["cart"]
+    params["PAYMENTREQUEST_0_AMT"] = cart["total"]
+    params["PAYMENTREQUEST_0_ITEMAMT"] = cart["total"]
+    for i in xrange( cart["item_count"] ):
+      params["L_PAYMENT_REQUEST_0_NAME_%i" % i] = cart["items"][i]["name"].encode( "utf-8" )
+      params["L_PAYMENT_REQUEST_0_QTY_%i" % i] = cart["items"][i]["quantity"]
+      params["L_PAYMENT_REQUEST_0_AMT_%i" % i] = cart["items"][i]["quantity"] * cart["items"][i]["price"]
+      params["L_PAYMENT_REQUEST_0_ITEM_CATEGORY_%i" % i] = "Physical"
+      
+    params = urllib.urlencode( params )
     print ">" * 80
     print params
     print ">" * 80
-    params = urllib.urlencode( params )
     request = urllib2.Request( url, params )
     response = urllib2.urlopen( request )
     fields = {}
@@ -133,8 +146,11 @@ class Services( object ):
     print fields
     print "=" * 80
     if fields["ACK"] == "Success":
+      print "paypal_checkout SUCCESS"
       raise cherrypy.HTTPRedirect( "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=%s" % fields["TOKEN"] )
     else:
+      print "paypal_checkout FAILED"
+      cherrypy.session["fields"] = fields
       raise cherrypy.HTTPRedirect( "/public/order_processed" )
 
   #-----------------------------------------------------------------------------
@@ -143,9 +159,9 @@ class Services( object ):
   def paypal_returnurl( self, token, PayerID ):
     url = "https://api-3t.sandbox.paypal.com/nvp"
     params = {}
-    params["USER"]       = "seller_1336112701_biz_api1.gmail.com"
-    params["PWD"]        = "1336112740"
-    params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
+    params["USER"]       = ppuser
+    params["PWD"]        = pppwd
+    params["SIGNATURE"]  = ppsignature
     params["VERSION"]    = "88.0"
     params["TOKEN"] = token
     params["METHOD"] = "GetExpressCheckoutDetails"
@@ -162,9 +178,9 @@ class Services( object ):
     if fields["ACK"] == "Success":
       cherrypy.session["fields"] = fields
       params = {}
-      params["USER"]       = "seller_1336112701_biz_api1.gmail.com"
-      params["PWD"]        = "1336112740"
-      params["SIGNATURE"]  = "AIu7siqV9nza75.8gl4R6lxQH-ewALzf8xM3vdvpExDOI9o5c-hEx-Ky"
+      params["USER"]       = ppuser
+      params["PWD"]        = pppwd
+      params["SIGNATURE"]  = ppsignature
       params["VERSION"]    = "88.0"
       params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale"
       params["PAYERID"] = PayerID
