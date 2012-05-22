@@ -19,7 +19,7 @@ div.extra_info {
   font-style: normal;
 }
 
-.price {
+.items .price {
   color: #A40000;
   text-align: center;
 }
