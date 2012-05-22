@@ -35,6 +35,10 @@
         <ul>
           <li class="title"><a href="/public/film_info?id=${p["id"]}">${p["name"]}</a></li>
           <li>${p["year"]}</li>
+          <%core:add_code>
+            $( "#r_${p["id"]}" ).ratings( ${int(p["review_avg"])}, false );
+          </%core:add_code>
+         <li><div id="r_${product["id"]}"></div></li>
           % if len( p["medias"]["values"] ) > 0:
           <li>${p["medias"]["values"][0]}</li>
           % endif
