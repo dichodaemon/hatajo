@@ -194,6 +194,8 @@ class Services( object ):
       for l in urllib.unquote_plus( response.read() ).split( "&" ):
         key, value = l.split( "=" )
         fields[key] = value
+      if fields["ACK"] == "Success":
+        cherrypy.session["cart"] = None
       print "*" * 80
       print fields
       print "*" * 80
