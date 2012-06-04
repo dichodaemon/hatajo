@@ -1,0 +1,27 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="admin/forms"/>
+
+<div id="local_info_bar" class="column_container">
+  <div class="column main">
+  </div>
+  <div class="column left">
+    <h1>Editar órden</h1>
+  </div>
+</div>
+
+<div id="content" class="column_container">
+  <div class="column main">
+    ${next.body()}
+  </div>
+  <div id="left_menu" class="column left">
+    <h1>Acciones</h1>
+    <ul>
+      <li><a href="/admin/order_list">Lista</a></li>
+      <li><a href="/admin/order_edit">Detalles</a></li>
+    </ul>
+  </div>
+</div>
