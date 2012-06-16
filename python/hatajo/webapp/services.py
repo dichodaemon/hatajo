@@ -91,6 +91,12 @@ class Services( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
+  def order_send( self, id ):
+    return json.dumps( self.backend.order_send( int( id ) ) )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
   def modify_cart( self, id, quantity  ):
     data = self.backend.product_info( id )
     quantity = int( quantity )
@@ -125,8 +131,9 @@ class Services( object ):
 
     cart = cherrypy.session["cart"]
     params["PAYMENTREQUEST_0_AMT"] = cart["total"]
+    params["PAYMENTREQUEST_0_CURRENCYCODE"] = "MXN"
     params["PAYMENTREQUEST_0_ITEMAMT"] = cart["total"]
-    for i in xrange( cart["item_count"] ):
+    for i in xrange( len( cart["items"] ) ):
       params["L_PAYMENT_REQUEST_0_NAME_%i" % i] = cart["items"][i]["name"].encode( "utf-8" )
       params["L_PAYMENT_REQUEST_0_QTY_%i" % i] = cart["items"][i]["quantity"]
       params["L_PAYMENT_REQUEST_0_AMT_%i" % i] = cart["items"][i]["quantity"] * cart["items"][i]["price"]
@@ -168,15 +175,17 @@ class Services( object ):
     params = urllib.urlencode( params )
     request = urllib2.Request( url, params )
     response = urllib2.urlopen( request )
-    fields = {}
+    address = {}
     for l in urllib.unquote_plus( response.read() ).split( "&" ):
       key, value = l.split( "=" )
-      fields[key] = value
+      address[key] = value
     print "=" * 80
-    print fields
+    print "After GetExpressCheckoutDetails"
+    print address
     print "=" * 80
-    if fields["ACK"] == "Success":
-      cherrypy.session["fields"] = fields
+    if address["ACK"] == "Success":
+      cart = cherrypy.session["cart"]
+      cherrypy.session["fields"] = address
       params = {}
       params["USER"]       = ppuser
       params["PWD"]        = pppwd
@@ -184,7 +193,16 @@ class Services( object ):
       params["VERSION"]    = "88.0"
       params["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale"
       params["PAYERID"] = PayerID
-      params["PAYMENTREQUEST_0_AMT"] = fields["AMT"]
+      params["PAYMENTREQUEST_0_AMT"] = cart["total"]
+      params["PAYMENTREQUEST_0_CURRENCYCODE"] = "MXN"
+
+      params["PAYMENTREQUEST_0_ITEMAMT"] = cart["total"]
+      for i in xrange( len( cart["items"] ) ):
+        params["L_PAYMENT_REQUEST_0_NAME_%i" % i] = cart["items"][i]["name"].encode( "utf-8" )
+        params["L_PAYMENT_REQUEST_0_QTY_%i" % i] = cart["items"][i]["quantity"]
+        params["L_PAYMENT_REQUEST_0_AMT_%i" % i] = cart["items"][i]["quantity"] * cart["items"][i]["price"]
+        params["L_PAYMENT_REQUEST_0_ITEM_CATEGORY_%i" % i] = "Physical"
+
       params["TOKEN"] = token
       params["METHOD"] = "DoExpressCheckoutPayment"
       params = urllib.urlencode( params )
@@ -194,10 +212,13 @@ class Services( object ):
       for l in urllib.unquote_plus( response.read() ).split( "&" ):
         key, value = l.split( "=" )
         fields[key] = value
-      if fields["ACK"] == "Success":
-        cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
-      print "*" * 80
+      print "=" * 80
+      print "After DoExpressCheckoutPayment"
       print fields
-      print "*" * 80
+      print "=" * 80
+      if fields["ACK"] == "Success":
+        cherrypy.session["fields"] = address
+        self.backend.complete_payment_paypal( cherrypy.session["user"]["id"], address, fields, cherrypy.session["cart"] )
+        cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
       raise cherrypy.HTTPRedirect( "/public/order_processed" )
       

@@ -149,7 +149,7 @@ class Public( object ):
 
     result.update( 
       helpers.pager_helper( 
-        self.backend.pager, "Review", "name", filter, sort_by, descending, page,
+        self.backend.pager, "Review", "name", filter, sort_by, descending, int( page ) * int( limit ),
         limit, select
       )
     )

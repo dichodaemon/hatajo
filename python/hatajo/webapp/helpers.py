@@ -103,7 +103,7 @@ def pager_helper(
   }
 
 def datatable_helper(
-    backend, table, filter_field, sort_columns, **kargs 
+    backend, table, filter_field, sort_columns, prefilter = [], **kargs 
 ) :
   filter = "sSearch" in kargs and kargs["sSearch"] or ""
   offset = "iDisplayStart" in kargs and int( kargs["iDisplayStart"] ) or 0
@@ -111,7 +111,7 @@ def datatable_helper(
   sort_column = "iSortCol_0" in kargs and int( kargs["iSortCol_0"] ) or 0
   sort_by = sort_columns[sort_column]
   descending  = not ( "sSortDir_0" in kargs and kargs["sSortDir_0"] == "asc" )
-  data, total_records = backend.pager( table, filter_field, filter, sort_by, descending, offset, limit )
+  data, total_records = backend.pager( table, filter_field, filter, sort_by, descending, offset, limit, prefilter )
   return {
     "sEcho": kargs["sEcho"],
     "iTotalRecords": total_records,

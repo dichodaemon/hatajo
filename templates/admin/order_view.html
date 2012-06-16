@@ -1,0 +1,59 @@
+## -*- coding: utf-8 -*-
+<%inherit file="order.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="custom-theme/jquery-ui-1.8.17.custom"/>
+<%core:add_css name="admin/forms"/>
+<%core:add_css name="admin/order_view"/>
+
+<h1>Datos de la orden</h1>
+
+<dl>
+  <dt>Cliente</dt>
+  <dd>${data["user"]["name"]}</dd>
+  <dt>Fecha</dt> 
+  <dd>${data["date"]}</dd>
+  <dt>Forma de pago</dt> 
+  <dd>${data["payment_type"] == 0 and "Paypal" or "Google"}</dd>
+  <dt>Dirección</dt>
+  <dd>
+    <div class="block">
+      <em>${data["name"]}</em></br>
+      ${data["street"]}</br>
+      ${data["postal_code"]} ${data["city"]}, ${data["state"]}</br>
+      ${data["country"]}
+    </div>
+  </dd>
+  <dt>Productos</dt>
+  <dd>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td>Total: $${data["total_amount"]}</td>
+        </tr>
+      </tfoot>
+      <tbody>
+        % for i in data["detail"]:
+        <tr>
+          <td>${i["product"]["name"]}</td>
+          <td>${i["quantity"]}</td>
+          <td>$${i["cost"]}</td>
+        </tr>
+        % endfor
+      </tbody>
+    </table>
+  </dd>
+  <dt>Información adicional</dt>
+  <dd>
+    <div class="block">
+    ${"</br>".join( data["payment_info"].split( "\n" ) )}
+    </div>
+  </dd>
+</dl>

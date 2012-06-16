@@ -201,13 +201,12 @@ class Admin( object ):
 
   @cherrypy.expose
   def order_list_elements( self, **args ):
-    result = helpers.datatable_helper( self.backend, "Ad", "name", ["name", "enabled", "ad_type", "valid_until" ], **args )
+    result = helpers.datatable_helper( self.backend, "Order", ["User", "name"], ["date", "user_id", "detail" ], prefilter = [["status", 0]], **args )
     result["aaData"] = [
       [
-        "<a id='%s' href=/admin/ad_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
-        d["enabled"] and "si" or "no",
-        d["ad_type"]["value"],
-        d["valid_until"]
+        d["date"],
+        "<a id='%s' href=/admin/order_view?id=%s>%s</a>" % ( d["id"], d["id"],  d["user"]["name"] ),
+        ", ".join( [v["product"]["name"] for v in d["detail"]] )
       ]
       for d in result["aaData"]
     ]
@@ -216,20 +215,13 @@ class Admin( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
-  @cherrypy.tools.render( template = "admin/order_edit.html" )
-  def order_edit( self, **kargs ):
-    kargs = helpers.cleanup_arguments( kargs )
-    kargs, warnings, errors = self.backend.ad_update( kargs )
+  @cherrypy.tools.render( template = "admin/order_view.html" )
+  def order_view( self, id ):
+    data = self.backend.order_view( id )
     result = {
-      "pageTitle": u"Edición de anuncio",
-      "errors": errors,
-      "warnings": warnings,
-      "data": kargs,
-      "catalogs": {
-        "ad_types": self.backend.catalog( "ad_types" )
-      }
+      "pageTitle": u"Ver órden",
+      "data": data
     }
-    result.update( kargs )
     return result
 
 

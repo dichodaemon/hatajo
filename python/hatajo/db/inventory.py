@@ -7,7 +7,7 @@ class Inventory( Base ):
 
   id         = Column( Integer, primary_key = True )
   product_id = Column( Integer, ForeignKey( "products.id" ), index = True )
-  date       = Column( Date )
+  date       = Column( DateTime )
   normal_price     = Column( Float )
   discounted_price = Column( Float )
   units            = Column( Integer )

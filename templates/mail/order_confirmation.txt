@@ -1,0 +1,72 @@
+## -*- coding: utf-8 -*-
+<head>
+  <style type = "text/css">
+    h1 {
+      font-size: 14px;
+      color: #A40000;
+    }
+
+    dt {
+      font-weight: bold;
+      font-style: italic;
+      color: #555753;
+      padding-top: 10px;
+    }
+
+    th, tfoot td {
+      font-weight: bold;
+      font-style: italic;
+      color: #555753;
+    }
+
+    tbody td {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+<h3>Estimado ${data["recipient"]}:</h3>
+
+<p>Una nueva orden ha sido solicitada:</p>
+
+<dt>Cliente</dt>
+<dd>${data["user"]["name"]}</dd>
+<dt>Fecha</dt> 
+<dd>${data["date"]}</dd>
+<dt>Forma de pago</dt> 
+<dd>${data["payment_type"] == 0 and "Paypal" or "Google"}</dd>
+<dt>Dirección</dt>
+<dd><em>${data["name"]}</em></br>
+${data["street"]}</br>
+${data["postal_code"]} ${data["city"]}, ${data["state"]}</br>
+${data["country"]}
+</dd>
+<dt>Productos</dt>
+<dd>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td>Total: $${data["total_amount"]}</td>
+      </tr>
+    </tfoot>
+    <tbody>
+      % for i in data["detail"]:
+      <tr>
+        <td>${i["product"]["name"]}</td>
+        <td>${i["quantity"]}</td>
+        <td>$${i["cost"]}</td>
+      </tr>
+      % endfor
+      </tbody>
+    </table>
+  </dd>
+</dl>
+</body>

@@ -11,38 +11,38 @@
     "tableOptions": {
       "sAjaxSource": "/admin/order_list_elements",
       "aoColumnDefs": [
-        { "bSortable": false, "aTargets": [2, 3] }
+        { "bSortable": false, "aTargets": [2] }
       ]
     }
   } );
 
-  $( "a[href='edit']" ).click( function( event ) {
+  $( "a[href='details']" ).click( function( event ) {
     event.preventDefault();
     var row = table.selectedRow();
     if ( row != null ) {
-      window.location = "/admin/order_edit?id=" + row.find( "a" ).attr( "id" );
+      window.location = "/admin/order_view?id=" + row.find( "a" ).attr( "id" );
     }
   } );
 
-  $( "a[href='delete']" ).click( function( event ) {
+  $( "a[href='send']" ).click( function( event ) {
     event.preventDefault();
     var row = table.selectedRow();
     if ( row != null ) {
       var item = row.find( "a" );
       var title = item.text();
-      var ok = confirm( "¿Está seguro de borrar '" + title + "'?" );
+      var ok = confirm( "¿Está seguro de haber enviado esta orden?" );
       if ( ok ) {
         $.ajax( {
           type: "post",
           dataType: "json",
-          url: "/services/order_delete",
+          url: "/services/order_send",
           data: { id: parseInt( item.attr( "id" ) ) },
           cache: false,
           success: function( ok ) {
             if ( ok ) {
               table.dataTable().fnDraw();
             } else {
-              alert( "Problema al borrar '" + title + "'" );
+              alert( "Problema al marcar la orden como enviada" );
             }
           }
         } );
@@ -59,19 +59,17 @@
   } );
 </%core:add_code>
 <ul class="toolbar_menu">
-  <li><a href="edit"  class="edit">Editar</a></li>
-  <li><a href="delete" class="delete">Borrar</a></li>
-  <li><a href="inventory" class="inventory">Existencias</a></li>
+  <li><a href="details"  class="details">Consultar</a></li>
+  <li><a href="send" class="send">Marcar como enviado</a></li>
 </ul>
 <div class="list">
   <h1>Lista de órdenes</h1>
   <table id="order_list">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Año</th>
-        <th>Director(es)</th>
-        <th>Existencia</th>
+        <th>Fecha</th>
+        <th>Usuario</th>
+        <th>Items</th>
       </tr>
     </thead>
     <tbody>

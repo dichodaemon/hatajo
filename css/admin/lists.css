@@ -317,3 +317,11 @@ ul.toolbar_menu .delete {
 ul.toolbar_menu .inventory {
   background: url( "/img/directory-object.png" ) no-repeat left;
 }
+
+ul.toolbar_menu .details {
+  background: url( "/img/view.png" ) no-repeat left;
+}
+
+ul.toolbar_menu .send {
+  background: url( "/img/approval.png" ) no-repeat left;
+}

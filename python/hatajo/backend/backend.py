@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import db
+from mail import send_mail
 from db import session, CatalogEntry
 import hashlib
 import pprint
@@ -14,7 +15,6 @@ import helpers
 class Backend( object ):
   def __init__( self, key ):
     self.key = key
-
 
   def authenticate( self, email, password ):
     user = db.User.by_email( email )
@@ -149,14 +149,20 @@ class Backend( object ):
     print count, limit
     return result, int( math.ceil( 1.0 * count / limit ) )
 
-  def pager( self, table, filter_field, filter, sort_by, descending, page, limit, prefilter=[] ):
+  def pager( self, table, filter_field, filter, sort_by, descending, offset, limit, prefilter=[] ):
     table = db.__dict__[table]
     def build_query( query ):
       for field, value in prefilter:
         query = query.filter( getattr( table, field ) == value )
       if filter != "":
-        for f in filter.split():
-          query = query.filter( getattr( table, filter_field ).like( "%%%s%%" % filter ) )
+        if type( filter_field ) != list:
+          for f in filter.split():
+            query = query.filter( getattr( table, filter_field ).like( "%%%s%%" % filter ) )
+        else:
+          t = db.__dict__[filter_field[0]]
+          for f in filter.split():
+            query = query.filter( getattr( t, filter_field[1] ).like( "%%%s%%" % filter ) )
+
       if not descending:
         query = query.order_by( db.func.lower( getattr( table, sort_by ) ).asc() )
       else:
@@ -166,7 +172,7 @@ class Backend( object ):
 
     result = build_query( db.session().query( table ) )
     count  = build_query( db.session().query( db.func.count( db.distinct( table.id ) ) ) ).one()[0]
-    result = result.limit( limit ).offset( page * limit ).all()
+    result = result.limit( limit ).offset( offset ).all()
 
     result = [ 
         helpers.get( table ).to_dictionary( p )
@@ -174,7 +180,7 @@ class Backend( object ):
     ]
     print count, limit
     print result
-    return result, int( math.ceil( 1.0 * count / limit ) )
+    return result, count
 
   @helpers.main_form
   def inventory_update( self, arguments, warnings, errors ):
@@ -234,6 +240,15 @@ class Backend( object ):
     if id == None:
       return False
     db.session().delete( product )
+    db.session().commit()
+    return True
+
+  def order_send( self, id ):
+    order = db.Order.by_id( id )
+    if id == None:
+      return False
+    order.status = db.Order.ORDER_DELIVERED
+    db.session().add( order )
     db.session().commit()
     return True
 
@@ -343,3 +358,62 @@ class Backend( object ):
     print
     pprint.pprint( arguments, width = 80 )
     return arguments
+
+  def complete_payment_paypal( self, user_id, address, fields, cart ):
+    print user_id, fields, cart
+    user = db.User.by_id( user_id )
+    order = db.Order()
+    order.date = datetime.datetime.now()
+    order.user = user
+    print user.name
+    order.payment_type = db.Order.PAYMENT_PAYPAL
+    order.status = db.Order.ORDER_PENDING
+    order.name = address["SHIPTONAME"]
+    order.country = address["SHIPTOCOUNTRYNAME"]
+    order.state = address["SHIPTOSTATE"]
+    order.city = address["SHIPTOCITY"]
+    order.street = address["SHIPTOSTREET"]
+    order.postal_code = address["SHIPTOZIP"]
+    order.total_amount = float( fields["PAYMENTINFO_0_AMT"] )
+    order.payment_info = """TRANSACTIONID: %(PAYMENTINFO_0_TRANSACTIONID)s
+    TOKEN: %(TOKEN)s
+    TIMESTAMP: %(TIMESTAMP)s
+    CORRELATIONID: %(CORRELATIONID)s""".encode( "utf-8" ) % fields
+
+    for i in cart["items"]:
+      product   = db.Product.by_id( int( i["id"] ) )
+      inventory = db.Inventory()
+      inventory.date  = datetime.datetime.now()
+      inventory.units = - float( i["quantity"] )
+      inventory.normal_price = product.inventory[-1].normal_price
+      inventory.discounted_price = product.inventory[-1].discounted_price
+      inventory.product = product
+      db.session().add( inventory )
+
+      detail = db.OrderDetail()
+      detail.product  = product
+      detail.quantity = int( i["quantity"] )
+      detail.cost     = float( i["price"] )
+      order.detail.append( detail )
+    db.session().add( order )
+    db.session().commit()
+
+    admins = db.session().query( db.User )\
+               .filter( db.CatalogEntry.value == "Administradores" )\
+               .all()
+    data = helpers.get( db.Order ).to_dictionary( order )
+    
+    for a in admins:
+      t = { "recipient": a.name }
+      t.update( data )
+
+      send_mail( 
+        "Nueva orden", "admin@mis-pelis.com", [a.email],
+        "mail/new_order.txt", t
+      )
+    return {}
+
+  def order_view( self, order_id ):
+    order = db.Order.by_id( order_id )
+    return helpers.get( db.Order ).to_dictionary( order )
+

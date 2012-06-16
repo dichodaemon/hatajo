@@ -136,7 +136,7 @@ class Helper( object ):
         result[f] = value
         if value == None:
           result[f] = ""
-      if info == "catalog":
+      elif info == "catalog":
         result[f] = catalog_to_dictionary( value )
       elif info == "multi":
         result[f] = multi_to_dictionary( value )
@@ -144,5 +144,9 @@ class Helper( object ):
         result[f] = images_to_dictionary( value )
       elif info == "date":
         result[f] = date_to_field( value )
+      elif isinstance( info, list ):
+        result[f] = [info[0].to_dictionary( v ) for v in value]
+      else:
+        result[f] = info.to_dictionary( value )
     return result
 
