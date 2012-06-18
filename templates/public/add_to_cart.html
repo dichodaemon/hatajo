@@ -37,13 +37,17 @@
           % endif
         </ul>
       </div>
-      <div class="summary">
+      <div class="summary inner">
+      % if cart["item_count"] >= 3:
+      <img src="/img/true.png"/> Califica para envío gratuito
+      % endif
         <dl>
           <dt class="subtotal">Subtotal de la orden:</dt><dd><span class="price">$${cart["total"]}</span></dd>
           <dt>Discos en el carrito:</dt><dd>${cart["item_count"]}</dd>
         </dl>
         <button id="edit_cart" class="red_button_small">Editar Carrito</button>
-        <button class="red_button_small checkout">Coloque su Órden</button>
+        <button class="red_button_small checkout">Coloque su Orden</button>
+        <div class="clear-both"></div>
       </div>
     </div>
   </div>

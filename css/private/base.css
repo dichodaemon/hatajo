@@ -12,6 +12,10 @@ body {
   margin-left: 80px;
 }
 
+.clear-both {
+  clear: both;
+}
+
 #content h1 {
   clear: left;
   color: #A40000;

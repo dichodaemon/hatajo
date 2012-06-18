@@ -252,6 +252,14 @@ class Backend( object ):
     db.session().commit()
     return True
 
+  def comment_delete( self, id ):
+    item = db.Review.by_id( id )
+    if id == None:
+      return False
+    db.session().delete( item )
+    db.session().commit()
+    return True
+
   @helpers.main_form
   def ad_update( self, arguments, warnings, errors ):
     print "-" * 80
@@ -379,6 +387,8 @@ class Backend( object ):
     TOKEN: %(TOKEN)s
     TIMESTAMP: %(TIMESTAMP)s
     CORRELATIONID: %(CORRELATIONID)s""".encode( "utf-8" ) % fields
+    order.delivery_method = cart["delivery_method"]
+    order.delivery_cost = cart["delivery_cost"]
 
     for i in cart["items"]:
       product   = db.Product.by_id( int( i["id"] ) )
@@ -411,6 +421,13 @@ class Backend( object ):
         "Nueva orden", "admin@mis-pelis.com", [a.email],
         "mail/new_order.txt", t
       )
+
+    t = { "recipient": user.email }
+    t.update( data )
+    send_mail( 
+      "Su orden", "admin@mis-pelis.com", [user.email],
+      "mail/order_confirmation.txt", t
+    )
     return {}
 
   def order_view( self, order_id ):

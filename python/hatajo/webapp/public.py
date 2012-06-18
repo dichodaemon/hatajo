@@ -247,7 +247,7 @@ class Public( object ):
     data = self.backend.product_info( id )
     quantity = int( quantity )
     if not cherrypy.session.has_key( "cart" ) or cherrypy.session["cart"] == None:
-      cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
+      cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0, "delivery_method": 0, "delivery_cost": 0 }
     found = False
     old_quantity = 0
     for item in cherrypy.session["cart"]["items"]:
@@ -273,7 +273,7 @@ class Public( object ):
   @cherrypy.tools.render( template = "public/cart.html" )
   def cart( self ):
     if not cherrypy.session.has_key( "cart" ):
-      cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
+      cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0, "delivery_method": 0, "delivery_cost": 0 }
     cart = cherrypy.session["cart"]
     for i in cart["items"]:
       i["data"] = self.backend.product_info( i["id"] )

@@ -72,12 +72,15 @@
   </table>
   </div>
   <div class="extra_info">
-    <div class="summary">
+    <div class="summary inner">
+      % if cart["item_count"] >= 3:
       <img src="/img/true.png"/> Califica para envío gratuito
+      % endif
       <dl>
         <dt class="subtotal">Subtotal (${cart["item_count"]} artículos):</dt><dd><span class="price">$${cart["total"]}</span></dd>
       </dl>
       <button class="red_button_small checkout">Coloque su Órden</button>
+      <div class="clear-both"></div>
     </div>
   % else:
   <p>

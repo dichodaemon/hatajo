@@ -11,18 +11,23 @@ class Order( Base ):
   ORDER_DELIVERED = 1
   ORDER_CANCELLED = 2
 
+  DELIVERY_MEXPOST = 0
+  DELIVERY_PAQPOST = 1
+
   __tablename__ = 'orders'
   id           = Column( Integer, primary_key = True )
   status       = Column( Integer )
   date         = Column( DateTime )
   user_id      = Column( Integer, ForeignKey( "users.id" ) )
   payment_type = Column( Integer )
+  delivery_method = Column( Integer )
   name         = Column( String )
   country      = Column( String )
   city         = Column( String )
   state        = Column( String )
   street       = Column( String )
   postal_code  = Column( String )
+  delivery_cost = Column( Float )
   total_amount = Column( Float )
   payment_info = Column( String )
 

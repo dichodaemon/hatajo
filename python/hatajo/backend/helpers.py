@@ -57,6 +57,7 @@ helpers[db.Ad] = Helper( {
 helpers[db.Review] = Helper( {
   "id": "id",
   "product_id": None,
+  "product": helpers[db.Product],
   "name": None,
   "alias": None,
   "date": "date",

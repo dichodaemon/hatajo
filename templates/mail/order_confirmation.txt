@@ -28,7 +28,19 @@
 <body>
 <h3>Estimado ${data["recipient"]}:</h3>
 
-<p>Una nueva orden ha sido solicitada:</p>
+<p>
+Hemos recibido una orden de compra con los detalles que aparecen más abajo.
+Le agradecemos su confianza y esperamos recibir su visita nuevamente.
+</p>
+
+<p>
+Cordialmente,
+</p>
+
+<p>
+El equipo de mis-pelis.com
+</p>
+
 
 <dt>Cliente</dt>
 <dd>${data["user"]["name"]}</dd>

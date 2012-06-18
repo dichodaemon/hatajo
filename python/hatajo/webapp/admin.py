@@ -224,4 +224,63 @@ class Admin( object ):
     }
     return result
 
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/comment_list.html" )
+  def comment_list( self ):
+    result = {
+      "pageTitle": u"Lista de comentarios"
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def comment_list_elements( self, **args ):
+    result = helpers.datatable_helper( self.backend, "Review", "name", ["date", "alias", "name", "product_id", "content" ], **args )
+    result["aaData"] = [
+      [
+        d["date"],
+        d["alias"],
+        "<a id='%s' href=/admin/comment_edit?id=%s>%s</a>" % ( d["id"], d["id"],  d["name"] ),
+        d["product"]["name"],
+        d["content"]
+      ]
+      for d in result["aaData"]
+    ]
+    return json.dumps( result )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/comment_edit.html" )
+  def comment_edit( self, **kargs ):
+    kargs = helpers.cleanup_arguments( kargs )
+    pprint.pprint( kargs, width = 80 )
+    kargs, warnings, errors = self.backend.comment_update( kargs )
+    result = {
+      "pageTitle": u"Modificar comentario",
+      "errors": errors,
+      "warnings": warnings,
+      "data": kargs
+    }
+    result.update( kargs )
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "admin/comment_edit.html" )
+  def comment_edit( self, **kargs ):
+    kargs = helpers.cleanup_arguments( kargs )
+    kargs, warnings, errors = self.backend.review_update( kargs )
+    result = {
+      "pageTitle": u"Información de comentario",
+      "errors": errors,
+      "warnings": warnings,
+      "data": kargs
+    }
+    result.update( kargs )
+    return result
 

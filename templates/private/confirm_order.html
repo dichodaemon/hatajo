@@ -9,6 +9,12 @@
   $( ".checkout" ).click( function ( event ) {
     window.location = "/services/paypal_checkout";
   } );
+  $( "#shipping1" ).click( function ( event ) {
+    window.location = "/services/modify_delivery?delivery_method=0";
+  } );
+  $( "#shipping2" ).click( function ( event ) {
+    window.location = "/services/modify_delivery?delivery_method=1";
+  } );
 </%core:add_code>
 
 <h1>Carrito de Compras</h1>
@@ -47,16 +53,25 @@
 </div>
 <div class="extra_info">
   <div class="summary">
+    % if cart["item_count"] >= 3:
+    <img src="/img/true.png"/> Califica para envío gratuito
+    % endif
     <dl>
-      <dt class="subtotal">Subtotal (${cart["item_count"]} artículos):</dt><dd><span class="price">$${cart["total"]}</span></dd>
+      <dt class="subtotal">Subtotal (${cart["item_count"]} artículos):</dt><dd><span class="price">$${cart["subtotal"]}</span></dd>
+      % if cart["delivery_cost"] > 0:
+      <dt class="subtotal">Gastos de envío:</dt><dd><span id="delivery_cost" class="price">$${cart["delivery_cost"]}</span></dd>
+      % endif
+      <dt class="subtotal">Total:</dt><dd><span class="price">$${cart["total"]}</span></dd>
     </dl>
-    <button class="red_button_small checkout">Coloque su Órden</button>
+    <div class="clear-both"></div>
+    <button class="red_button_small checkout">Confirme su Orden</button>
+    <div class="clear-both"></div>
   </div>
 </div>
 
 <h1>Formas de Pago</h1>
 <div class="section">
-<p class="hint">Seleccione su forma de pago preferente</p>
+<p class="hint">Seleccione su forma de pago</p>
 <input type="radio" id="payment1" name="payment" value="paypal" checked="checked"/>
 <label for="payment1">Paypal</label><br/>
 <input type="radio" id="payment2" name="payment" value="google" disabled="disabled"/>
@@ -77,7 +92,29 @@
   </p>
 
   <p>
-    <input type="radio" id="shipping1" name="shipping" value="1"/><label for="shipping1">en 3 días hábiles $125 pesos - <em>Mex Post</em></label><br/>
-    <input type="radio" id="shipping2" name="shipping" value="2" checked="checked"/><label for="shipping2">en 7 días hábiles $40 pesos - <em>Paq Post</em></label><br/>
+    % if cart["delivery_method"] == 1:
+    <input type="radio" id="shipping1" name="shipping" value="0"/><label for="shipping1">en 3 días hábiles $125 pesos - <em>Mex Post</em></label><br/>
+    <input type="radio" id="shipping2" name="shipping" value="1" checked="checked"/><label for="shipping2">en 7 días hábiles $40 pesos - <em>Paq Post</em></label><br/>
+    % else:
+    <input type="radio" id="shipping1" name="shipping" value="0" checked="checked"/><label for="shipping1">en 3 días hábiles $125 pesos - <em>Mex Post</em></label><br/>
+    <input type="radio" id="shipping2" name="shipping" value="1"/><label for="shipping2">en 7 días hábiles $40 pesos - <em>Paq Post</em></label><br/>
+    % endif
   </p>
+</div>
+
+<h1>Ordenar</h1>
+
+<div class="section">
+    % if cart["item_count"] >= 3:
+    <img src="/img/true.png"/> Califica para envío gratuito
+    % endif
+    <dl>
+      <dt class="subtotal">Subtotal (${cart["item_count"]} artículos):</dt><dd><span class="price">$${cart["subtotal"]}</span></dd>
+      % if cart["delivery_cost"] > 0:
+      <dt class="subtotal">Gastos de envío:</dt><dd><span id="delivery_cost" class="price">$${cart["delivery_cost"]}</span></dd>
+      % endif
+      <dt class="subtotal">Total:</dt><dd><span class="price">$${cart["total"]}</span></dd>
+    </dl>
+  <div class="clear-both"></div>
+  <button class="red_button_small checkout">Confirme su Orden</button>
 </div>

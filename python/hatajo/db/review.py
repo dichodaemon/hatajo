@@ -11,6 +11,8 @@ class Review( Base ):
   date       = Column( Date )
   rating     = Column( Float )
   content    = Column( String )
+
+  by_id = classmethod( by_id )
   
   product = relation( 
     "Product", 

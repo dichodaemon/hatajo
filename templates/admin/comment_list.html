@@ -1,0 +1,72 @@
+## -*- coding: utf-8 -*-
+<%inherit file="comment.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%core:add_css name="admin/lists"/>
+<%core:add_js name="dataTables/jquery.dataTables.min"/>
+<%core:add_js name="table"/>
+<%core:add_code>
+  var table = $( "#comment_list" );
+  table.table( {
+    "menu": ".toolbar_menu",
+    "tableOptions": {
+      "sAjaxSource": "/admin/comment_list_elements",
+      "aoColumnDefs": [
+        { "bSortable": false, "aTargets": [2] }
+      ]
+    }
+  } );
+
+  $( "a[href='edit']" ).click( function( event ) {
+    event.preventDefault();
+    var row = table.selectedRow();
+    if ( row != null ) {
+      window.location = "/admin/comment_edit?id=" + row.find( "a" ).attr( "id" );
+    }
+  } );
+
+  $( "a[href='delete']" ).click( function( event ) {
+    event.preventDefault();
+    var row = table.selectedRow();
+    if ( row != null ) {
+      var item = row.find( "a" );
+      var title = item.text();
+      var ok = confirm( "¿Está seguro de borrar '" + title + "'?" );
+      if ( ok ) {
+        $.ajax( {
+          type: "post",
+          dataType: "json",
+          url: "/services/comment_delete",
+          data: { id: parseInt( item.attr( "id" ) ) },
+          cache: false,
+          success: function( ok ) {
+            if ( ok ) {
+              table.dataTable().fnDraw();
+            } else {
+              alert( "Problema al borrar '" + title + "'" );
+            }
+          }
+        } );
+      }
+    }
+  } );
+</%core:add_code>
+<ul class="toolbar_menu">
+  <li><a href="edit"  class="edit">Editar</a></li>
+  <li><a href="delete" class="delete">Borrar</a></li>
+</ul>
+<div class="list">
+  <h1>Lista de comentarios</h1>
+  <table id="comment_list">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Alias</th>
+        <th>Título</th>
+        <th>Producto</th>
+        <th>Comentario</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>

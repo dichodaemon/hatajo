@@ -103,7 +103,7 @@ div.summary {
   text-align: center;
   float: left;
   background: #CBDBED;
-  height: 120px;
+  min-height: 120px;
   min-width: 250px;
   padding: 10px;
   -webkit-border-radius: 10px;
@@ -112,14 +112,11 @@ div.summary {
 }
 
 div.summary dt {
-  display: inline;
-  float: center;
-  clear: left;
+  float: left;
 }
 
 div.summary dd {
-  display: inline;
-  float: center;
+  float: left;
   margin-left: 10px;
 }
 

@@ -58,7 +58,7 @@ div.summary {
   float: left;
   margin-left: 40px;
   background: #CBDBED;
-  height: 100px;
+  min-height: 100px;
   min-width: 200px;
   padding: 10px;
   -webkit-border-radius: 10px;

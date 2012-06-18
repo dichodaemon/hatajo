@@ -97,6 +97,13 @@ class Services( object ):
   #-----------------------------------------------------------------------------
 
   @cherrypy.expose
+  def comment_delete( self, id ):
+    return json.dumps( self.backend.comment_delete( int( id ) ) )
+
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
   def modify_cart( self, id, quantity  ):
     data = self.backend.product_info( id )
     quantity = int( quantity )
@@ -112,6 +119,17 @@ class Services( object ):
     if selected != None and quantity == 0:
       cherrypy.session["cart"]["items"].remove( selected )
     raise cherrypy.HTTPRedirect( "/public/cart" )
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  def modify_delivery( self, delivery_method  ):
+    print "*" * 80
+    print delivery_method
+    print "*" * 80
+    cherrypy.session["cart"]["delivery_method"] = int( delivery_method )
+    raise cherrypy.HTTPRedirect( "/private/confirm_order" )
+
 
   #-----------------------------------------------------------------------------
 
@@ -137,6 +155,11 @@ class Services( object ):
       params["L_PAYMENT_REQUEST_0_NAME_%i" % i] = cart["items"][i]["name"].encode( "utf-8" )
       params["L_PAYMENT_REQUEST_0_QTY_%i" % i] = cart["items"][i]["quantity"]
       params["L_PAYMENT_REQUEST_0_AMT_%i" % i] = cart["items"][i]["quantity"] * cart["items"][i]["price"]
+      params["L_PAYMENT_REQUEST_0_ITEM_CATEGORY_%i" % i] = "Physical"
+    if cart["delivery_cost"] != 0:
+      params["L_PAYMENT_REQUEST_0_NAME_%i" % len( cart["items"] )] = "Envío"
+      params["L_PAYMENT_REQUEST_0_QTY_%i" % len( cart["items"] )] = 1 
+      params["L_PAYMENT_REQUEST_0_AMT_%i" % len( cart["items"] )] = cart["delivery_cost"]
       params["L_PAYMENT_REQUEST_0_ITEM_CATEGORY_%i" % i] = "Physical"
       
     params = urllib.urlencode( params )
@@ -202,6 +225,11 @@ class Services( object ):
         params["L_PAYMENT_REQUEST_0_QTY_%i" % i] = cart["items"][i]["quantity"]
         params["L_PAYMENT_REQUEST_0_AMT_%i" % i] = cart["items"][i]["quantity"] * cart["items"][i]["price"]
         params["L_PAYMENT_REQUEST_0_ITEM_CATEGORY_%i" % i] = "Physical"
+      if cart["delivery_cost"] != 0:
+        params["L_PAYMENT_REQUEST_0_NAME_%i" % len( cart["items"] )] = "Envío"
+        params["L_PAYMENT_REQUEST_0_QTY_%i" % len( cart["items"] )] = 1 
+        params["L_PAYMENT_REQUEST_0_AMT_%i" % len( cart["items"] )] = cart["delivery_cost"]
+        params["L_PAYMENT_REQUEST_0_ITEM_CATEGORY_%i" % i] = "Physical"
 
       params["TOKEN"] = token
       params["METHOD"] = "DoExpressCheckoutPayment"
@@ -219,6 +247,6 @@ class Services( object ):
       if fields["ACK"] == "Success":
         cherrypy.session["fields"] = address
         self.backend.complete_payment_paypal( cherrypy.session["user"]["id"], address, fields, cherrypy.session["cart"] )
-        cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0 }
+        cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0, "delivery_method": 0, "delivery_cost": 0 }
       raise cherrypy.HTTPRedirect( "/public/order_processed" )
       
