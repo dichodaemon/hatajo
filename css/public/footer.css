@@ -1,11 +1,11 @@
-#footer {
-  background: #EEEEEC;
+#footer-bottom {
+  width: 1024px;
+  background: url(/img/bottom.png) no-repeat center bottom;
+  min-height: 10px;
+}
+
+.footer-inner {
   text-align: center;
-  padding: 20px;
-  margin: 0px;
-  margin-top: 20px;
-  color: #888A85;
-  clear: both;
 }
 
 #footer li {

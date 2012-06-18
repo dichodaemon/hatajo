@@ -35,6 +35,7 @@ div.description {
   float: left;
   margin-left: 20px;
   margin-top: 30px;
+  width: 500px;
 }
 
 div.description li.stock {
@@ -57,7 +58,7 @@ div.summary {
   float: left;
   margin-left: 40px;
   background: #CBDBED;
-  height: 180px;
+  height: 100px;
   min-width: 200px;
   padding: 10px;
   -webkit-border-radius: 10px;

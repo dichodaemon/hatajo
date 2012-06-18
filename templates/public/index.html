@@ -2,30 +2,37 @@
 <%inherit file="base.html"/>
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
-<%core:add_css name="public/three_columns"/>
+<%core:add_css name="public/layout"/>
 <%core:add_code>
   $( "#main_ad" ).load( "/public/ad?ad_type=Grande" );
   $( "#small_ad" ).load( "/public/ad?ad_type=Chico" );
 </%core:add_code>
 
-<div id="column_container">
-  <div id="center" class="column">
-    <div id="main_ad">cargando...</div>
+<div class="top-background" >
+  <div class="band">
+    <div class="inner">
+      <%include file="genre_menu.html"/>
+    </div>
   </div>
-  <div id="left" class="column">
-    <%include file="genre_menu.html"/>
+  <div class="main-3">
+    <div class="inner">
+      <div id="main_ad">cargando...</div>
+    </div>
   </div>
-  <div id="right" class="column">
-    <div id="small_ad">cargando...</div>
+  <div class="band">
+    <div class="inner">
+      <div id="small_ad">cargando...</div>
+    </div>
   </div>
-</div>
-<div class="indent1">
-  <%recommendation:recommendation
-    title="Recomendaciones para usted"
-    method="random"/>
-  <%recommendation:recommendation
-    title="Novedades"
-    method="random"/>
+  
+  <div class="inner bottom">
+	<%recommendation:recommendation
+      title="Recomendaciones para usted"
+      method="random"/>
+    <%recommendation:recommendation
+      title="Novedades"
+      method="random"/>
+  </div>
 </div>
 
 

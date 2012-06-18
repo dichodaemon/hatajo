@@ -3,59 +3,64 @@
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="forms" file="/forms.mako"/>
 <%namespace name="ratings" file="/ratings.mako"/>
+<%core:add_css name="public/layout"/>
 <%core:add_css name="public/comments_form"/>
 <%core:add_css name="public/ratings"/>
 <%core:add_css name="public/film_images"/>
 <%! import hatajo.webapp.template_helpers as h %>
 
-<div class="comments_form clear">
-  <div class="left">
-    <%forms:form action="review_edit" method="post">
-      <h1>Enrique, escriba su comentario</h1>
-      <input type="hidden" id="id" name="id" value="${data["id"]}"/>
-      <input type="hidden" id="product_id" name="product_id" value="${data["product_id"]}"/>
-      <h2>Inicie aquí</h2>
-      <table cellpadding="0" cellspacing="10">
-        <%forms:text_field
-          field="alias"
-          label="Alias"
-          tabindex="1"
-          hint="escriba su nombre o pseudónimo">
-          $( "#name" ).focus();
-        </%forms:text_field>
-        <%ratings:rating
-          field="rating"
-          label="Calificación"/>
-        <%forms:text_field
-          field="name"
-          label="Título de comentario"
-          tabindex="2"
-          hint="escriba un título para el comentario"/>
-      </table>
-      <h2>Comparta su opinión (mínimo tres palabras)</h2>
-      <table cellpadding="0" cellspacing="0">
-        <tr id="content_row" class="field">
-          <td colspan="2">
-            <textarea id="content" name="content" tabindex="3">
-            % if "content" in data:
-            ${data["content"]}
-            % endif
-            </textarea>
-          </td>
-        </tr>
-        <tr class="buttons">
-          <td colspan="2">
-            <input type="submit" tabindex="4" value="Envíe su comentario" class="button"/>
-          </td>
-        </tr>
-      </table>
-    </%forms:form>
-  </div>
-  <div class="right">
-    <h2>Producto Comentado</h2>
-    <div class="film_images">
-      <img src="${h.main_image( product )}" class="main"/>
+<div class="top-background">
+  <div class="inner">
+    <div class="comments_form clear">
+      <div class="left">
+        <%forms:form action="review_edit" method="post">
+          <h1>Enrique, escriba su comentario</h1>
+          <input type="hidden" id="id" name="id" value="${data["id"]}"/>
+          <input type="hidden" id="product_id" name="product_id" value="${data["product_id"]}"/>
+          <h2>Inicie aquí</h2>
+          <table cellpadding="0" cellspacing="10">
+            <%forms:text_field
+              field="alias"
+              label="Alias"
+              tabindex="1"
+              hint="escriba su nombre o pseudónimo">
+              $( "#name" ).focus();
+            </%forms:text_field>
+            <%ratings:rating
+              field="rating"
+              label="Calificación"/>
+            <%forms:text_field
+              field="name"
+              label="Título de comentario"
+              tabindex="2"
+              hint="escriba un título para el comentario"/>
+          </table>
+          <h2>Comparta su opinión (mínimo tres palabras)</h2>
+          <table cellpadding="0" cellspacing="0">
+            <tr id="content_row" class="field">
+              <td colspan="2">
+                <textarea id="content" name="content" tabindex="3">
+                % if "content" in data:
+                ${data["content"]}
+                % endif
+                </textarea>
+              </td>
+            </tr>
+            <tr class="buttons">
+              <td colspan="2">
+                <input type="submit" tabindex="4" value="Envíe su comentario" class="button"/>
+              </td>
+            </tr>
+          </table>
+        </%forms:form>
+      </div>
+      <div class="right">
+        <h2>Producto Comentado</h2>
+        <div class="film_images">
+          <img src="${h.main_image( product )}" class="main"/>
+        </div>
+        <p><a href="/public/film_info?id=${product["id"]}">${product["name"]}</a></p>
+      </div>
     </div>
-    <p><a href="/public/film_info?id=${product["id"]}">${product["name"]}</a></p>
   </div>
 </div>

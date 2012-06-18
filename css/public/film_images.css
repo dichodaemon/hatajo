@@ -1,7 +1,4 @@
 div.film_images {
-  width: 150px;
-  margin-left: 60px;
-  margin-bottom: 20px;
 }
 
 .film_images img.micro {
@@ -74,14 +71,12 @@ div.film_images {
 .add_to_cart div.top {
   background: #C9E2F6;
   text-align: center;
-  margin-right: 20px;
   padding: 20px;
 }
 
 .add_to_cart div.bottom{
   background: #EFF6FF;
   text-align: center;
-  margin-right: 20px;
   padding: 20px;
 }
 
@@ -94,19 +89,21 @@ div.film_images {
 
 .large_text {
   border-top: 1px dotted #2E3436;
-  padding: 10px 0px;
-  margin: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   clear: both;
   color: #555753;
 }
 
 .large_text h2 {
   font-size: 16px;
+  margin-bottom: 10px;
   color: #2E3436;
 }
 
 .large_text dl {
   float: left;
+  padding-bottom: 20px;
 }
 
 .large_text dt {
@@ -159,3 +156,4 @@ a.all_reviews {
   font-size: 22px;
   color: #204A87;
 }
+

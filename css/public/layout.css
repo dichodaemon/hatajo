@@ -1,0 +1,62 @@
+* { 
+  margin: 0; 
+  padding: 0; 
+  outline: 0;
+}
+
+body {
+  background: #FFFFFF url(/img/background.png) repeat-x;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #2E3436;
+  text-align: center;
+}
+
+#wrap {
+  position: relative;
+  width: 1024px;
+  margin: 40px auto 40px auto;
+  text-align: left;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.top-background {
+  width: 1024px;
+  background: url(/img/top-background.png) repeat-y center top;
+}
+
+.bottom-background {
+  width: 1024px;
+  background: url(/img/bottom-background.png) repeat-y center top;
+}
+
+.inner {
+  padding: 10px 20px;
+}
+
+.bottom {
+  clear: both;
+}
+
+.main-3 {
+  padding-top: 20px;
+  float: left;
+  width: 60%;
+  text-align: center;
+}
+
+.main-2 {
+  padding-top: 20px;
+  float: left;
+  width: 80%;
+  text-align: center;
+}
+
+.band {
+  padding-top: 20px;
+  float: left;
+  width: 20%;
+  text-align: left;
+}

@@ -4,7 +4,9 @@
 
 <%core:add_css name="public/formatting"/>
 
-<%include file="header.html"/>
-<%include file="search_bar.html"/>
-${next.body()}
-<%include file="footer.html"/>
+<div id="wrap">
+  <%include file="header.html"/>
+  <%include file="search_bar.html"/>
+  ${next.body()}
+  <%include file="footer.html"/>
+</div>

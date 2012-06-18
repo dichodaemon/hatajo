@@ -1,15 +1,16 @@
-#header {
-  padding: 10px 30px;
-  color: #888A85;
+#header-top {
+  width: 1024px;
+  background: url(/img/top.png) no-repeat center top;
+  min-height: 10px;
 }
 
 #header .logo {
   display: inline;
-  margin-right: 40px;
+  margin-right: 20px;
 }
 
 #header a {
-  color: #2E3436;
+  color: #CE5C00;
   text-decoration: none;
 }
 

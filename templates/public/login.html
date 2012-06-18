@@ -1,22 +1,27 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="base.html"/>
 <%namespace name="core" file="/core.mako"/>
+<%core:add_css name="public/layout"/>
 <%core:add_css name="public/forms"/>
 <%! import hatajo.webapp.template_helpers as h %>
 
-<div class="form clear">
-  <div class="left">
-    <form method="post" action="/public/login">
-      <input type="hidden" name="destination" value="${destination}"/>
-      <h1>Iniciar Sesión</h1>
-      <h2>¿Cuál es su dirección de correo?</h2>
-      <label>Mi e-mail<label> <input type="text" name="email"/>
-      </table>
-      <h2>¿Tiene usted una cuenta en Mis-Pelis?</h2>
-      <input type="radio" name="existing" value="False">No, soy un nuevo usuario</input><br/>
-      <input type="radio" name="existing" value="True" checked="checked">Si, tengo una contraseña</input>
-      <input type="password" name="password"/><br/>
-      <input type="submit" value="Iniciar sesión"/>
-    </form>
+<div class="top-background">
+  &nbsp;
+  <div class="form clear">
+    <div class="left">
+      <form method="post" action="/public/login">
+        <input type="hidden" name="destination" value="${destination}"/>
+        <h1>Iniciar Sesión</h1>
+        <h2>¿Cuál es su dirección de correo?</h2>
+        <label>Mi e-mail<label> <input type="text" name="email"/>
+        </table>
+        <h2>¿Tiene usted una cuenta en Mis-Pelis?</h2>
+        <input type="radio" name="existing" value="False">No, soy un nuevo usuario</input><br/>
+        <input type="radio" name="existing" value="True" checked="checked">Si, tengo una contraseña</input>
+        <input type="password" name="password"/><br/>
+        <input type="submit" value="Iniciar sesión"/>
+      </form>
+    </div>
   </div>
+  &nbsp;
 </div>

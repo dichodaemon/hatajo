@@ -29,7 +29,7 @@ div.extra_info {
 }
 
 .fixed_200 {
-  width: 200px;
+  width: 150px;
 }
 
 .fixed_100 {
@@ -38,7 +38,7 @@ div.extra_info {
 
 .items table {
   border-collapse: collapse;
-  width: 800px;
+  width: 650px;
   color: #2E3436;
   margin-bottom: 40px;
 }

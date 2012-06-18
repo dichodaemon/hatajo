@@ -1,12 +1,6 @@
 #search_results {
   text-align: left;
-  margin-left: 40px;
-  margin-right: 40px;
   color: #2E3436;
-}
-
-#search_results h2 {
-  color: #A40000;
 }
 
 #search_results .header {
@@ -17,7 +11,7 @@
 }
 
 ul.search_results {
-  margin-right: 40px;
+  margin-right: 10px;
 }
 
 ul.search_results li {
@@ -44,7 +38,7 @@ ul.search_results em {
 
 #search_results img.main {
   max-width: 150px;
-  min-height: 200px;
+  min-height: 230px;
 }
 
 #search_results ul.description {

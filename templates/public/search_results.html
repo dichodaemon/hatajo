@@ -3,40 +3,47 @@
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="public" file="public.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
-<%core:add_css name="public/two_columns"/>
+<%core:add_css name="public/layout"/>
 <%core:add_css name="public/search_results"/>
 <%core:add_css name="public/ratings"/>
 <%core:add_css name="public/pager"/>
 <%core:add_css name="hint"/>
 <%core:add_js name="ratings"/>
 <%!import hatajo.webapp.template_helpers as h%>
-<div id="column_container">
-  <div id="center" class="column">
-    <div id="search_results">
-      <h2>${genre_name}</h2>
-      <p class="header">
-        ${len( items )} RESULTADOS
-      </p>
-      <%public:pager>
-        <ul class="search_results">
-          <%i = 0 %>
-          % for p in items:
-          % if p["normal_price"] > 0:
-          <%i += 1 %>
-          <li>
-          <em>${i}</em>${public.product( p )}
-          </li>
-          % endif
-          % endfor
-        </ul>
-      </%public:pager>
-    </div>      
-  </div>
-  <div id="left" class="column">
-    <%include file="genre_menu.html"/>
-    <%recommendation:recommendation
+
+
+<div class="top-background" >
+  <div class="band">
+    <div class="inner">
+      <%include file="genre_menu.html"/>
+      <%recommendation:recommendation
       title="Historia reciente"
       method="recent"
       layout="vertical"/>
+    </div>
   </div>
+  <div class="main-2">
+    <div class="inner">
+      <div id="search_results">
+        <h2>${genre_name}</h2>
+        <p class="header">
+          ${len( items )} RESULTADOS
+        </p>
+        <%public:pager>
+          <ul class="search_results">
+            <%i = 0 %>
+            % for p in items:
+            % if p["normal_price"] > 0:
+            <%i += 1 %>
+            <li>
+            <em>${i}</em>${public.product( p )}
+            </li>
+            % endif
+            % endfor
+          </ul>
+        </%public:pager>
+      </div>
+    </div>
+  </div>
+  <div class="clear-both"></div>
 </div>

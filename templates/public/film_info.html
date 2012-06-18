@@ -4,7 +4,7 @@
 <%namespace name="ratings" file="/ratings.mako"/>
 <%namespace name="reviews" file="reviews.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
-<%core:add_css name="public/three_columns"/>
+<%core:add_css name="public/layout"/>
 <%core:add_css name="public/ratings"/>
 <%core:add_css name="public/film_images"/>
 <%core:add_css name="public/reviews"/>
@@ -30,118 +30,126 @@
 </%core:add_code>
 ${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
 
-<div id="column_container">
-  <div id="center" class="column">
-    <div class="film_description">
-      <ul>
-        <li class="title">${data["name"]} (${(data["original_name"] + " " + str( data["year"] ) ).strip()})</li>
-        <li>Director: ${", ".join( [d for d in data["directors"]["values"]] )} </li>
-        <li>${", ".join( [a for a in data["actors"]["values"]] )}</li>
-        <li><div class="film_ratings"></div> <a href="/public/product_reviews?id=${data["id"]}" class="ratings_count">${data["total_reviews"]} Comentarios</a></li>
-        <li class="media">${", ".join( [a for a in data["medias"]["values"]] )}</li>
-        <li class="price">Precio Normal <span class="normal">$${data["normal_price"]}</span> Precio de promoción <span class="discounted">$${data["discounted_price"]}</span></li>
-        % if data["units"] > 0:
-        <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Ordena ahora y recíbela antes del ${h.next_date( 5 )}</a></li>
-        % else:
-        <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Disponible en una semana</a></li>
-        % endif
-        % if data["units"] < 4 and data["units"] > 0:
-        <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Stock reducido ¡ordene pronto!</a></li>
-        %endif
-        <li class="special">Envío gratis en la compra de 3 películas</li>
-      </ul>
+<div class="top-background">
+  <div class="band">
+    <div class="inner">
+      <div class="film_images">
+        <img src="${h.main_image( data )}" class="main"/>
+        %for i in data["images"]["ids"]:
+        <a href="/services/load_image?id=${i}"><img src="/services/load_image?id=${i}" class="micro"/></a>
+        %endfor
+      </div>
     </div>
   </div>
-  <div id="left" class="column">
-    <div class="film_images">
-      <img src="${h.main_image( data )}" class="main"/>
-      %for i in data["images"]["ids"]:
-      <a href="/services/load_image?id=${i}"><img src="/services/load_image?id=${i}" class="micro"/></a>
-      %endfor
+  <div class="main-3">
+    <div class="inner">
+      <div class="film_description">
+        <ul>
+          <li class="title">${data["name"]} (${(data["original_name"] + " " + str( data["year"] ) ).strip()})</li>
+          <li>Director: ${", ".join( [d for d in data["directors"]["values"]] )} </li>
+          <li>${", ".join( [a for a in data["actors"]["values"]] )}</li>
+          <li><div class="film_ratings"></div> <a href="/public/product_reviews?id=${data["id"]}" class="ratings_count">${data["total_reviews"]} Comentarios</a></li>
+          <li class="media">${", ".join( [a for a in data["medias"]["values"]] )}</li>
+          <li class="price">Precio Normal <span class="normal">$${data["normal_price"]}</span> Precio de promoción <span class="discounted">$${data["discounted_price"]}</span></li>
+          % if data["units"] > 0:
+          <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Ordena ahora y recíbela antes del ${h.next_date( 5 )}</a></li>
+          % else:
+          <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Disponible en una semana</a></li>
+          % endif
+          % if data["units"] < 4 and data["units"] > 0:
+          <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Stock reducido ¡ordene pronto!</a></li>
+          %endif
+          <li class="special">Envío gratis en la compra de 3 películas</li>
+        </ul>
+      </div>
     </div>
   </div>
-  <div id="right" class="column">
-    <form class="add_to_cart" action="/public/add_to_cart?id=${data["id"]}" method="post">
-      <div class="top">
-        <label for="quantity">Cantidad:</label>
-        <input id="quantity" name="quantity" class="quantity" type="text" value="1"/>
-      </div>
-      <div class="bottom">
-        <input type="submit" value="Agregar al Carrito" class="submit, red_button"/>
-      </div>
-    </form>
+  <div class="band">
+    <div class="inner">
+      <form class="add_to_cart" action="/public/add_to_cart?id=${data["id"]}" method="post">
+        <div class="top">
+          <label for="quantity">Cantidad:</label>
+          <input id="quantity" name="quantity" class="quantity" type="text" value="1"/>
+        </div>
+        <div class="bottom">
+          <input type="submit" value="Agregar al Carrito" class="submit, red_button"/>
+        </div>
+      </form>
+    </div>
   </div>
+  
+  <div class="inner">
+    <%recommendation:recommendation
+      title="Quien compró esta película tambien compró..."
+      method="random"/>
+    <div class="large_text">
+      <h2>Detalles del producto:</h2>
+      <dl>
+        <dt>Actor(es):</dt>
+        <dd>${", ".join( [a for a in data["actors"]["values"]] )}</dd>
+        <dt>Director(es):</dt>
+        <dd>${", ".join( [a for a in data["directors"]["values"]] )}</dd>
+        <dt>Norma:</dt>
+        <dd>${data["norm"]["value"]}</dd>
+        <dt>Formato de pantalla:</dt>
+        <dd>${data["screen_format"]["value"]}</dd>
+        <dt>Formato:</dt>
+        <dd>${data["format"]["value"]}</dd>
+        <dt>Idiomas:</dt>
+        <dd>${", ".join( [a for a in data["languages"]["values"]] )}</dd>
+        <dt>Subtítulos:</dt>
+        <dd>${", ".join( [a for a in data["subtitles"]["values"]] )}</dd>
+        <dt>Regiones:</dt>
+        <dd>${", ".join( [a for a in data["regions"]["values"]] )}</dd>
+        <dt>No. de discos:</dt>
+        <dd>${data["item_count"]}</dd>
+        <dt>Clasificación:</dt>
+        <dd>${data["age_rating"]["value"]}</dd>
+        <dt>Productora:</dt>
+        <dd>${data["productor"]["value"]}</dd>
+        <dt>Distribuidora:</dt>
+        <dd>${data["distributor"]["value"]}</dd>
+        <dt>Duración:</dt>
+        <dd>${data["duration"]}</dd>
+        <dt>Comentarios:</dt>
+        <dd><div class="film_ratings"></div> en ${data["total_reviews"]} Comentarios</dd>
+        <dt>RTC:</dt>
+        <dd>${data["rtc"]}</dd>
+        <dt>Código de barras:</dt>
+        <dd>${data["bar_code"]}</dd>
+        <dt>Ranking en la tienda:</dt>
+        <dd>30</dd>
+      </dl>
+    </div>
+    
+    %if data["special_features"].strip() != "":
+    <div class="large_text">
+      <h2>Características especiales:</h2>
+      ${data["special_features"]}
+    </div>
+    %endif
+    
+    %if data["summary"].strip() != "":
+    <div class="large_text">
+      <h2>Reseña de la distribuidora:</h2>
+      ${data["summary"]}
+    </div>
+    %endif
+    
+    <div class="large_text">
+      ${reviews.review_summary( data, product_reviews )}
+    </div>
+    
+    % if len( product_reviews ) > 0:
+    <div class="reviews">
+      % for review in product_reviews[:3]:
+      ${reviews.review_details( review, data )}
+      % endfor
+      % if len( product_reviews ) > 3:
+      <a href="/public/product_reviews?id=${data["id"]}" class="all_reviews">Ver todos los comentarios</a>
+      % endif
+    </div>
+    % endif
+  </div>
+  <div class="clear-both"></div>
 </div>
-<div class="indent1">
-  <%recommendation:recommendation
-    title="Quien compró esta película tambien compró..."
-    method="random"/>
-</div>
-<div class="large_text">
-  <h2>Detalles del producto:</h2>
-  <dl>
-    <dt>Actor(es):</dt>
-    <dd>${", ".join( [a for a in data["actors"]["values"]] )}</dd>
-    <dt>Director(es):</dt>
-    <dd>${", ".join( [a for a in data["directors"]["values"]] )}</dd>
-    <dt>Norma:</dt>
-    <dd>${data["norm"]["value"]}</dd>
-    <dt>Formato de pantalla:</dt>
-    <dd>${data["screen_format"]["value"]}</dd>
-    <dt>Formato:</dt>
-    <dd>${data["format"]["value"]}</dd>
-    <dt>Idiomas:</dt>
-    <dd>${", ".join( [a for a in data["languages"]["values"]] )}</dd>
-    <dt>Subtítulos:</dt>
-    <dd>${", ".join( [a for a in data["subtitles"]["values"]] )}</dd>
-    <dt>Regiones:</dt>
-    <dd>${", ".join( [a for a in data["regions"]["values"]] )}</dd>
-    <dt>No. de discos:</dt>
-    <dd>${data["item_count"]}</dd>
-    <dt>Clasificación:</dt>
-    <dd>${data["age_rating"]["value"]}</dd>
-    <dt>Productora:</dt>
-    <dd>${data["productor"]["value"]}</dd>
-    <dt>Distribuidora:</dt>
-    <dd>${data["distributor"]["value"]}</dd>
-    <dt>Duración:</dt>
-    <dd>${data["duration"]}</dd>
-    <dt>Comentarios:</dt>
-    <dd><div class="film_ratings"></div> en ${data["total_reviews"]} Comentarios</dd>
-    <dt>RTC:</dt>
-    <dd>${data["rtc"]}</dd>
-    <dt>Código de barras:</dt>
-    <dd>${data["bar_code"]}</dd>
-    <dt>Ranking en la tienda:</dt>
-    <dd>30</dd>
-  </dl>
-</div>
-
-%if data["special_features"].strip() != "":
-<div class="large_text">
-  <h2>Características especiales:</h2>
-  ${data["special_features"]}
-</div>
-%endif
-
-%if data["summary"].strip() != "":
-<div class="large_text">
-  <h2>Reseña de la distribuidora:</h2>
-  ${data["summary"]}
-</div>
-%endif
-
-<div class="large_text">
-  ${reviews.review_summary( data, product_reviews )}
-</div>
-
-% if len( product_reviews ) > 0:
-<div class="reviews">
-  % for review in product_reviews[:3]:
-  ${reviews.review_details( review, data )}
-  % endfor
-  % if len( product_reviews ) > 3:
-  <a href="/public/product_reviews?id=${data["id"]}" class="all_reviews">Ver todos los comentarios</a>
-  % endif
-</div>
-% endif

@@ -1,8 +1,7 @@
 div.reviews {
   clear: both;
   border-top: 1px dotted #2E3436;
-  padding-top: 20px;
-  margin: 20px;
+  padding-top: 10px;
 }
 div.reviews h1 {
   font-size: 18px;

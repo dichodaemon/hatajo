@@ -39,6 +39,7 @@ div.rating_container {
   list-style: none;
   margin-left: 0px;
   padding-left: 0px;
+  padding-bottom: 20px;
 }
 
 .rating_list li a {

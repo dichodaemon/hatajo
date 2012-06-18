@@ -5,7 +5,7 @@
 <%namespace name="ratings" file="/ratings.mako"/>
 <%namespace name="reviews" file="reviews.mako"/>
 <%namespace name="recommendation" file="recommendation.mako"/>
-<%core:add_css name="public/two_columns"/>
+<%core:add_css name="public/layout"/>
 <%core:add_css name="public/ratings"/>
 <%core:add_css name="public/pager"/>
 <%core:add_css name="hint"/>
@@ -13,30 +13,36 @@
 <%core:add_css name="public/reviews"/>
 <%core:add_js name="ratings"/>
 <%core:add_js name="imgpreview.full.jquery"/>
-<div class="large_text">
-  ${reviews.review_summary( data, items )}
-</div>
 
-<div class="reviews">
-  % if len( items ) > 0:
-    <%public:pager>
-      % for review in items:
-      ${reviews.review_details( review, data )}
-      % endfor
-    </%public:pager>
-  % else:
-    ¡No hay comentarios con ${rating} estrella(s)!
-  % endif
-</div>
-
-<div class="indent1">
-  <%recommendation:recommendation
-    title="Historia Reciente"
-    method="recent"/>
-</div>
-
-<div class="indent1">
-  <%recommendation:recommendation
-    title="Recomendaciones"
-    method="random"/>
+<div class="top-background">
+  <div class="inner">
+    <div class="large_text">
+      ${reviews.review_summary( data, items )}
+    </div>
+    
+    <div class="reviews">
+      % if len( items ) > 0:
+        <%public:pager>
+          % for review in items:
+          ${reviews.review_details( review, data )}
+          % endfor
+        </%public:pager>
+      % else:
+        ¡No hay comentarios con ${rating} estrella(s)!
+      % endif
+    </div>
+    
+    <div class="indent1">
+      <%recommendation:recommendation
+        title="Historia Reciente"
+        method="recent"/>
+    </div>
+    
+    <div class="indent1">
+      <%recommendation:recommendation
+        title="Recomendaciones"
+        method="random"/>
+    </div>
+  </div>
+  <div class="clear-both"></div>
 </div>
