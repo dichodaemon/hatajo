@@ -9,6 +9,9 @@
   $( "#user__name" ).inlineEdit( options );
   $( "#user__email" ).inlineEdit( options );
   $( "#user__password" ).inlineEdit( $.extend( true, { control: 'input[type="password"]' }, options  ) );
+  $( "#order_period" ).change( function() {
+    window.location = "/private/orders";
+  } );
 </%core:add_code>
 
 <h1>Órdenes recientes</h1>

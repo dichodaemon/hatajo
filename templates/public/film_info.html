@@ -57,7 +57,7 @@ ${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
           <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Disponible en una semana</a></li>
           % endif
           % if data["units"] < 4 and data["units"] > 0:
-          <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Stock reducido ¡ordene pronto!</a></li>
+          <li class="delivery"><a href="/public/film_info?id=${data["id"]}">Quedan sólo ${data["units"]} ¡ordene pronto!</a></li>
           %endif
           <li class="special">Envío gratis en la compra de 3 películas</li>
         </ul>
@@ -80,8 +80,8 @@ ${ratings.show_rating( "div.film_ratings", data["review_avg"] )}
   
   <div class="inner">
     <%recommendation:recommendation
-      title="Quien compró esta película tambien compró..."
-      method="random"/>
+      title="Recomendaciones para usted"
+      method="recommended"/>
     <div class="large_text">
       <h2>Detalles del producto:</h2>
       <dl>

@@ -1,0 +1,44 @@
+## -*- coding: utf-8 -*-
+<head>
+  <style type = "text/css">
+    h1 {
+      font-size: 18px;
+      color: #A40000;
+      font-weight: bold;
+    }
+    h2 {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    h3 {
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+<h3>Estimado(a) ${data["recipient"]}:</h3>
+
+<p>
+Un nuevo comentario ha sido escrito en el sitio, los detalles aparecen más
+abajo.
+</p>
+
+<p>
+Cordialmente,
+</p>
+
+<p>
+El equipo de mis-pelis.com
+</p>
+
+<h1>${data["review"]["name"]}</h1>
+<h2>Escrito por ${data["review"]["alias"]} el ${data["review"]["date"]}</h2>
+<h3>Comentario acerca de: ${data["product"]["name"]}</span></h3>
+<h3>Nota: <span class="name">${data["review"]["rating"]}</span></h3>
+
+<p>
+${"</p><p>".join( data["review"]["content"].split( "\n" ) )}
+</p>
+
+

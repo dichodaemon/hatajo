@@ -1,0 +1,87 @@
+.width_1000 {
+  width: 1000px;
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.order_info {
+  border: 1px solid #888A85;
+}
+
+.order_info h1 {
+  color: #2E3436;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.order_info div.general {
+  float: left;
+  width: 30%;
+  border-right: 1px solid #888A85;
+  margin-right: 0px;
+}
+
+.order_info dt {
+  font-weight: bold;
+}
+
+.order_info dd {
+  margin-bottom: 10px;
+}
+
+.order_info dl.total {
+  margin-bottom: 10px;
+}
+
+.order_info .total dt {
+  font-weight: bold;
+  width: 100px;
+  float: left;
+  clear: left;
+}
+
+.order_info .total dd {
+  margin-left: 10px;
+  margin-bottom: 0px;
+  float: left;
+  clear: right;
+  color: #A40000;
+}
+
+.order_info div.detail {
+  float: left;
+  width: 70%;
+  border-left: 1px solid #888A85;
+  margin-left: -1px;
+}
+
+.order_info div.detail img {
+  margin-left: 0px;
+  width: 100px;
+  float: left;
+}
+
+.order_info li.items {
+  margin-bottom: 10px;
+}
+.order_info div.detail ul {
+  margin-left: 0px;
+  list-style: none;
+}
+
+.order_info div.detail ul ul {
+  float: left;
+  padding-top: 20px;
+  margin-left: 20px;
+  width: 400px;
+  list-style: none;
+}
+
+.order_info div.detail li.title {
+  color: #204A87;
+}
+.order_info div.detail li.media {
+  color: #888A85;
+}

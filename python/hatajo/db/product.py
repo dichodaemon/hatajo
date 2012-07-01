@@ -7,6 +7,7 @@ class Product( Base ):
   __tablename__ = 'products'
   id         = Column( Integer, primary_key = True )
   name       = Column( String )
+  date       = Column( Date )
   original_name = Column( String )
   year          = Column( Integer )
   norm_id       = Column( Integer, ForeignKey( "catalog_entries.id" ) )

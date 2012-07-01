@@ -33,6 +33,7 @@
       var filter = $( "#pager_filter" ).attr( "value" );
       var sort   = $( "#pager_sort" ).attr( "value" );
       var desc   = $( "#pager_descending" ).attr( "checked" );
+      var genre  = $( "#pager_genre" ).attr( "value" );
       if ( $( "#pager_filter" ).hasClass( "hint" ) ) {
         filter = "";
       }
@@ -42,6 +43,9 @@
       var location = "${base_url}&filter=" + filter 
                    + "&sort_by=" + sort
                    + "&descending=" + desc;
+      if ( genre != "" ) {
+        location += "&genre=" + genre;
+      }
       window.location = location
        
     };
@@ -66,6 +70,7 @@
 
   <div class="pager">
     <input id="pager_filter" type="text" class="search" value="${filter}"></input>
+    <input id="pager_genre" type="hidden" value="${genre}"></input>
     <label for="pager_sort">Ordenar por</label>
     <select id="pager_sort" value="${sort_by}">
       % for f in sort_fields:
@@ -86,17 +91,17 @@
   ${caller.body()}
   <ul class="pager">
     % if page != 0:
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page - 1}&limit=${limit}" class="previous">Anterior</a></li>
+    <li><a href="${base_url}&genre=${genre}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page - 1}&limit=${limit}" class="previous">Anterior</a></li>
     % endif
     % for p in xrange( max( page - 5, 0 ), page ):
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}">${p + 1}</a></li>
+    <li><a href="${base_url}&genre=${genre}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}">${p + 1}</a></li>
     %endfor
     <li>${page + 1}</li>
     % for p in xrange( page + 1, min( page + 5, page_count ) ):
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}">${p + 1}</a></li>
+    <li><a href="${base_url}&genre=${genre}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${p}&limit=${limit}">${p + 1}</a></li>
     % endfor
     % if page < page_count -1:
-    <li><a href="${base_url}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page + 1}&limit=${limit}" class="next">Siguiente</a></li>
+    <li><a href="${base_url}&genre=${genre}&filter=${filter}&sort_by=${sort_by}&descending=${descending}&page=${page + 1}&limit=${limit}" class="next">Siguiente</a></li>
     % endif
   </ul>
 </%def>

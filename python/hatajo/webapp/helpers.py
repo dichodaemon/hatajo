@@ -59,8 +59,9 @@ def product_helper(
   call, filter_field, filter="", sort_by="date", 
   descending=True, page=0, limit=10, genre="", prefilter = []
 ):
+  print "Descending", descending
   if type( descending ) in [unicode, str]:
-    descending = descending == "checked"
+    descending = descending == "checked" or descending == "True"
   if type( filter ) == int:
     filter = ""
   if type( page ) != int:
@@ -99,6 +100,7 @@ def pager_helper(
     "sort_by": sort_by,
     "descending": descending,
     "limit": limit,
+    "genre": "",
     "items": items
   }
 

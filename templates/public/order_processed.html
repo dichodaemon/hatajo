@@ -2,16 +2,101 @@
 <%inherit file="base.html"/>
 <%namespace name="core" file="/core.mako"/>
 <%namespace name="forms" file="/forms.mako"/>
+<%core:add_css name="public/layout"/>
 <%core:add_css name="public/forms"/>
+<%core:add_css name="public/order_info"/>
+
+<%core:add_code>
+  $( "#order" ).load( "/public/order_info?id=${data["id"]}" );
+</%core:add_code>
+
 <%! import hatajo.webapp.template_helpers as h %>
 
-Gracias por su pedido!
+<div class="top-background">
+  <div class="inner">
+    <h2>¡Muchas gracias por su pedido!</h2>
 
-<table>
-% for k, v in fields.items():
-<tr>
-  <td>${k}</td>
-  <td>${v}</td>
-</tr>
-% endfor
-</table>
+    <p>
+    Su compra, cuyos detalles aparecen más abajo, ha sido procesada. En breve, 
+    usted recibirá un correo electrónico confirmando la transacción y, 
+    ulteriormente, el envío de su pedido.
+    </p>
+
+    <p>
+    Cordialmente,
+    </p>
+
+    <p>
+    El equipo de mis-pelis.com
+    </p>
+
+    <div id="order" class="inner">
+    </div>
+
+    % if False:
+    <dl>
+      <dt>Cliente</dt>
+      <dd>${data["user"]["name"]}</dd>
+      <dt>Fecha</dt> 
+      <dd>${data["date"]}</dd>
+      <dt>Forma de pago</dt> 
+      <dd>${data["payment_type"] == 0 and "Paypal" or "Google"}</dd>
+      <dt>Dirección</dt>
+      <dd>
+        <div class="block">
+          <em>${data["name"]}</em></br>
+          ${data["street"]}</br>
+          ${data["postal_code"]} ${data["city"]}, ${data["state"]}</br>
+          ${data["country"]}
+        </div>
+      </dd>
+      <dt>Productos</dt>
+      <dd>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Subtotal: $${data["total_amount"] - data["delivery_cost"]}</td>
+            </tr>
+            <tr>
+              <td>Envío: $${data["delivery_cost"]}</td>
+            </tr>
+            <tr>
+              <td>Total: $${data["total_amount"]}</td>
+            </tr>
+          </tfoot>
+          <tbody>
+            % for i in data["detail"]:
+            <tr>
+              <td>${i["product"]["name"]}</td>
+              <td>${i["quantity"]}</td>
+              <td>$${i["cost"]}</td>
+            </tr>
+            % endfor
+          </tbody>
+        </table>
+      </dd>
+      <dt>Información adicional</dt>
+      <dd>
+        <div class="block">
+        ${"</br>".join( data["payment_info"].split( "\n" ) )}
+        </div>
+      </dd>
+    </dl>
+    <table>
+    % for k, v in fields.items():
+    <tr>
+      <td>${k}</td>
+      <td>${v}</td>
+    </tr>
+    % endfor
+    </table>
+    % endif
+  </div>
+</div>

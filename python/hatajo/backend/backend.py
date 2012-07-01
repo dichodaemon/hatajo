@@ -6,8 +6,10 @@ from db import session, CatalogEntry
 import hashlib
 import pprint
 import datetime
+import time
 import random
 import math
+import score
 from collections import defaultdict
 
 import helpers
@@ -78,11 +80,9 @@ class Backend( object ):
 
   @helpers.main_form
   def product_update( self, arguments, warnings, errors ):
-    print "-" * 80
-    pprint.pprint( arguments, width = 80 )
-
     if arguments["id"] == "new": 
       product = db.Product( arguments["name"] )
+      product.date = datetime.datetime.now().date()
     else:
       product = db.Product.by_id( arguments["id"] )
 
@@ -99,12 +99,18 @@ class Backend( object ):
       if len( errors ) == 0:
         helpers.get( db.Product ).to_record( arguments, product )
         db.session().add( product )
+        if arguments["id"] == "new":
+          statistics = db.Statistics()
+          statistics.product = product
+          statistics.created = 1
+          statistics.sold = 1
+          statistics.view = 1
+          statistics.timestamp = time.time()
+          db.session().add( statistics )
         db.session().commit()
         arguments = helpers.get( db.Product ).to_dictionary( product )
     else:
       arguments = helpers.get( db.Product ).to_dictionary( product )
-    print
-    pprint.pprint( arguments, width = 80 )
     return arguments
 
   def product_info( self, id ):
@@ -120,10 +126,44 @@ class Backend( object ):
       result.append( d )
     return result
 
+  def update_views( self, user_id, product_id ):
+    user = db.User.by_id( user_id )
+    product = db.Product.by_id( product_id )
+    statistics = db.Statistics()
+    statistics.user = user
+    statistics.product = product
+    statistics.view = 1
+    statistics.timestamp = time.time()
+    db.session().add( statistics )
+    db.session().commit()
+    return True
+
+  def recommendations( self, method, args = None ):
+    data = []
+    
+    if method == "new":
+      data = db.session().query( db.Product )\
+                  .order_by( db.Product.date )\
+                  .limit( 5 )\
+                  .all()
+    elif method == "random":
+      data = db.session().query( db.Product )\
+                  .limit( 10 )\
+                  .all()
+      random.shuffle( data )
+      data = data[:5]
+    elif method == "recommended":
+      data = score.score( args["user_id"], 5 )
+
+    result = []
+    for p in data:
+      d = helpers.get( db.Product ).to_dictionary( p )
+      result.append( d )
+    return result
+
   def product_pager( self, filter_field, filter, sort_by, descending, page, limit, genre="", prefilter=[] ):
     def build_query( query ):
       if genre != "":
-        print "Genre:", genre
         query = query.join( db.Product.genres )
         query = query.filter( "product_genre_1.genre_id = %s" % genre )
       for field, value in prefilter:
@@ -146,7 +186,6 @@ class Backend( object ):
         helpers.get( db.Product ).to_dictionary( p )
       for p in result
     ]
-    print count, limit
     return result, int( math.ceil( 1.0 * count / limit ) )
 
   def pager( self, table, filter_field, filter, sort_by, descending, offset, limit, prefilter=[] ):
@@ -178,15 +217,10 @@ class Backend( object ):
         helpers.get( table ).to_dictionary( p )
       for p in result
     ]
-    print count, limit
-    print result
     return result, count
 
   @helpers.main_form
   def inventory_update( self, arguments, warnings, errors ):
-    print "-" * 80
-    pprint.pprint( arguments, width = 80 )
-
     inventory = db.Inventory()
     if "product_id" in arguments:
       inventory.product = db.Product.by_id( arguments["product_id"] )
@@ -209,8 +243,6 @@ class Backend( object ):
     else:
       arguments = helpers.get( db.Inventory ).to_dictionary( inventory )
     arguments["product"] = helpers.get( db.Product ).to_dictionary( inventory.product )
-    print
-    pprint.pprint( arguments, width = 80 )
     return arguments
 
   def save_binary( self, filename, content_type, content ):
@@ -262,9 +294,6 @@ class Backend( object ):
 
   @helpers.main_form
   def ad_update( self, arguments, warnings, errors ):
-    print "-" * 80
-    pprint.pprint( arguments, width = 80 )
-
     if arguments["id"] == "new": 
       ad = db.Ad()
     else:
@@ -280,7 +309,6 @@ class Backend( object ):
         arguments = helpers.get( db.Ad ).to_dictionary( ad )
     else:
       arguments = helpers.get( db.Ad ).to_dictionary( ad )
-    pprint.pprint( arguments, width = 80 )
     return arguments
 
   def ad_delete( self, id ):
@@ -306,9 +334,6 @@ class Backend( object ):
 
   @helpers.main_form
   def review_update( self, arguments, warnings, errors ):
-    print "-" * 80
-    pprint.pprint( arguments, width = 80 )
-
     if arguments["id"] == "new": 
       record = db.Review()
     else:
@@ -327,9 +352,21 @@ class Backend( object ):
         db.session().add( record )
         db.session().commit()
         arguments = helpers.get( db.Review ).to_dictionary( record )
+
+        admins = db.session().query( db.User )\
+                   .filter( db.CatalogEntry.value == "Administradores" )\
+                   .all()
+        
+        for user in admins:
+          t = { "recipient": user.name }
+          t["review"] = arguments
+          t["product"] = helpers.get( db.Product ).to_dictionary( record.product )
+          send_mail( 
+            "Nuevo comentario", "admin@mis-pelis.com", [user.email],
+            "mail/new_review.txt", t
+          )
     else:
       arguments = helpers.get( db.Review ).to_dictionary( record )
-    pprint.pprint( arguments, width = 80 )
     return arguments
 
   def reviews( self, product_id ):
@@ -338,14 +375,10 @@ class Backend( object ):
       helpers.get( db.Review ).to_dictionary( r )
       for r in record.reviews
     ]
-    pprint.pprint( result, width = 80 )
     return result
 
   @helpers.main_form
   def user_update( self, arguments, warnings, errors ):
-    print "-" * 80
-    pprint.pprint( arguments, width = 80 )
-
     if arguments["id"] == "new": 
       user = db.User()
     else:
@@ -363,17 +396,13 @@ class Backend( object ):
         arguments = helpers.get( db.User ).to_dictionary( user )
     else:
       arguments = helpers.get( db.User ).to_dictionary( user )
-    print
-    pprint.pprint( arguments, width = 80 )
     return arguments
 
   def complete_payment_paypal( self, user_id, address, fields, cart ):
-    print user_id, fields, cart
     user = db.User.by_id( user_id )
     order = db.Order()
     order.date = datetime.datetime.now()
     order.user = user
-    print user.name
     order.payment_type = db.Order.PAYMENT_PAYPAL
     order.status = db.Order.ORDER_PENDING
     order.name = address["SHIPTONAME"]
@@ -405,6 +434,14 @@ class Backend( object ):
       detail.quantity = int( i["quantity"] )
       detail.cost     = float( i["price"] )
       order.detail.append( detail )
+
+      statistics = db.Statistics()
+      statistics.product = product
+      statistics.user = user
+      statistics.sold = detail.quantity
+      statistics.timestamp = time.time()
+      db.session().add( statistics )
+
     db.session().add( order )
     db.session().commit()
 
@@ -422,15 +459,22 @@ class Backend( object ):
         "mail/new_order.txt", t
       )
 
-    t = { "recipient": user.email }
+    t = { "recipient": user.name }
     t.update( data )
     send_mail( 
       "Su orden", "admin@mis-pelis.com", [user.email],
       "mail/order_confirmation.txt", t
     )
-    return {}
+    return data
 
-  def order_view( self, order_id ):
+  def order( self, order_id ):
     order = db.Order.by_id( order_id )
     return helpers.get( db.Order ).to_dictionary( order )
+
+  def orders( self ):
+    orders = db.session().query( db.Order ).all()
+    orders = [helpers.get( db.Order ).to_dictionary( order ) for order in orders]
+    print orders
+    return orders
+
 

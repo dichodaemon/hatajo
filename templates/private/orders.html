@@ -1,0 +1,36 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+<%namespace name="core" file="/core.mako"/>
+<%core:add_js name="jquery.inlineedit"/>
+<%core:add_css name="public/order_info"/>
+<%core:add_code>
+  % for order in orders:
+  $( "#order_${order["id"]}" ).load( "/public/order_info?id=${order["id"]}" );
+  % endfor
+  $( "#order_period" ).change( function() {
+    window.location = "/private/orders";
+  } );
+</%core:add_code>
+
+<h1>Órdenes recientes</h1>
+<div class="section">
+<ul>
+  <li><a href="#">Mis órdenes recientes</a></li>
+  <li>
+    <a href="#">Mis órdenes por fecha</a>
+    <select id="order_period" name="order_period">
+      <option value="0" selected="selected">Últimos 30 días</option>
+      <option value="1">Últimos 6 meses</option>
+      <option value="2">Últimos 12 meses</option>
+      <option value="3">Todas</option>
+    </select>
+  </li>
+</ul>
+</div>
+
+
+% for order in orders:
+<div class="width_1000">
+  <div id="order_${order["id"]}" class="inner"></div>
+</div>
+% endfor

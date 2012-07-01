@@ -71,6 +71,7 @@ helpers[db.OrderDetail] = Helper( {
 } )
 helpers[db.Order] = Helper( {
   "id": "id",
+  "status": None,
   "user": helpers[db.User],
   "date": "date",
   "payment_type": None,
@@ -82,6 +83,8 @@ helpers[db.Order] = Helper( {
   "postal_code": None,
   "total_amount": None,
   "payment_info": None,
+  "delivery_method": None, 
+  "delivery_cost": None,
   "detail": [helpers[db.OrderDetail]]
 } )
 

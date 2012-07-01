@@ -37,10 +37,11 @@ def transform( template = None ):
       result = t.render_unicode( **params )
       if template[-5:] == ".html":
         return str( tidy.parseString( 
-          result, 
+          result.encode( "utf-8" ), 
           output_xhtml = True, 
           indent = True, 
           tidy_mark = 0, 
+          char_encoding = "utf8",
           output_encoding = "utf8",
           wrap = 120
         ) )

@@ -58,3 +58,16 @@ class Private( object ):
       "cart": cart
     }
     return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "private/orders.html" )
+  def orders( self ):
+    result = {
+      "pageTitle": u"Órdenes",
+      "pageDescription": u"Mis órdenes", 
+      "orders": self.backend.orders()
+    }
+    return result
+

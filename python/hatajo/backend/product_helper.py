@@ -32,7 +32,6 @@ class ProductHelper( Helper ):
         date = r.date
         normal_price = r.normal_price
         discounted_price = r.discounted_price
-      print r
       units += r.units
     d["units"] = units
     d["normal_price"] = normal_price

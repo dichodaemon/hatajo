@@ -217,7 +217,7 @@ class Admin( object ):
   @cherrypy.expose
   @cherrypy.tools.render( template = "admin/order_view.html" )
   def order_view( self, id ):
-    data = self.backend.order_view( id )
+    data = self.backend.order( id )
     result = {
       "pageTitle": u"Ver órden",
       "data": data

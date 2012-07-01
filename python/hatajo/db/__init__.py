@@ -8,3 +8,4 @@ from product_image  import *
 from review         import *
 from user           import *
 from inventory      import *
+from statistics     import *

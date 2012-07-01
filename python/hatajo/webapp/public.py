@@ -110,7 +110,6 @@ class Public( object ):
         self.backend.product_pager, "name", filter, sort_by, descending, page, limit, genre 
       )
     )
-    pprint.pprint( result, width = 80 )
     return result
 
   #-----------------------------------------------------------------------------
@@ -122,6 +121,8 @@ class Public( object ):
     visited = visited[:10]
     visited.insert( 0, int( id ) )
     cherrypy.session["visited"] = visited
+    if "user" in cherrypy.session:
+      self.backend.update_views( int( cherrypy.session["user"]["id"] ), int( id ) )
 
     result = {
       "pageTitle": u"Detalles de la película",
@@ -153,7 +154,6 @@ class Public( object ):
         limit, select
       )
     )
-    pprint.pprint( result, width = 80 )
     return result
 
   #-----------------------------------------------------------------------------
@@ -175,20 +175,38 @@ class Public( object ):
     while not done:
       try:
         done = True
+        added = set()
+        elements = []
         if method == "random":
-          elements = filter( lambda r: r["normal_price"] > 0, self.backend.products() )
-          random.shuffle( elements )
+          for product in self.backend.recommendations( "random" ):
+            if not product["id"] in added:
+              elements.append( product )
+              added.add( product["id"] )
         elif method == "recent":
-          added = set()
-          elements = []
           for id in cherrypy.session.get( "visited", [] ):
             if not id in added:
               elements.append( self.backend.product_info( id ) )
               added.add( id )
-          for p in self.backend.products():
-            if not p["id"] in added:
-              elements.append( p )
-              added.add( p["id"] )
+        elif method == "new":
+          for product in self.backend.recommendations( "new" ):
+            if not product["id"] in added:
+              elements.append( product )
+              added.add( product["id"] )
+        elif method == "recommended":
+          if "user" in cherrypy.session and "id" in cherrypy.session["user"]:
+            data = self.backend.recommendations( "recommended", { "user_id": cherrypy.session["user"]["id"] } )
+          else:
+            data = self.backend.recommendations( "recommended", { "user_id": -1 } )
+          for product in data:
+            if not product["id"] in added:
+              elements.append( product )
+              added.add( product["id"] )
+        for p in self.backend.recommendations( "random" ):
+          if len( added ) > 5:
+            break
+          if not p["id"] in added:
+            elements.append( p )
+            added.add( p["id"] )
       except httplib.CannotSendRequest:
         time.sleep( random.random() )
         done = False
@@ -220,7 +238,6 @@ class Public( object ):
   @cherrypy.expose
   @cherrypy.tools.render( template = "public/review_edit.html" )
   def review_edit( self, **kargs  ):
-    pprint.pprint( kargs, width = 80 )
     kargs = helpers.cleanup_arguments( kargs )
     if "rating" in kargs:
       if kargs["rating"].strip() != "":
@@ -291,6 +308,18 @@ class Public( object ):
   def order_processed( self ):
     result = {
       "pageTitle": u"Gracias por su pedido",
-      "fields": cherrypy.session["fields"]
+      "fields": cherrypy.session["fields"],
+      "data": cherrypy.session["last_order"]
+    }
+    return result
+
+  #-----------------------------------------------------------------------------
+
+  @cherrypy.expose
+  @cherrypy.tools.render( template = "public/order_info.html" )
+  def order_info( self, id ):
+    data = self.backend.order( id )
+    result = {
+      "data": data
     }
     return result

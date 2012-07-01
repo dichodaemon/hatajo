@@ -246,7 +246,8 @@ class Services( object ):
       print "=" * 80
       if fields["ACK"] == "Success":
         cherrypy.session["fields"] = address
-        self.backend.complete_payment_paypal( cherrypy.session["user"]["id"], address, fields, cherrypy.session["cart"] )
+        order = self.backend.complete_payment_paypal( cherrypy.session["user"]["id"], address, fields, cherrypy.session["cart"] )
+        cherrypy.session["last_order"] = order
         cherrypy.session["cart"] = { "items": [], "total": 0, "item_count": 0, "delivery_method": 0, "delivery_cost": 0 }
       raise cherrypy.HTTPRedirect( "/public/order_processed" )
       

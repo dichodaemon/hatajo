@@ -12,6 +12,7 @@ if os.path.exists( path ):
 from hatajo import *
 import ConfigParser
 import codecs
+import time
 
 #-------------------------------------------------------------------------------
 
@@ -20,4 +21,23 @@ config = ConfigParser.SafeConfigParser()
 config.readfp( codecs.open( sys.argv[1], "r", "utf-8" ) )
 db.create( config.get( "db", "url" ).strip( '"' ) )
 
+if False:
+  for p in db.session().query( db.Product ).all():
+    statistics = db.Statistics()
+    statistics.product = p
+    statistics.created = 1
+    statistics.view = 1
+    statistics.sold = 1
+    statistics.timestamp = time.time()
+    db.session().add( statistics )
+  db.session().commit()
 
+  for order in db.session().query( db.Order ).all():
+    for item in order.detail:
+      statistics = db.Statistics()
+      statistics.product = item.product
+      statistics.user = order.user
+      statistics.sold = item.quantity
+      statistics.timestamp = time.mktime( order.date.timetuple() )
+      db.session().add( statistics )
+  db.session().commit()

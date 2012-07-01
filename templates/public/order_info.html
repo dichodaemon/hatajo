@@ -1,0 +1,76 @@
+## -*- coding: utf-8 -*-
+<%namespace name="core" file="/core.mako"/>
+<%namespace name="public" file="public.mako"/>
+<%! import hatajo.webapp.template_helpers as h %>
+
+<div class="order_info">
+  <div class="general">
+    <div class="inner outline">
+      <h1>Datos de la orden</h1>
+      <dl>
+        <dt>Fecha<dd>
+        <dd>${data["date"]}</dd>
+        <dt>Número de la orden</dt>
+        <dd>${data["id"]}
+        <dt>Enviado a</dt>
+        <dd>
+          <em>${data["name"]}</em></br>
+          ${data["street"]}</br>
+          ${data["postal_code"]} ${data["city"]}, ${data["state"]}</br>
+          ${data["country"]}
+        </dd>
+
+        % if data["status"] == 0:
+        <dt>Status</dt>
+        <dd>Pendiente</dd>
+        % if data["delivery_method"] == 0:
+        <dt>Entrega estimada</dt>
+        <dd>${h.next_date( 5, data["date"] )}</dd>
+        % else:
+        <dt>Entrega estimada</dt>
+        <dd>${h.next_date( 7, data["date"] )}</dd>
+        % endif
+        % elif data["status"] == 1:
+        <dt>Status</dt>
+        <dd>Enviada</dd>
+        % else:
+        <dt>Status</dt>
+        <dd>Cancelada</dd>
+        %endif
+
+      </dl>
+      
+      <dl class="total">
+        <dt>Subtotal</dt>
+        <dd>$${data["total_amount"] - data["delivery_cost"]}</dd>
+        <dt>Envío</dt>
+        <dd>$${data["delivery_cost"]}</dd>
+        <dt>Total</dt>
+        <dd>$${data["total_amount"]}</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="detail">
+    <div class="inner outline">
+      <h1>Detalle</h1>
+      <ul>
+        <%i = 0 %>
+        % for p in data["detail"]:
+        <%i += 1 %>
+        <%p_info = p["product"] %>
+        <li class="items">
+          <a href="${h.main_image( p_info )}"><img src="${h.main_image( p_info )}"/></a>
+          <ul>
+            <li class="title">${p_info["name"]} (${(p_info["original_name"] + " " + str( p_info["year"] ) ).strip()})</li>
+            <li class="media">${", ".join( [a for a in p_info["medias"]["values"]] )}</li>
+            <li>Director(es): ${", ".join( [d for d in p_info["directors"]["values"]] )} </li>
+            <li>Actor(es):${", ".join( [a for a in p_info["actors"]["values"]] )}</li>
+          </ul>
+          <div class="clear-both"></div>
+        </li>
+        % endfor
+      </ul>
+    </div>
+  </div>
+  <div class="clear-both"></div>
+</div>
